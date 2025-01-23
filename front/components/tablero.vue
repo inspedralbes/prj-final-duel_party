@@ -1,20 +1,24 @@
 <template>
     <main>
+{{ turno }}
 
 <div id="tablero">
-<div class="ficha1" :class="{animacion: animacion  }" :style="{ marginTop: movimiento.top + 'px',
-      marginLeft: movimiento.izq + 'px',
+   <div v-if="explosion" class="explosion"  :style="{ marginTop: movimiento[turno].top + 'px',
+      marginLeft: movimiento[turno].izq + 'px',
+      }"> <img  src="/explo.gif" alt="GIF"> </div>
+<div class="ficha1" :class="{animacion: animacion  }" :style="{ marginTop: movimiento[0].top + 'px',
+      marginLeft: movimiento[0].izq + 'px',
       }"> </div>
-      <div class="ficha2" :class="{animacion: animacion  }" :style="{ marginTop: movimiento.top + 'px',
-      marginLeft: movimiento.izq + 'px',
+      <div class="ficha2" :class="{animacion: animacion  }" :style="{ marginTop: movimiento[1].top + 'px',
+      marginLeft: movimiento[1].izq + 'px',
       }"> </div>
-      <div class="ficha3" :class="{animacion: animacion  }" :style="{ marginTop: movimiento.top + 'px',
-      marginLeft: movimiento.izq + 'px',
+      <div class="ficha3" :class="{animacion: animacion  }" :style="{ marginTop: movimiento[2].top + 'px',
+      marginLeft: movimiento[2].izq + 'px',
       }"> </div>
-<div class="ficha4" :class="{animacion: animacion  }" :style="{ marginTop: movimiento.top + 'px',
-      marginLeft: movimiento.izq + 'px',
+<div class="ficha4" :class="{animacion: animacion  }" :style="{ marginTop: movimiento[3].top + 'px',
+      marginLeft: movimiento[3].izq + 'px',
      }"></div>
-<img src="/tablero.jpeg" srcset="">
+<img class="img" src="/tablero.jpeg" srcset="">
  
 </div>
 
@@ -32,13 +36,18 @@
 import { reactive, ref } from 'vue';
 import { Coordenadas } from '../static/tablero';
 const animacion = ref(false);
-const posicionActual= ref(0);
-const movimiento=reactive({top:0,izq:0});
-pintarFicha(); 
+const explosion = ref(false);
+const turno = ref(0);
+const nJugadores= ref(3);
+const posicionActual= reactive([0,0,0,0]); 
+const movimiento = reactive([{top:0,izq:0},{top:0,izq:0},{top:0,izq:0},{top:0,izq:0}]);
 
-function getPosicion(){
-    let x = Coordenadas[posicionActual.value][0];
-    let y = Coordenadas[posicionActual.value][1];
+pintarFicha(turno.value); 
+
+function getPosicion(num){
+    let x = Coordenadas[posicionActual[num]][0];
+    let y = Coordenadas[posicionActual[num]][1];
+    
     return {x,y};
 
     
@@ -49,33 +58,75 @@ function actualizarPosicion(num) {
     function moverFicha() {
         if (index < num) {
            
-            posicionActual.value += 1;
+            posicionActual[turno.value] += 1;
 
            
-            if (posicionActual.value >= Coordenadas.length) {
-                posicionActual.value = 0; 
+            if (posicionActual[turno.value] >= Coordenadas.length) {
+                posicionActual[turno.value] = 0; 
             }
 
             
-            pintarFicha();
+            pintarFicha(turno.value);
 
              
             index++;
 
             
             setTimeout(moverFicha, 200);
+        } else{
+
+            dosEnCasilla(turno.value);
+            turno.value += 1;
+          
+            if(turno.value>nJugadores.value){
+                turno.value = 0;
+            }
+           
         }
     } 
     moverFicha();
+     
 }
 
+function dosEnCasilla(num){
+   
+    let aux = posicionActual[num];
+
+    for (let index = 0; index < nJugadores.value; index++) {
+         
+        console.log(posicionActual[index]);
+        if(num === index){
+         
+        }else{
+            if(aux === posicionActual[index]){
+                explosion.value = true;
+                setTimeout(() => {
+                    explosion.value = false;
+                }, 400);
+                posicionActual[index]-=3;
+                if(posicionActual[index]<0){
+                    posicionActual[index] += Coordenadas.length;
+                    //numeo vueltas --
+                }
+                pintarFicha(index);
+                console.log("iguales")
+                
+                dosEnCasilla(index)
+            }
 
 
-function pintarFicha(){
+        }
+        
+    }
+
+
+}
+
+function pintarFicha(num){
     animacion.value = true;
-    let posicion = getPosicion();
-    movimiento.top = posicion.x;
-    movimiento.izq = posicion.y;
+    let posicion = getPosicion(num);
+    movimiento[num].top = posicion.x;
+    movimiento[num].izq = posicion.y;
     setTimeout(() => {
   animacion.value = false;
 }, 200);
@@ -94,7 +145,21 @@ function pintarFicha(){
       }
     }
 
-
+.explosion{
+    width: auto;
+    height:40px;
+    position: absolute;
+    
+}
+.explosion img{
+    width: auto;
+    height: 60px;
+    
+    position: relative;
+    top:-24px;
+    left: -15px;
+    
+}
 .animacion{
     animation: crecer 0.1s infinite alternate;
 }
@@ -108,7 +173,7 @@ function pintarFicha(){
  
     
 }
-#tablero img{
+#tablero .img{
     width: 600px;
     height: auto;
      
