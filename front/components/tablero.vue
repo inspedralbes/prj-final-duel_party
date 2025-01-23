@@ -6,16 +6,16 @@
    <div v-if="explosion" class="explosion"  :style="{ marginTop: movimiento[turno].top + 'px',
       marginLeft: movimiento[turno].izq + 'px',
       }"> <img  src="/explo.gif" alt="GIF"> </div>
-<div class="ficha1" :class="{animacion: animacion  }" :style="{ marginTop: movimiento[0].top + 'px',
+<div class="ficha1" :class="{animacion: movimiento[0].animacion  }" :style="{ marginTop: movimiento[0].top + 'px',
       marginLeft: movimiento[0].izq + 'px',
       }"> </div>
-      <div class="ficha2" :class="{animacion: animacion  }" :style="{ marginTop: movimiento[1].top + 'px',
+      <div class="ficha2" :class="{animacion: movimiento[1].animacion  }" :style="{ marginTop: movimiento[1].top + 'px',
       marginLeft: movimiento[1].izq + 'px',
       }"> </div>
-      <div class="ficha3" :class="{animacion: animacion  }" :style="{ marginTop: movimiento[2].top + 'px',
+      <div class="ficha3" :class="{animacion: movimiento[2].animacion  }" :style="{ marginTop: movimiento[2].top + 'px',
       marginLeft: movimiento[2].izq + 'px',
       }"> </div>
-<div class="ficha4" :class="{animacion: animacion  }" :style="{ marginTop: movimiento[3].top + 'px',
+<div class="ficha4" :class="{animacion: movimiento[3].animacion  }" :style="{ marginTop: movimiento[3].top + 'px',
       marginLeft: movimiento[3].izq + 'px',
      }"></div>
 <img class="img" src="/tablero.jpeg" srcset="">
@@ -39,10 +39,9 @@ const animacion = ref(false);
 const explosion = ref(false);
 const turno = ref(0);
 const nJugadores= ref(3);
-const posicionActual= reactive([0,0,0,0]); 
-const movimiento = reactive([{top:0,izq:0},{top:0,izq:0},{top:0,izq:0},{top:0,izq:0}]);
-
-pintarFicha(turno.value); 
+const posicionActual= reactive([-1,-1,-1,-1]); 
+const movimiento = reactive([{top:60,izq:90,animacion:false},{top:60,izq:60,animacion:false},{top:90,izq:90,animacion:false},{top:90,izq:60,animacion:false}]);
+ 
 
 function getPosicion(num){
     let x = Coordenadas[posicionActual[num]][0];
@@ -94,7 +93,7 @@ function dosEnCasilla(num){
 
     for (let index = 0; index < nJugadores.value; index++) {
          
-        console.log(posicionActual[index]);
+       
         if(num === index){
          
         }else{
@@ -109,11 +108,13 @@ function dosEnCasilla(num){
                     //numeo vueltas --
                 }
                 pintarFicha(index);
-                console.log("iguales")
-                
-                dosEnCasilla(index)
+                console.log("iguales");
+                setTimeout(() => {
+                    dosEnCasilla(index);
+                }, 200);
+               
             }
-
+           
 
         }
         
@@ -123,12 +124,12 @@ function dosEnCasilla(num){
 }
 
 function pintarFicha(num){
-    animacion.value = true;
+    movimiento[num].animacion = true;
     let posicion = getPosicion(num);
     movimiento[num].top = posicion.x;
     movimiento[num].izq = posicion.y;
     setTimeout(() => {
-  animacion.value = false;
+  movimiento[num].animacion = false;
 }, 200);
     
 }
