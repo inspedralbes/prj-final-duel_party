@@ -2,7 +2,12 @@
     <main>
        
         <div class="rojo"> Rojo {{ movimiento[0].posicion }} vueltas {{ movimiento[0].vuelta }} </div>
-         <div class="azul"> Azul {{ movimiento[1].posicion }}  vueltas {{ movimiento[1].vuelta }} </div>
+         <div class="azul"> 
+            <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy1.png" alt=""> </div>
+            <div style="grid-column: 2; margin-top: 15px;">Posicion   {{ movimiento[1].posicion }} <br><br> Vueltas {{ movimiento[1].vuelta }} </div>
+          
+           
+             </div>
          <div class="amarillo"> Amarillo {{ movimiento[2].posicion }} vueltas {{ movimiento[2].vuelta }}  </div>
          <div class="verde"> Verde  {{ movimiento[3].posicion }} vueltas {{ movimiento[3].vuelta }}  </div>
        
@@ -200,18 +205,27 @@ actualizarPosiciones();
 top: 0px;
 left: 0px;
 border: 1px solid black;
+background-color: red;
+border-radius: 10%; 
 }
 .azul{width: 200px; height: 100px;
 position: absolute;
 top: 0px;
 right: 0px;
 border: 1px solid black;
+background-color: blue;
+border-radius: 10%;
+color: white;
+display: grid;
+grid-template-columns: 1fr 1fr;
 }
 .verde{width: 200px; height: 100px;
 position: absolute;
 bottom: 0px;
 left: 0px;
 border: 1px solid black;
+background-color: green;
+border-radius: 10%;
 
 }
 .amarillo{width: 200px; height: 100px;
@@ -219,6 +233,8 @@ position: absolute;
 bottom: 0px;
 right: 0px;
 border: 1px solid black;
+background-color: yellow;
+border-radius: 10%;
 }
 
 
