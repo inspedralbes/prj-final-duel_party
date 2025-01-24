@@ -1,10 +1,10 @@
 <template>
     <main>
        
-        <div class="rojo"> Rojo {{ movimiento[0].posicion }}  </div>
-         <div class="azul"> Azul {{ movimiento[1].posicion }}  </div>
-         <div class="amarillo"> Amarillo {{ movimiento[2].posicion }}  </div>
-         <div class="verde"> Verde  {{ movimiento[3].posicion }}  </div>
+        <div class="rojo"> Rojo {{ movimiento[0].posicion }} vueltas {{ movimiento[0].vuelta }} </div>
+         <div class="azul"> Azul {{ movimiento[1].posicion }}  vueltas {{ movimiento[1].vuelta }} </div>
+         <div class="amarillo"> Amarillo {{ movimiento[2].posicion }} vueltas {{ movimiento[2].vuelta }}  </div>
+         <div class="verde"> Verde  {{ movimiento[3].posicion }} vueltas {{ movimiento[3].vuelta }}  </div>
        
          
 <div id="tablero">
@@ -51,24 +51,36 @@ const animacion = ref(false);
 const explosion = ref(false);
 const turno = ref(0);
 const nJugadores= ref(3); 
-const movimiento = reactive([{top:60,izq:90,animacion:false,posicionActual:-1,posicion:1},
-                            {top:60,izq:60,animacion:false,posicionActual:-1,posicion:2},
-                            {top:90,izq:90,animacion:false,posicionActual:-1,posicion:3},
-                            {top:90,izq:60,animacion:false,posicionActual:-1,posicion:4}]);
+const movimiento = reactive([{top:60,izq:90,animacion:false,posicionActual:-1,posicion:1,vuelta:0},
+                            {top:60,izq:60,animacion:false,posicionActual:-1,posicion:2,vuelta:0},
+                            {top:90,izq:90,animacion:false,posicionActual:-1,posicion:3,vuelta:0},
+                            {top:90,izq:60,animacion:false,posicionActual:-1,posicion:4,vuelta:0}]);
                     
  
 
 
-                            const actualizarPosiciones = () => {
-      // Crear una copia del array y ordenarlo por 'posicionActual' de mayor a menor
-      const sorted = [...movimiento].sort((a, b) => b.posicionActual - a.posicionActual);
-      
-      // Asignar 'posicion' a cada objeto según el índice en el array ordenado
-      movimiento.forEach(item => {
-        const index = sorted.findIndex(sortedItem => sortedItem.posicionActual === item.posicionActual);
-        item.posicion = index + 1; // Asignar la nueva posición
-      });
-    };
+ function actualizarPosiciones(){
+    const sortedByVuelta = [...movimiento].sort((a, b) => a.vuelta - b.vuelta);
+
+// Asignamos las posiciones según las vueltas
+sortedByVuelta.forEach((item, index) => {
+  item.posicion = 4 - index; // Asignamos la posición 4 al que tiene menos vueltas, 1 al que tiene más
+});
+
+// 2. Ahora, dentro de los elementos con la misma cantidad de vuelta, ordenamos por posicionActual (de menor a mayor)
+const sortedByPosicionActual = [...movimiento].sort((a, b) => {
+  if (a.vuelta === b.vuelta) {
+    return a.posicionActual - b.posicionActual; // Si las vueltas son iguales, ordenamos por posicionActual
+  }
+  return 0; // Si las vueltas son diferentes, no cambian
+});
+
+// Asignamos las posiciones nuevamente según posicionActual
+sortedByPosicionActual.forEach((item, index) => {
+  // Esto solo cambia el valor de `posicion`, no el orden del array
+  item.posicion = 4 - index; // Posicion es asignada de acuerdo a `posicionActual`
+});
+                           }
 
 
 function getPosicion(num){
@@ -86,11 +98,13 @@ function actualizarPosicion(num) {
         if (index < num) {
            
             movimiento[turno.value].posicionActual += 1;
-
+            console.log(movimiento[turno.value].posicionActual);
            
            
             if (movimiento[turno.value].posicionActual >= Coordenadas.length) {
                 movimiento[turno.value].posicionActual = 0; 
+                movimiento[turno.value].vuelta++;
+                console.log(movimiento[turno.value].posicionActual);
             }
 
             
@@ -135,8 +149,8 @@ function dosEnCasilla(num){
                 movimiento[index].posicionActual-=3;
                 if(movimiento[index].posicionActual<0){
                     movimiento[index].posicionActual += Coordenadas.length;
-                
-                    //numeo vueltas --
+                    movimiento[index].vuelta--;
+                   
                 }
                 pintarFicha(index);
                 console.log("iguales");
