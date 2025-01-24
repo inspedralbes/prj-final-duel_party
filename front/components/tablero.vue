@@ -1,11 +1,12 @@
 <template>
     <main>
        
-        <div class="rojo"> Rojo {{ movimiento[0].posicion }} </div>
-         <div class="azul"> Azul {{ movimiento[1].posicion }} </div>
-         <div class="verde"> Verde {{ movimiento[2].posicion }} </div>
-         <div class="amarillo"> Amarillo {{ movimiento[3].posicion }} </div>
-
+        <div class="rojo"> Rojo {{ movimiento[0].posicion }}  </div>
+         <div class="azul"> Azul {{ movimiento[1].posicion }}  </div>
+         <div class="amarillo"> Amarillo {{ movimiento[2].posicion }}  </div>
+         <div class="verde"> Verde  {{ movimiento[3].posicion }}  </div>
+       
+         
 <div id="tablero">
     <div v-if="turno === 0">Rojo</div>
         <div v-if="turno === 1">Azul</div>
@@ -49,16 +50,30 @@ import { Coordenadas } from '../static/tablero';
 const animacion = ref(false);
 const explosion = ref(false);
 const turno = ref(0);
-const nJugadores= ref(3);
-const posicionActual= reactive([-1,-1,-1,-1]); 
-const movimiento = reactive([{top:60,izq:90,animacion:false,posicion:1},{top:60,izq:60,animacion:false,posicion:2},{top:90,izq:90,animacion:false,posicion:3},{top:90,izq:60,animacion:false,posicion:4}]);
+const nJugadores= ref(3); 
+const movimiento = reactive([{top:60,izq:90,animacion:false,posicionActual:-1,posicion:1},
+                            {top:60,izq:60,animacion:false,posicionActual:-1,posicion:2},
+                            {top:90,izq:90,animacion:false,posicionActual:-1,posicion:3},
+                            {top:90,izq:60,animacion:false,posicionActual:-1,posicion:4}]);
+                    
  
 
 
+                            const actualizarPosiciones = () => {
+      // Crear una copia del array y ordenarlo por 'posicionActual' de mayor a menor
+      const sorted = [...movimiento].sort((a, b) => b.posicionActual - a.posicionActual);
+      
+      // Asignar 'posicion' a cada objeto según el índice en el array ordenado
+      movimiento.forEach(item => {
+        const index = sorted.findIndex(sortedItem => sortedItem.posicionActual === item.posicionActual);
+        item.posicion = index + 1; // Asignar la nueva posición
+      });
+    };
+
 
 function getPosicion(num){
-    let x = Coordenadas[posicionActual[num]][0];
-    let y = Coordenadas[posicionActual[num]][1];
+    let x = Coordenadas[movimiento[num].posicionActual][0];
+    let y = Coordenadas[movimiento[num].posicionActual][1];
     
     return {x,y};
 
@@ -70,11 +85,12 @@ function actualizarPosicion(num) {
     function moverFicha() {
         if (index < num) {
            
-            posicionActual[turno.value] += 1;
+            movimiento[turno.value].posicionActual += 1;
 
            
-            if (posicionActual[turno.value] >= Coordenadas.length) {
-                posicionActual[turno.value] = 0; 
+           
+            if (movimiento[turno.value].posicionActual >= Coordenadas.length) {
+                movimiento[turno.value].posicionActual = 0; 
             }
 
             
@@ -97,12 +113,13 @@ function actualizarPosicion(num) {
         }
     } 
     moverFicha();
+
    
 }
 
 function dosEnCasilla(num){
    
-    let aux = posicionActual[num];
+    let aux = movimiento[num].posicionActual;
 
     for (let index = 0; index < nJugadores.value; index++) {
          
@@ -110,14 +127,15 @@ function dosEnCasilla(num){
         if(num === index){
          
         }else{
-            if(aux === posicionActual[index]){
+            if(aux ===  movimiento[index].posicionActual){
                 explosion.value = true;
                 setTimeout(() => {
                     explosion.value = false;
                 }, 400);
-                posicionActual[index]-=3;
-                if(posicionActual[index]<0){
-                    posicionActual[index] += Coordenadas.length;
+                movimiento[index].posicionActual-=3;
+                if(movimiento[index].posicionActual<0){
+                    movimiento[index].posicionActual += Coordenadas.length;
+                
                     //numeo vueltas --
                 }
                 pintarFicha(index);
@@ -141,10 +159,15 @@ function pintarFicha(num){
     let posicion = getPosicion(num);
     movimiento[num].top = posicion.x;
     movimiento[num].izq = posicion.y;
+   
+
     setTimeout(() => {
   movimiento[num].animacion = false;
-}, 200);
-    
+  
+}, 200); 
+actualizarPosiciones();
+
+
 }
 
 </script>
