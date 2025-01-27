@@ -84,8 +84,7 @@
 <script setup>
 
 import { reactive, ref } from 'vue';
-import { Coordenadas } from '../static/tablero';
-const animacion = ref(false);
+import { Coordenadas } from '../static/tablero'; 
 const explosion = ref(false);
 const turno = ref(0);
 const nJugadores= ref(3); 
