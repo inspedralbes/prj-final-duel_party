@@ -1,5 +1,5 @@
 <template>
-  <tablero/>
+  <EleccionJugadores/>
 </template>
 
 <script>

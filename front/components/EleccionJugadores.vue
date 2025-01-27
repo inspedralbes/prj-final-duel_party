@@ -1,13 +1,14 @@
 <template>
-    <div class="centrar_main">
+<div class="centrar_main">
     <div class="main">
         <div class="selector">Selector de jugadores</div>
         <div class="jugador1" :style="{backgroundColor: jugador1Color}"> <br>Presiona <br> <span @click="unirse(1)"> A </span>  <br> para unirte a la partida</div>
         <div class="jugador2" :style="{backgroundColor: jugador2Color}" > <br>Presiona <br>  <span @click="unirse(2)"> A </span>  <br> para unirte a la partida</div>
         <div class="jugador3" :style="{backgroundColor: jugador3Color}" > <br>Presiona <br>  <span @click="unirse(3)"> A </span> <br> para unirte a la partida</div>
         <div class="jugador4" :style="{backgroundColor: jugador4Color}"> <br>Presiona <br>  <span @click="unirse(4)"> A </span>  <br> para unirte a la partida</div>
-
+        <div @click="empezar()"> <button>Empezar</button> </div>
     </div>
+
 </div>
 </template>
 
@@ -20,7 +21,7 @@ const jugador1Color = ref("rgba(255, 0, 0, 0.212)");
 const jugador2Color = ref("rgba(0, 0, 255, 0.212)");
 const jugador3Color = ref("rgba(255, 255, 0, 0.24)");
 const jugador4Color = ref("rgba(0, 255, 0, 0.336)");
-
+const nJugadores = ref(0);
 function unirse(num){
 
     switch (num) {
@@ -39,7 +40,10 @@ function unirse(num){
         default:
             break;
     }
+    nJugadores.value++;
+    if(nJugadores.value>1){
 
+    }
 }
 
 
@@ -75,7 +79,7 @@ function unirse(num){
     "s s s s"
     "a b c d"
     "a b c d"
-    "a b c d";
+    "e e e e";
     height: 80vh;
     width: 80vw;
     
@@ -83,6 +87,13 @@ function unirse(num){
 
 }
  
+.empezar{
+    display: grid;
+    grid-area: e;
+    font-size: 30px;
+    text-align: center;
+
+}
 .jugador1{
     display: grid;
     grid-area: a;
