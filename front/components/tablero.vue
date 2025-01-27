@@ -17,8 +17,8 @@
         <div v-if="turno === 1">Azul</div>
         <div v-if="turno === 3">Verde</div>
         <div v-if="turno === 2">Amarillo</div>
-   <div v-if="explosion" class="explosion"  :style="{ marginTop: movimiento[turno-1<0?3 : turno-1].top + 'px',
-      marginLeft: movimiento[turno-1<0?3 : turno-1].izq + 'px',
+   <div v-if="explosion" class="explosion"  :style="{ marginTop: movimiento[turno-1<0?nJugadores : turno-1].top + 'px',
+      marginLeft: movimiento[turno-1<0?nJugadores : turno-1].izq + 'px',
       }"> <img  src="/explo.gif" alt="GIF"> </div>
 
 
