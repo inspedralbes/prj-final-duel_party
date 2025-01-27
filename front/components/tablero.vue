@@ -1,15 +1,34 @@
 <template>
     <main>
-       
-        <div class="rojo"> Rojo {{ movimiento[0].posicion }} vueltas {{ movimiento[0].vuelta }} </div>
-         <div class="azul"> 
-            <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy1.png" alt=""> </div>
-            <div style="grid-column: 2; margin-top: 15px;">Posicion   {{ movimiento[1].posicion }} <br><br> Vueltas {{ movimiento[1].vuelta }} </div>
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+        <div class="rojo"> 
+            <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy4.png" alt=""> </div>
+            <div style="grid-column: 2; margin-top: 15px; margin-left:10px">  {{ movimiento[0].posicion }}o <br><br> 🏁 {{ movimiento[0].vuelta }} </div>
           
            
-             </div>
-         <div class="amarillo"> Amarillo {{ movimiento[2].posicion }} vueltas {{ movimiento[2].vuelta }}  </div>
-         <div class="verde"> Verde  {{ movimiento[3].posicion }} vueltas {{ movimiento[3].vuelta }}  </div>
+         </div>
+        
+        <div class="azul"> 
+            <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy1.png" alt=""> </div>
+            <div style="grid-column: 2; margin-top: 15px; margin-left:10px">  {{ movimiento[1].posicion }}o <br><br> 🏁 {{ movimiento[1].vuelta }} </div>
+          
+           
+         </div>
+         <div class="amarillo"> 
+            <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy2.png" alt=""> </div>
+            <div style="grid-column: 2; margin-top: 15px; margin-left:10px">  {{ movimiento[2].posicion }}o <br><br> 🏁 {{ movimiento[2].vuelta }} </div>
+          
+           
+         </div>
+
+         <div class="verde"> 
+            <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy3.png" alt=""> </div>
+            <div style="grid-column: 2; margin-top: 15px; margin-left:10px">  {{ movimiento[3].posicion }}o <br><br> 🏁 {{ movimiento[3].vuelta }} </div>
+          
+           
+         </div>
+      
+         
        
          
 <div id="tablero">
@@ -204,28 +223,40 @@ actualizarPosiciones();
 .rojo{width: 200px; height: 100px; position: absolute;
 top: 0px;
 left: 0px;
-border: 1px solid black;
-background-color: red;
-border-radius: 10%; 
+border: 1px solid black; 
+border-radius: 10%;
+color: #d59b3d;
+display: grid;
+grid-template-columns: 1fr 1fr;
+font-family: 'Press Start 2P', cursive; 
+background-color: #1c1c1c;
+box-shadow: 0px 5px 10px rgba(255,0, 0, 0.5);
 }
 .azul{width: 200px; height: 100px;
 position: absolute;
 top: 0px;
 right: 0px;
-border: 1px solid black;
-background-color: blue;
+border: 1px solid blue; 
 border-radius: 10%;
-color: white;
+color: #d59b3d;
 display: grid;
 grid-template-columns: 1fr 1fr;
+font-family: 'Press Start 2P', cursive; background-color: #1c1c1c;
+box-shadow: 0px 5px 10px rgba(0, 0, 255, 0.5);
+
 }
 .verde{width: 200px; height: 100px;
 position: absolute;
 bottom: 0px;
 left: 0px;
-border: 1px solid black;
-background-color: green;
+border: 1px solid black; 
 border-radius: 10%;
+color: #d59b3d;
+display: grid;
+grid-template-columns: 1fr 1fr;
+font-family: 'Press Start 2P', cursive; 
+background-color: #1c1c1c;
+box-shadow: 0px -5px 10px rgba(0,255, 0, 0.5);
 
 }
 .amarillo{width: 200px; height: 100px;
@@ -233,8 +264,13 @@ position: absolute;
 bottom: 0px;
 right: 0px;
 border: 1px solid black;
-background-color: yellow;
 border-radius: 10%;
+color: #d59b3d;
+display: grid;
+grid-template-columns: 1fr 1fr;
+font-family: 'Press Start 2P', cursive; 
+background-color: #1c1c1c;
+box-shadow: 0px -5px 10px rgba(255,255, 0);
 }
 
 
