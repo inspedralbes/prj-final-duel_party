@@ -1,5 +1,5 @@
 <template>
-  <tablero/>
+  <mando/>
 </template>
 
 <script>
