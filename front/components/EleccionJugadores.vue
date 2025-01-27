@@ -1,7 +1,8 @@
 <template>
 <div class="centrar_main">
+     
     <div class="main">
-        <div class="selector">Selector de jugadores</div>
+        <div class="selector"> {{ props.numero }} </div> 
         <div class="jugador1" :style="{backgroundColor: jugador1Color}"> <br>Presiona <br> <span @click="unirse(1)"> A </span>  <br> para unirte a la partida</div>
         <div class="jugador2" :style="{backgroundColor: jugador2Color}" > <br>Presiona <br>  <span @click="unirse(2)"> A </span>  <br> para unirte a la partida</div>
         <div class="jugador3" :style="{backgroundColor: jugador3Color}" > <br>Presiona <br>  <span @click="unirse(3)"> A </span> <br> para unirte a la partida</div>
@@ -14,7 +15,40 @@
 
 <script setup>
 
-import { reactive, ref } from 'vue';
+import { reactive, ref,watch } from 'vue';
+
+const props = defineProps({
+  data: {
+    type: Number,
+    required: true,
+  },
+  numero: {
+    type: String,
+    required: true,
+  },
+
+},)
+
+
+
+    if(props.data==1){
+        jugador1Color.value="red";
+    }
+ 
+watch(() => props.data, (newValue) => {
+  if (newValue === 1) {
+    jugador1Color.value = "red";
+  } else if (newValue === 2) {
+    jugador2Color.value = "blue";
+  } else if (newValue === 3) {
+    jugador3Color.value = "yellow";
+  } else if (newValue === 4) {
+    jugador4Color.value = "green";
+  }
+});
+
+
+
 
 
 const jugador1Color = ref("rgba(255, 0, 0, 0.212)");

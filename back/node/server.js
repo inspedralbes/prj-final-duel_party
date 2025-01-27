@@ -27,13 +27,14 @@ const io = socketIo(server, {
 });
 
 const salas={};
-let conexiones = {};
-rellenarPreguntas();
+let conexiones = {}; 
 
 
 
 io.on('connection', async (socket) => {
+
     
+    socket.user = { username: socket.handshake.auth.username };
 
  
     socket.on('create-room', () => {
@@ -43,11 +44,12 @@ io.on('connection', async (socket) => {
         }
        
         conexiones[socket.id]=socket
-        
+        salas[claveSala].push(socket);
+
         socket.join(claveSala);
 
         socket.emit('room-created', claveSala);
-        console.log(`Sala creada: ${claveSala} por el usuario: ${socket.user.username} (ID=${socket.user.id})`);
+        console.log(`Sala creada: ${claveSala} por el usuario: ${socket.user.username}`);
        
         io.to(claveSala).emit('room-users', {
             room: claveSala,
@@ -59,7 +61,10 @@ io.on('connection', async (socket) => {
 
     });
 
-   
+   socket.on('move', (data,username,claveSala) => {
+      
+        io.to(conexiones[salas[claveSala][0].id].id).emit('move', data,username);
+    });
 
  
 
@@ -70,14 +75,14 @@ io.on('connection', async (socket) => {
         if (!salas[claveSala]) {
             salas[claveSala] = [];  // Inicializamos la sala como un array vacío
         }
-         
+        
         if (room) {
             socket.join(claveSala);
             console.log(`Usuario ${socket.user.username} (ID=${socket.user.id}) se unió a la sala: ${claveSala}`);
 
             socket.emit('room-joined', claveSala);
-            asignarValores();
-            salas[claveSala].push(socket.user);
+         
+            salas[claveSala].push(socket);
             conexiones[socket.id]=socket
 
             console.log(salas)

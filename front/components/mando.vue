@@ -8,15 +8,15 @@
        
         <div class="controller">
     <div class="dpad">
-      <button class="up">↑</button>
-      <button class="left">←</button>
-      <button class="center"></button>
-      <button class="right">→</button>
-      <button class="down">↓</button>
+      <button class="up" @click="click('up')">↑</button>
+      <button class="left" @click="click('left')">←</button>
+      <button class="center" @click="click('center')"></button>
+      <button class="right" @click="click('right')">→</button>
+      <button class="down" @click="click('down')">↓</button>
     </div>
     <div class="buttons">
-      <button class="b">B</button>
-      <button class="a">A</button>
+      <button class="b" @click="click('b')">B</button>
+      <button class="a" @click="click('a')">A</button>
      
     </div>
   </div> 
@@ -29,7 +29,13 @@
 </template>
 <script setup>
 import { ref } from "vue";
+const emit = defineEmits();
 
+
+function click(param){
+  emit('boton',param); 
+
+}
 const mensaje=ref(false)
 
 window.addEventListener('load', ()=>{
