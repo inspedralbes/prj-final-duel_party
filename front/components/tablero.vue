@@ -8,20 +8,20 @@
            
          </div>
         
-        <div class="azul"> 
+        <div class="azul"  v-if="nJugadores>0"> 
             <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy1.png" alt=""> </div>
             <div style="grid-column: 2; margin-top: 15px; margin-left:10px">  {{ movimiento[1].posicion }}o <br><br> 🏁 {{ movimiento[1].vuelta }} </div>
           
            
          </div>
-         <div class="amarillo"> 
+         <div class="amarillo"  v-if="nJugadores>1"> 
             <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy2.png" alt=""> </div>
             <div style="grid-column: 2; margin-top: 15px; margin-left:10px">  {{ movimiento[2].posicion }}o <br><br> 🏁 {{ movimiento[2].vuelta }} </div>
           
            
          </div>
 
-         <div class="verde"> 
+         <div class="verde" v-if="nJugadores>2">
             <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy3.png" alt=""> </div>
             <div style="grid-column: 2; margin-top: 15px; margin-left:10px">  {{ movimiento[3].posicion }}o <br><br> 🏁 {{ movimiento[3].vuelta }} </div>
           
@@ -56,16 +56,16 @@
 
 
 
-<div class="ficha1" :class="{animacion: movimiento[0].animacion  }" :style="{ marginTop: movimiento[0].top + 'px',
+<div  class="ficha1" :class="{animacion: movimiento[0].animacion  }" :style="{ marginTop: movimiento[0].top + 'px',
       marginLeft: movimiento[0].izq + 'px',
       }"> </div>
-      <div class="ficha2" :class="{animacion: movimiento[1].animacion  }" :style="{ marginTop: movimiento[1].top + 'px',
+      <div v-if="nJugadores>0" class="ficha2" :class="{animacion: movimiento[1].animacion  }" :style="{ marginTop: movimiento[1].top + 'px',
       marginLeft: movimiento[1].izq + 'px',
       }"> </div>
-      <div class="ficha3" :class="{animacion: movimiento[2].animacion  }" :style="{ marginTop: movimiento[2].top + 'px',
+      <div v-if="nJugadores>1" class="ficha3" :class="{animacion: movimiento[2].animacion  }" :style="{ marginTop: movimiento[2].top + 'px',
       marginLeft: movimiento[2].izq + 'px',
       }"> </div>
-<div class="ficha4" :class="{animacion: movimiento[3].animacion  }" :style="{ marginTop: movimiento[3].top + 'px',
+<div v-if="nJugadores>2" class="ficha4" :class="{animacion: movimiento[3].animacion  }" :style="{ marginTop: movimiento[3].top + 'px',
       marginLeft: movimiento[3].izq + 'px',
      }"></div>
 <img class="img" src="/tablero.jpeg" srcset="">
