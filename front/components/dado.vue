@@ -2,7 +2,9 @@
     <main>
         <div class="contenedor">
             <canvas id="confetti-canvas"></canvas>
-            <div class="cubito">
+
+            <div class="cubito" @click="girarDado">
+
                 <div class="cara-cubo front">
                     <div class="dentro">
                         <span class="punto"></span>
@@ -55,36 +57,26 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
-        <button onclick="tirarEstrellas()">Tirar Confeti</button>
-
-
-        <button id="startButton">Permitir acceso a sensores</button>
-
-
+        <!--<button @click="tirarEstrellas">Tirar Confeti</button>-->
+        <!--<button id="startButton" @click="requestPermission">Permitir acceso a sensores</button> -->
+        
     </main>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
+import confetti from 'canvas-confetti';
 
-const cubito = document.querySelector('.cubito');
+
 const time = 2;
-const resul = new Audio('resultado.wav');
-const agitar = new Audio('agitar.mp3');
-let animacion;
 
-window.addEventListener("orientationchange", function () {
-    if (window.orientation === 0) {
-        document.getElementById('orientation-message').style.display = 'block';
-    } else {
-        document.getElementById('orientation-message').style.display = 'none';
-    }
-});
+const agitar = new Audio('/effects/agitar.mp3');
+const resul = new Audio('/effects/resultado.wav');
 
-const canvas = document.getElementById('confetti-canvas');
-const confettiInstance = confetti.create(canvas, { resize: true });
+let confettiInstance;
+const shakeThreshold = 15;
+const lastAcceleration = ref({ x: 0, y: 0, z: 0 });
 
 const tirarEstrellas = () => {
     const defaults = {
@@ -117,113 +109,116 @@ const tirarEstrellas = () => {
     setTimeout(shoot, 200);
 };
 
-function girarDado() {
+
+
+let dadoTimeout1;
+let dadoTimeout2;
+
+const girarDado = () => {
+    clearTimeout(dadoTimeout1);
+    clearTimeout(dadoTimeout2);
+
+    const cubito = document.querySelector('.cubito');
+    const valorRandom = Math.floor(Math.random() * 6) + 1;
+
     window.navigator.vibrate([1000]);
     agitar.currentTime = 0;
     agitar.play();
 
     cubito.style.transition = '';
-    cubito.style.transform = `translateY(400px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
+      cubito.style.transform = `translateY(400px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
 
-    setTimeout(() => {
+    dadoTimeout1 = setTimeout(() => {
         cubito.style.transition = `transform ${time}s`;
         const valorRandom = Math.floor((Math.random() * 6) + 1);
         console.log(`Valor:${valorRandom}`);
 
         switch (valorRandom) {
-            case 1:
-                cubito.style.transform = `translateY(400px) rotateX(3600deg) rotateY(3600deg) rotateZ(3600deg)`;
-                break;
-            case 2:
-                cubito.style.transform = `translateY(400px) rotateX(4410deg) rotateY(3600deg) rotateZ(3600deg)`;
+          case 1:
+            cubito.style.transform = `translateY(400px) rotateX(3600deg) rotateY(3600deg) rotateZ(3600deg)`;
+            break;
+          case 2:
+            cubito.style.transform = `translateY(400px) rotateX(4410deg) rotateY(3600deg) rotateZ(3600deg)`;
 
-                break;
-            case 3:
-                cubito.style.transform = `translateY(400px) rotateX(3600deg) rotateY(4410deg) rotateZ(3600deg)`;
+            break;
+          case 3:
+            cubito.style.transform = `translateY(400px) rotateX(3600deg) rotateY(4410deg) rotateZ(3600deg)`;
 
-                break;
-            case 4:
-                cubito.style.transform = `translateY(400px) rotateX(3600deg) rotateY(2430deg) rotateZ(3600deg)`;
+            break;
+          case 4:
+            cubito.style.transform = `translateY(400px) rotateX(3600deg) rotateY(2430deg) rotateZ(3600deg)`;
 
-                break;
-            case 5:
-                cubito.style.transform = `translateY(400px) rotateX(2430deg) rotateY(3600deg) rotateZ(3600deg)`;
+            break;
+          case 5:
+            cubito.style.transform = `translateY(400px) rotateX(2430deg) rotateY(3600deg) rotateZ(3600deg)`;
 
-                break;
-            case 6:
-                cubito.style.transform = `translateY(400px) rotateX(3600deg) rotateY(1980deg) rotateZ(3600deg)`;
+            break;
+          case 6:
+            cubito.style.transform = `translateY(400px) rotateX(3600deg) rotateY(1980deg) rotateZ(3600deg)`;
 
-                break;
+            break;
         }
+    }, 100);
+
+    dadoTimeout2 = setTimeout(() => {
+        resul.currentTime = 0;
+        resul.play();
+        tirarEstrellas();
+    }, time * 1000);
+};
 
 
-    }, time * 10);
-
-    resul.currentTime = 0;
-    resul.play();
-    tirarEstrellas();
 
 
+const startDeviceMotionListener = () => {
+    window.addEventListener("devicemotion", (event) => {
+        const { x, y, z } = event.acceleration;
+        const { x: lastX, y: lastY, z: lastZ } = lastAcceleration.value;
 
-}
+        const shakeMagnitude = Math.sqrt(
+            (x - lastX) ** 2 + (y - lastY) ** 2 + (z - lastZ) ** 2
+        );
 
-cubito.addEventListener('click', girarDado);
+        if (shakeMagnitude > shakeThreshold) girarDado();
 
-let lastAcceleration = { x: 0, y: 0, z: 0 };
-const shakeThreshold = 15;
-function startDeviceMotionListener() {
-    window.addEventListener("devicemotion", function (event) {
-        const accelX = event.acceleration.x;
-        const accelY = event.acceleration.y;
-        const accelZ = event.acceleration.z;
-
-        const deltaX = accelX - lastAcceleration.x;
-        const deltaY = accelY - lastAcceleration.y;
-        const deltaZ = accelZ - lastAcceleration.z;
-
-        const shakeMagnitude = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
-
-        if (shakeMagnitude > shakeThreshold) {
-            girarDado();
-        }
-
-        lastAcceleration.x = accelX;
-        lastAcceleration.y = accelY;
-        lastAcceleration.z = accelZ;
-    }, false);
-}
-
-if (window.DeviceMotionEvent) {
-    const startButton = document.getElementById("startButton");
-
-    startButton.addEventListener("click", function () {
-        if (typeof DeviceMotionEvent.requestPermission === "function") {
-            DeviceMotionEvent.requestPermission().then(function (permissionState) {
-                if (permissionState === "granted") {
-                    startDeviceMotionListener();
-                    startButton.style.display = "none";
-                } else {
-                    alert("Permiso denegado para acceder a los sensores.");
-                }
-            }).catch(function (error) {
-                alert("Error al solicitar permiso: " + error);
-            });
-        } else {
-            startDeviceMotionListener();
-            startButton.style.display = "none";
-        }
+        lastAcceleration.value = { x, y, z };
     });
-} else {
-    alert("Tu navegador no soporta el evento DeviceMotion.");
-}
+};
+
+const requestPermission = () => {
+    const startButton = document.getElementById('startButton');
+
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+        DeviceMotionEvent.requestPermission().then((state) => {
+            if (state === 'granted') {
+                startDeviceMotionListener();
+                startButton.style.display = 'none';
+            } else {
+                alert('Permiso denegado para acceder a los sensores.');
+            }
+        }).catch((error) => alert(`Error al solicitar permiso: ${error}`));
+    } else {
+        startDeviceMotionListener();
+        startButton.style.display = 'none';
+    }
+};
+
+onMounted(() => {
+    const canvas = document.getElementById('confetti-canvas');
+    if (canvas) {
+        confettiInstance = confetti.create(canvas, { resize: true });
+    } else {
+        console.error("El canvas de confeti no se encontró.");
+    }
+});
 
 </script>
 
 <style>
 #confetti-canvas {
-    position: absolute;
-    z-index: 0;
-    top: 80px;
+    position: fixed;
+    z-index: 1;
+    top: 10px;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 200px;
@@ -257,7 +252,6 @@ main {
     font-family: Arial, sans-serif;
     margin: 20px;
     padding: 20px;
-    background-color: #f0f0f0;
     color: #333;
 }
 
