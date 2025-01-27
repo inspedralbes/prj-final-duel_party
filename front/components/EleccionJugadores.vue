@@ -6,7 +6,7 @@
         <div class="jugador2" :style="{backgroundColor: jugador2Color}" > <br>Presiona <br>  <span @click="unirse(2)"> A </span>  <br> para unirte a la partida</div>
         <div class="jugador3" :style="{backgroundColor: jugador3Color}" > <br>Presiona <br>  <span @click="unirse(3)"> A </span> <br> para unirte a la partida</div>
         <div class="jugador4" :style="{backgroundColor: jugador4Color}"> <br>Presiona <br>  <span @click="unirse(4)"> A </span>  <br> para unirte a la partida</div>
-        <div @click="empezar()"> <button>Empezar</button> </div>
+        <div @click="empezar()" v-if="nJugadores>1"> <button>Empezar</button> </div>
     </div>
 
 </div>
