@@ -40,6 +40,20 @@
       marginLeft: movimiento[turno-1<0?nJugadores : turno-1].izq + 'px',
       }"> <img  src="/explo.gif" alt="GIF"> </div>
 
+      
+    <img class="balon" src="/balon.png" alt="logo" id="logo" :style="{ marginTop: miniBasquet[0].top + 'px',
+      marginLeft: miniBasquet[0].izq-9 + 'px',
+      }"> 
+      <img  class="balon" src="/balon.png" alt="logo" id="logo" :style="{ marginTop: miniBasquet[1].top-9 + 'px',
+      marginLeft: miniBasquet[1].izq + 'px',
+      }"> 
+      <img  class="balon" src="/balon.png" alt="logo" id="logo" :style="{ marginTop: miniBasquet[2].top + 'px',
+      marginLeft: miniBasquet[2].izq-9 + 'px',      
+      }">
+      <img  class="balon" src="/balon.png" alt="logo" id="logo" :style="{ marginTop: miniBasquet[3].top-9 + 'px',
+      marginLeft: miniBasquet[3].izq + 'px',      
+      }">
+
 
 
 <div class="ficha1" :class="{animacion: movimiento[0].animacion  }" :style="{ marginTop: movimiento[0].top + 'px',
@@ -79,7 +93,12 @@ const movimiento = reactive([{top:60,izq:90,animacion:false,posicionActual:-1,po
                             {top:60,izq:60,animacion:false,posicionActual:-1,posicion:2,vuelta:0},
                             {top:90,izq:90,animacion:false,posicionActual:-1,posicion:3,vuelta:0},
                             {top:90,izq:60,animacion:false,posicionActual:-1,posicion:4,vuelta:0}]);
-                    
+                  
+const miniBasquet = reactive([{top:Coordenadas[10][0],izq:Coordenadas[10][1],posicion:10},
+{top:Coordenadas[22][0],izq:Coordenadas[22][1],posicion:22},
+{top:Coordenadas[33][0],izq:Coordenadas[33][1],posicion:33},
+{top:Coordenadas[42][0],izq:Coordenadas[42][1],posicion:42}]);
+                  
  
 
 
@@ -307,6 +326,13 @@ box-shadow: 0px -5px 10px rgba(255,255, 0);
     height: auto;
      
 }
+.balon{
+    position:absolute;
+    width:40px;
+    height:40px;
+}
+
+
 .ficha1{
     height: 20px;
     width: 20px;
