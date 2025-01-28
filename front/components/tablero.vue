@@ -33,44 +33,46 @@
          
 <div id="tablero">
     <div v-if="turno === 0">Rojo</div>
-        <div v-if="turno === 1">Azul</div>
-        <div v-if="turno === 3">Verde</div>
+    <div v-if="turno === 1">Azul</div>
+    <div v-if="turno === 3">Verde</div>
         <div v-if="turno === 2">Amarillo</div>
-   <div v-if="explosion" class="explosion"  :style="{ marginTop: movimiento[turno-1<0?nJugadores : turno-1].top + 'px',
+        <div v-if="explosion" class="explosion"  :style="{ marginTop: movimiento[turno-1<0?nJugadores : turno-1].top + 'px',
       marginLeft: movimiento[turno-1<0?nJugadores : turno-1].izq + 'px',
       }"> <img  src="/explo.gif" alt="GIF"> </div>
 
       
-    <img class="balon" src="/balon.png" alt="logo" id="logo" :style="{ marginTop: miniBasquet[0].top + 'px',
+<img class="balon" src="/balon.png" alt="logo" id="logo" :style="{ marginTop: miniBasquet[0].top + 'px',
       marginLeft: miniBasquet[0].izq-9 + 'px',
-      }"> 
+    }"> 
       <img  class="balon" src="/balon.png" alt="logo" id="logo" :style="{ marginTop: miniBasquet[1].top-9 + 'px',
       marginLeft: miniBasquet[1].izq + 'px',
-      }"> 
+    }"> 
       <img  class="balon" src="/balon.png" alt="logo" id="logo" :style="{ marginTop: miniBasquet[2].top + 'px',
       marginLeft: miniBasquet[2].izq-9 + 'px',      
-      }">
+    }">
       <img  class="balon" src="/balon.png" alt="logo" id="logo" :style="{ marginTop: miniBasquet[3].top-9 + 'px',
       marginLeft: miniBasquet[3].izq + 'px',      
-      }">
+    }">
 
 
 
 <div  class="ficha1" :class="{animacion: movimiento[0].animacion  }" :style="{ marginTop: movimiento[0].top + 'px',
-      marginLeft: movimiento[0].izq + 'px',
-      }"> </div>
-      <div v-if="nJugadores>0" class="ficha2" :class="{animacion: movimiento[1].animacion  }" :style="{ marginTop: movimiento[1].top + 'px',
-      marginLeft: movimiento[1].izq + 'px',
-      }"> </div>
-      <div v-if="nJugadores>1" class="ficha3" :class="{animacion: movimiento[2].animacion  }" :style="{ marginTop: movimiento[2].top + 'px',
-      marginLeft: movimiento[2].izq + 'px',
-      }"> </div>
-<div v-if="nJugadores>2" class="ficha4" :class="{animacion: movimiento[3].animacion  }" :style="{ marginTop: movimiento[3].top + 'px',
-      marginLeft: movimiento[3].izq + 'px',
-     }"></div>
-<img class="img" src="/tablero.jpeg" srcset="">
- 
-</div>
+        marginLeft: movimiento[0].izq + 'px',
+    }"> </div>
+        <div v-if="nJugadores>0" class="ficha2" :class="{animacion: movimiento[1].animacion  }" :style="{ marginTop: movimiento[1].top + 'px',
+        marginLeft: movimiento[1].izq + 'px',
+    }"> </div>
+        <div v-if="nJugadores>1" class="ficha3" :class="{animacion: movimiento[2].animacion  }" :style="{ marginTop: movimiento[2].top + 'px',
+        marginLeft: movimiento[2].izq + 'px',
+    }"> </div>
+    <div v-if="nJugadores>2" class="ficha4" :class="{animacion: movimiento[3].animacion  }" :style="{ marginTop: movimiento[3].top + 'px',
+        marginLeft: movimiento[3].izq + 'px',
+    }"></div>
+    <img class="img" src="/tablero.jpeg" srcset="">
+    <dado @resultado="actualizarPosicion" />
+
+
+</div>  
 
 <button @click="actualizarPosicion(1)" :disabled="movimiento[turno].animacion" > 1 </button>   
 <button @click="actualizarPosicion(2)" :disabled="movimiento[turno].animacion" > 2 </button>   
@@ -85,6 +87,8 @@
 
 import { reactive, ref } from 'vue';
 import { Coordenadas } from '../static/tablero'; 
+import dado from './dado.vue';
+
 const explosion = ref(false);
 const turno = ref(0);
 const nJugadores= ref(3); 
@@ -313,7 +317,7 @@ box-shadow: 0px -5px 10px rgba(255,255, 0);
 
 
 #tablero {
-    border: 1px solid black;
+  border: 1px solid black;
   width: fit-content;  
   margin: 20px auto; 
   text-align: center;

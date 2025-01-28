@@ -1,5 +1,7 @@
 <template>
-  <EleccionJugadores/>
+  <div>   
+    <tablero/>
+  </div>
 </template>
 
 <script>

@@ -1,5 +1,4 @@
 <template>
-    <main>
         <div class="contenedor">
             <canvas id="confetti-canvas"></canvas>
 
@@ -60,19 +59,18 @@
         </div>
         <!--<button @click="tirarEstrellas">Tirar Confeti</button>-->
         <!--<button id="startButton" @click="requestPermission">Permitir acceso a sensores</button> -->
-        
-    </main>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import confetti from 'canvas-confetti';
 
-
+const valorDado = ref(1);
 const time = 2;
 
 const agitar = new Audio('/effects/agitar.mp3');
 const resul = new Audio('/effects/resultado.wav');
+const emit = defineEmits(['resultado']);
 
 let confettiInstance;
 const shakeThreshold = 15;
@@ -119,7 +117,6 @@ const girarDado = () => {
     clearTimeout(dadoTimeout2);
 
     const cubito = document.querySelector('.cubito');
-    const valorRandom = Math.floor(Math.random() * 6) + 1;
 
     window.navigator.vibrate([1000]);
     agitar.currentTime = 0;
@@ -130,43 +127,48 @@ const girarDado = () => {
 
     dadoTimeout1 = setTimeout(() => {
         cubito.style.transition = `transform ${time}s`;
-        const valorRandom = Math.floor((Math.random() * 6) + 1);
-        console.log(`Valor:${valorRandom}`);
-
-        switch (valorRandom) {
+        valorDado.value = Math.floor((Math.random() * 6) + 1);
+        console.log(`Valor:${valorDado.value}`);
+        
+        
+        
+        switch (valorDado.value) {
           case 1:
-            cubito.style.transform = `translateY(400px) rotateX(3600deg) rotateY(3600deg) rotateZ(3600deg)`;
-            break;
+              cubito.style.transform = `translateY(400px) rotateX(3600deg) rotateY(3600deg) rotateZ(3600deg)`;
+              break;
           case 2:
             cubito.style.transform = `translateY(400px) rotateX(4410deg) rotateY(3600deg) rotateZ(3600deg)`;
 
             break;
-          case 3:
-            cubito.style.transform = `translateY(400px) rotateX(3600deg) rotateY(4410deg) rotateZ(3600deg)`;
-
+            case 3:
+                cubito.style.transform = `translateY(400px) rotateX(3600deg) rotateY(4410deg) rotateZ(3600deg)`;
+                
+                break;
+                case 4:
+                    cubito.style.transform = `translateY(400px) rotateX(3600deg) rotateY(2430deg) rotateZ(3600deg)`;
+                    
             break;
-          case 4:
-            cubito.style.transform = `translateY(400px) rotateX(3600deg) rotateY(2430deg) rotateZ(3600deg)`;
-
-            break;
-          case 5:
+            case 5:
             cubito.style.transform = `translateY(400px) rotateX(2430deg) rotateY(3600deg) rotateZ(3600deg)`;
-
+            
             break;
-          case 6:
-            cubito.style.transform = `translateY(400px) rotateX(3600deg) rotateY(1980deg) rotateZ(3600deg)`;
-
-            break;
-        }
-    }, 100);
-
-    dadoTimeout2 = setTimeout(() => {
-        resul.currentTime = 0;
-        resul.play();
-        tirarEstrellas();
-    }, time * 1000);
-};
-
+            case 6:
+                cubito.style.transform = `translateY(400px) rotateX(3600deg) rotateY(1980deg) rotateZ(3600deg)`;
+                
+                break;
+            }
+        }, 100);
+        
+        dadoTimeout2 = setTimeout(() => {
+            resul.currentTime = 0;
+            resul.play();
+            tirarEstrellas();
+            
+            emit('resultado', valorDado.value);
+        }, time * 1000);
+        
+    };
+    
 
 
 
@@ -226,6 +228,15 @@ onMounted(() => {
     pointer-events: none;
 }
 
+.cubito {
+    position: absolute;
+    transform: translateY(400px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    width: 100%;
+    z-index: 2;
+    height: 100%;
+    transform-style: preserve-3d;
+    
+}
 @media (max-width: 600px) {
     #confetti-canvas {
         width: 150px;
@@ -247,7 +258,6 @@ onMounted(() => {
     }
 }
 
-
 main {
     font-family: Arial, sans-serif;
     margin: 20px;
@@ -261,20 +271,9 @@ main {
     margin: 0 auto;
     position: relative;
     perspective: 1200px;
-    top: -200px;
+    top: -140px;
 }
 
-.cubito {
-    transform: translateY(400px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
-    width: 100%;
-    z-index: 1;
-    height: 100%;
-    transform-style: preserve-3d;
-    /*transition-property: transform;*/
-    /*transition-duration: 2s;*/
-    animation: girarDado 2s ease-in-out forwards;
-    position: relative;
-}
 
 .cara-cubo {
     position: absolute;
