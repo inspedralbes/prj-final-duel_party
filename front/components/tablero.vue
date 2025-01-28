@@ -4,28 +4,30 @@
         <div class="rojo"> 
             <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy4.png" alt=""> </div>
             <div style="grid-column: 2; margin-top: 15px; margin-left:10px">  {{ movimiento[0].posicion }}o <br><br> 🏁 {{ movimiento[0].vuelta }} </div>
-          
+            <div v-if="turno === 0"><dado :disabled="turno !== 0" @resultado="actualizarPosicion"/></div>
            
-         </div>
+        </div>
         
         <div class="azul"  v-if="nJugadores>0"> 
             <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy1.png" alt=""> </div>
             <div style="grid-column: 2; margin-top: 15px; margin-left:10px">  {{ movimiento[1].posicion }}o <br><br> 🏁 {{ movimiento[1].vuelta }} </div>
-          
-           
-         </div>
+            <div v-if="turno === 1"><dado :disabled="turno !== 1" @resultado="actualizarPosicion"/></div>
+        </div>
+
          <div class="amarillo"  v-if="nJugadores>1"> 
             <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy2.png" alt=""> </div>
             <div style="grid-column: 2; margin-top: 15px; margin-left:10px">  {{ movimiento[2].posicion }}o <br><br> 🏁 {{ movimiento[2].vuelta }} </div>
-          
+
+            <div v-if="turno === 2"><dado :disabled="turno !== 2" @resultado="actualizarPosicion"/>
+            </div>
            
          </div>
 
          <div class="verde" v-if="nJugadores>2">
             <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy3.png" alt=""> </div>
             <div style="grid-column: 2; margin-top: 15px; margin-left:10px">  {{ movimiento[3].posicion }}o <br><br> 🏁 {{ movimiento[3].vuelta }} </div>
-          
-           
+            <div v-if="turno === 3"><dado :disabled="turno !== 3" @resultado="actualizarPosicion"/>
+            </div>
          </div>
       
          
@@ -69,18 +71,16 @@
         marginLeft: movimiento[3].izq + 'px',
     }"></div>
     <img class="img" src="/tablero.jpeg" srcset="">
-    <dado @resultado="actualizarPosicion" />
-
 
 </div>  
-
+<!--           
 <button @click="actualizarPosicion(1)" :disabled="movimiento[turno].animacion" > 1 </button>   
 <button @click="actualizarPosicion(2)" :disabled="movimiento[turno].animacion" > 2 </button>   
 <button @click="actualizarPosicion(3)" :disabled="movimiento[turno].animacion" > 3 </button>   
 <button @click="actualizarPosicion(4)" :disabled="movimiento[turno].animacion" > 4 </button>   
 <button @click="actualizarPosicion(5)" :disabled="movimiento[turno].animacion" > 5 </button>   
 <button @click="actualizarPosicion(6)" :disabled="movimiento[turno].animacion" > 6 </button>   
-
+-->
 </main>
 </template>
 <script setup>
@@ -233,6 +233,7 @@ actualizarPosiciones();
 </script>
 <style scoped>
 
+
 @keyframes crecer {
       0% {
         transform: scale(1);  
@@ -249,7 +250,7 @@ border: 1px solid black;
 border-radius: 10%;
 color: #d59b3d;
 display: grid;
-grid-template-columns: 1fr 1fr;
+grid-template-columns: 1fr 1fr 1fr;
 font-family: 'Press Start 2P', cursive; 
 background-color: #1c1c1c;
 box-shadow: 0px 5px 10px rgba(255,0, 0, 0.5);
@@ -262,7 +263,7 @@ border: 1px solid blue;
 border-radius: 10%;
 color: #d59b3d;
 display: grid;
-grid-template-columns: 1fr 1fr;
+grid-template-columns: 1fr 1fr 1fr;
 font-family: 'Press Start 2P', cursive; background-color: #1c1c1c;
 box-shadow: 0px 5px 10px rgba(0, 0, 255, 0.5);
 
@@ -275,7 +276,7 @@ border: 1px solid black;
 border-radius: 10%;
 color: #d59b3d;
 display: grid;
-grid-template-columns: 1fr 1fr;
+grid-template-columns: 1fr 1fr 1fr;
 font-family: 'Press Start 2P', cursive; 
 background-color: #1c1c1c;
 box-shadow: 0px -5px 10px rgba(0,255, 0, 0.5);
@@ -289,7 +290,7 @@ border: 1px solid black;
 border-radius: 10%;
 color: #d59b3d;
 display: grid;
-grid-template-columns: 1fr 1fr;
+grid-template-columns: 1fr 1fr 1fr;
 font-family: 'Press Start 2P', cursive; 
 background-color: #1c1c1c;
 box-shadow: 0px -5px 10px rgba(255,255, 0);

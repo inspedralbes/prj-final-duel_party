@@ -229,7 +229,7 @@ onMounted(() => {
 }
 
 .cubito {
-    position: absolute;
+    position: relative;
     transform: translateY(400px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
     width: 100%;
     z-index: 2;
@@ -272,6 +272,8 @@ main {
     position: relative;
     perspective: 1200px;
     top: -140px;
+    transform: scale(0.5); 
+    transform-origin: center;
 }
 
 
