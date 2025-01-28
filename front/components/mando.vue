@@ -7,6 +7,7 @@
 
        
         <div class="controller">
+            Jugador: {{ yo.playerNumber }}
     <div class="dpad">
       <button class="up" @click="click('up')">↑</button>
       <button class="left" @click="click('left')">←</button>
@@ -28,10 +29,14 @@
 
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref,computed } from "vue";  
+import { useStore } from 'vuex'; // Importar `useStore` de Vuex
+
+const yo= computed(() => $nuxt.$store.state);
 const emit = defineEmits();
+ 
 
-
+ 
 function click(param){
   emit('boton',param); 
 

@@ -14,7 +14,7 @@
           
            
          </div>
-         <div class="amarillo"  v-if="nJugadores>1"> 
+         <div class="morado"  v-if="nJugadores>1"> 
             <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy2.png" alt=""> </div>
             <div style="grid-column: 2; margin-top: 15px; margin-left:10px">  {{ movimiento[2].posicion }}o <br><br> 🏁 {{ movimiento[2].vuelta }} </div>
           
@@ -35,7 +35,7 @@
     <div v-if="turno === 0">Rojo</div>
         <div v-if="turno === 1">Azul</div>
         <div v-if="turno === 3">Verde</div>
-        <div v-if="turno === 2">Amarillo</div>
+        <div v-if="turno === 2">Morado</div>
    <div v-if="explosion" class="explosion"  :style="{ marginTop: movimiento[turno-1<0?nJugadores : turno-1].top + 'px',
       marginLeft: movimiento[turno-1<0?nJugadores : turno-1].izq + 'px',
       }"> <img  src="/explo.gif" alt="GIF"> </div>
@@ -277,7 +277,7 @@ background-color: #1c1c1c;
 box-shadow: 0px -5px 10px rgba(0,255, 0, 0.5);
 
 }
-.amarillo{width: 200px; height: 100px;
+.morado{width: 200px; height: 100px;
 position: absolute;
 bottom: 0px;
 right: 0px;
@@ -288,7 +288,7 @@ display: grid;
 grid-template-columns: 1fr 1fr;
 font-family: 'Press Start 2P', cursive; 
 background-color: #1c1c1c;
-box-shadow: 0px -5px 10px rgba(255,255, 0);
+box-shadow: 0px -5px 10px rgba(128, 0, 128, 0.5)
 }
 
 
@@ -355,7 +355,7 @@ box-shadow: 0px -5px 10px rgba(255,255, 0);
 .ficha3{
     height: 20px;
     width: 20px;
-    background-color: yellow;
+    background-color: purple;
     border-radius: 50%;
     position: absolute;
     transition: all 0.2s ease-in;

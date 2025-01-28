@@ -42,7 +42,8 @@ io.on('connection', async (socket) => {
         if (!salas[claveSala]) {
             salas[claveSala] = [];  // Inicializamos la sala como un array vacío
         }
-       
+        let aux={};
+        
         conexiones[socket.id]=socket
         salas[claveSala].push(socket);
 
@@ -51,7 +52,7 @@ io.on('connection', async (socket) => {
         socket.emit('room-created', claveSala);
         console.log(`Sala creada: ${claveSala} por el usuario: ${socket.user.username}`);
        
-        io.to(claveSala).emit('room-users', {
+        io.to(conexiones[salas[claveSala][0].id].id).emit('room-users', {
             room: claveSala,
             users: [...io.sockets.adapter.rooms.get(claveSala)].map(id => ({
                 id,
@@ -80,17 +81,43 @@ io.on('connection', async (socket) => {
             socket.join(claveSala);
             console.log(`Usuario ${socket.user.username} (ID=${socket.user.id}) se unió a la sala: ${claveSala}`);
 
-            socket.emit('room-joined', claveSala);
-         
-            salas[claveSala].push(socket);
-            conexiones[socket.id]=socket
+           
+            
 
-            console.log(salas)
-            io.to(claveSala).emit('room-users', {
+            if(salas[claveSala].length<6){
+                
+                salas[claveSala].push(socket);
+                conexiones[socket.id]=socket
+                switch (salas[claveSala].length) {
+                   case 2:
+                        socket.user.player=1;
+                        break;
+                    case 3:
+                        socket.user.player=2;
+                        break;
+                    case 4:
+                        socket.user.player=3;
+                        break;
+                    case 5:
+                        socket.user.player=4;
+                        break;
+                
+                    default:
+                        break;
+                }
+               
+                socket.emit('room-joined', claveSala,socket.user);
+
+            }
+
+            console.log(salas[claveSala])
+           
+            io.to(conexiones[salas[claveSala][0].id].id).emit('room-users', {
                 room: claveSala,
                 users: [...room].map(id => ({
                     id,
                     username: io.sockets.sockets.get(id)?.user?.username || 'Invitado',
+                    player: io.sockets.sockets.get(id)?.user?.player || 0,
                 }))
             });
         } else {
@@ -137,6 +164,11 @@ io.on('connection', async (socket) => {
                 
                 
                 }
+                salas[claveSala].splice(salas[claveSala].indexOf(socket.user), 1);
+        if(salas[claveSala].length===0){
+
+            delete salas[claveSala];
+        }
             }
         }
 

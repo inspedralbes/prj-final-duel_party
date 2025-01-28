@@ -1,6 +1,7 @@
 <template>
    <div>
       <NuxtLink to="/menu">Empezar</NuxtLink>
+       
     </div>
      
 </template>
