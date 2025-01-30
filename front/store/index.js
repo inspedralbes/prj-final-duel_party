@@ -32,6 +32,11 @@ export const actions = {
       commit('setPlayerNumber', playerData.socket.player);
      
     },
+    updateNamePlayer({ commit }, playerData) {
+      commit('setUsername', playerData);
+     
+     
+    },
     updateKeyData({ commit }, key) {
         commit('setRoomKey', key);
        

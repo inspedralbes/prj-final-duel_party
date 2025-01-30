@@ -1,13 +1,18 @@
 <template>
 <div class="centrar_main">
      
-    <div class="main">
+    <div class="main" v-if="!jugar">
         <div class="selector"> {{ props.numero }} numero de jugadores: {{ nJugadores }} </div> 
         <div class="jugador1" :style="{backgroundColor: jugador1Color}"> {{ props.data[0].username }} <br>Presiona <br> <span @click="unirse(1)"> A </span>  <br> para estar Listo</div>
         <div class="jugador2" :style="{backgroundColor: jugador2Color}" >{{ props.data[1].username }}<br>Presiona <br>  <span @click="unirse(2)"> A </span>  <br> para estar Listo</div>
         <div class="jugador3" :style="{backgroundColor: jugador3Color}" >{{ props.data[2].username }} <br>Presiona <br>  <span @click="unirse(3)"> A </span> <br> para estar Listo</div>
         <div class="jugador4" :style="{backgroundColor: jugador4Color}">{{ props.data[3].username }} <br>Presiona <br>  <span @click="unirse(4)"> A </span>  <br> para estar Listo</div>
         <div @click="empezar()" v-if="nJugadores>1"> <button>Empezar</button> </div>
+    </div>
+
+    <div v-else>
+        <tablero :numero="nJugadores"/>
+
     </div>
 
 </div>
@@ -30,10 +35,11 @@ const props = defineProps({
 },)
 
 
-
+const jugar=ref(false);
 
 watch(() => props.data, (newValue) => {
   reiniciarColor();
+  console.log(newValue)
   nJugadores.value = 0;
   // Iterar desde el índice 0
   for (let index = 0; index < newValue.length; index++) {
@@ -60,7 +66,10 @@ watch(() => props.data, (newValue) => {
 }, { deep: true });
 
 
-
+function empezar(){
+nJugadores.value--;
+jugar.value=true;
+}
 
 const jugador1Color = ref("rgba(255, 0, 0, 0.212)");
 const jugador2Color = ref("rgba(0, 0, 255, 0.212)");

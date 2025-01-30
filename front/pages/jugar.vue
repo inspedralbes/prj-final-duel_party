@@ -5,7 +5,7 @@
         <button @click="crearSala()">Crear una sala</button>
         <button @click="unirseSala()"> Unirse a una sala</button>
         <input type="text" v-model="claveActual" class="input-sala" placeholder="Clave de la sala" />
-        <input type="text" v-model="nombre" class="input-sala" placeholder="nombre"/>
+       
     </div>
 
     
@@ -31,18 +31,18 @@ const claveSala = computed(() => $nuxt.$store.state.roomKey);
 const yo= computed(() => $nuxt.$store.state);
 const claveActual=ref("");
 
-
 socketManager.RemSocket();
 
 const menu=ref(1)
 const nombre=ref("");
 const player=ref(0);
-const socket = socketManager.getSocket("profe");
+const socket = socketManager.makeSocket(yo.value.username);
 const jugadores=reactive([{username:"", in:false},{username:"", in:false},{username:"", in:false}, {username:"", in:false}]);
 
 
 function boton(param){
-    socket.emit('move', param,nombre.value,claveSala.value);
+    socket.emit('move', param, yo.value.playerNumber,claveSala.value);
+    
 }
 
 function crearSala(){
@@ -64,18 +64,17 @@ function reiniciarSala(){
 
 socket.on('move', (data,username) => {
   
-  if(data=="a"){
-      player.value=1;
-      menu.value=-0;
-      menu.value=3;
-        console.log(player.value);
-  }
+   
+        console.log(data, username);
+  
 });
+socket.on('sala_llena',()=>{
+
+    alert("sala llena")
+})
 
 socket.on('room-users', (data) => { 
     reiniciarSala();
-
-
 
     for (let index = 1; index < data.users.length; index++) {
         jugadores[index-1].username=data.users[index].username;

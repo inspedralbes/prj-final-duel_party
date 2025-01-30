@@ -2,7 +2,7 @@ import { io } from 'socket.io-client';
 
 let socketInstance;
 
-const getSocket = (token) => {
+const makeSocket = (token) => {
   if (!socketInstance) {
     socketInstance = io("http://localhost:20070", {
       transports: ["websocket"],
@@ -24,4 +24,8 @@ const RemSocket=()=>{
   }
 }
 
-export default { getSocket, RemSocket } ;
+const getSocket=()=>{
+  return socketInstance;
+}
+
+export default { getSocket, RemSocket,makeSocket } ;

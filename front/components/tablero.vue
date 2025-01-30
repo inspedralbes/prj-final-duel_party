@@ -7,6 +7,7 @@
           
            
          </div>
+         
         
         <div class="azul"  v-if="nJugadores>0"> 
             <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy1.png" alt=""> </div>
@@ -83,11 +84,20 @@
 </template>
 <script setup>
 
+const props = defineProps({
+  numero: {
+    type: Number,
+    required: true,
+  },
+
+},)
 import { reactive, ref } from 'vue';
 import { Coordenadas } from '../static/tablero'; 
 const explosion = ref(false);
 const turno = ref(0);
-const nJugadores= ref(3); 
+
+
+const nJugadores= ref(props.numero);
 const movimiento = reactive([{top:60,izq:90,animacion:false,posicionActual:-1,posicion:1,vuelta:0},
                             {top:60,izq:60,animacion:false,posicionActual:-1,posicion:2,vuelta:0},
                             {top:90,izq:90,animacion:false,posicionActual:-1,posicion:3,vuelta:0},
