@@ -83,13 +83,22 @@
 </template>
 <script setup>
 
+const props = defineProps({
+  numero: {
+    type: Number,
+    required: true,
+  },
+
+},)
 import { reactive, ref } from 'vue';
 import { Coordenadas } from '../static/tablero'; 
 import dado from './dado.vue';
 
 const explosion = ref(false);
 const turno = ref(0);
-const nJugadores= ref(3); 
+
+
+const nJugadores= ref(props.numero);
 const movimiento = reactive([{top:60,izq:90,animacion:false,posicionActual:-1,posicion:1,vuelta:0},
                             {top:60,izq:60,animacion:false,posicionActual:-1,posicion:2,vuelta:0},
                             {top:90,izq:90,animacion:false,posicionActual:-1,posicion:3,vuelta:0},
@@ -313,7 +322,7 @@ display: grid;
 grid-template-columns: 1fr 1fr 1fr;
 font-family: 'Press Start 2P', cursive; 
 background-color: #1c1c1c;
-box-shadow: 0px -5px 10px rgba(255,255, 0);
+box-shadow: 0px -5px 10px rgba(128, 0, 128, 0.5)
 }
 .dado-amarillo{
     width: 200px; 
@@ -387,7 +396,7 @@ box-shadow: 0px -5px 10px rgba(255,255, 0);
 .ficha3{
     height: 20px;
     width: 20px;
-    background-color: yellow;
+    background-color: purple;
     border-radius: 50%;
     position: absolute;
     transition: all 0.2s ease-in;

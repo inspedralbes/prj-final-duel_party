@@ -1,12 +1,18 @@
 <template>
 <div class="centrar_main">
-    <div class="main">
-        <div class="selector">Selector de jugadores</div>
-        <div class="jugador1" :style="{backgroundColor: jugador1Color}"> <br>Presiona <br> <span @click="unirse(1)"> A </span>  <br> para unirte a la partida</div>
-        <div class="jugador2" :style="{backgroundColor: jugador2Color}" > <br>Presiona <br>  <span @click="unirse(2)"> A </span>  <br> para unirte a la partida</div>
-        <div class="jugador3" :style="{backgroundColor: jugador3Color}" > <br>Presiona <br>  <span @click="unirse(3)"> A </span> <br> para unirte a la partida</div>
-        <div class="jugador4" :style="{backgroundColor: jugador4Color}"> <br>Presiona <br>  <span @click="unirse(4)"> A </span>  <br> para unirte a la partida</div>
-        <div @click="empezar()"> <button>Empezar</button> </div>
+     
+    <div class="main" v-if="!jugar">
+        <div class="selector"> {{ props.numero }} numero de jugadores: {{ nJugadores }} </div> 
+        <div class="jugador1" :style="{backgroundColor: jugador1Color}"> {{ props.data[0].username }} <br>Presiona <br> <span @click="unirse(1)"> A </span>  <br> para estar Listo</div>
+        <div class="jugador2" :style="{backgroundColor: jugador2Color}" >{{ props.data[1].username }}<br>Presiona <br>  <span @click="unirse(2)"> A </span>  <br> para estar Listo</div>
+        <div class="jugador3" :style="{backgroundColor: jugador3Color}" >{{ props.data[2].username }} <br>Presiona <br>  <span @click="unirse(3)"> A </span> <br> para estar Listo</div>
+        <div class="jugador4" :style="{backgroundColor: jugador4Color}">{{ props.data[3].username }} <br>Presiona <br>  <span @click="unirse(4)"> A </span>  <br> para estar Listo</div>
+        <div @click="empezar()" v-if="nJugadores>1"> <button>Empezar</button> </div>
+    </div>
+
+    <div v-else>
+        <tablero :numero="nJugadores"/>
+
     </div>
 
 </div>
@@ -14,14 +20,71 @@
 
 <script setup>
 
-import { reactive, ref } from 'vue';
+import { reactive, ref,watch } from 'vue';
 
+const props = defineProps({
+  data: {
+    type: Array,
+    required: true,
+  },
+  numero: {
+    type: String,
+    required: true,
+  },
+
+},)
+
+
+const jugar=ref(false);
+
+watch(() => props.data, (newValue) => {
+  reiniciarColor();
+  console.log(newValue)
+  nJugadores.value = 0;
+  // Iterar desde el índice 0
+  for (let index = 0; index < newValue.length; index++) {
+    if (newValue[index].in) {
+      nJugadores.value++;
+      switch (nJugadores.value) {
+        case 4: jugador4Color.value="green";
+        
+        
+        case 3: jugador3Color.value="purple";
+        
+        
+        case 2: jugador2Color.value="blue";
+        
+        
+        case 1: jugador1Color.value="red";
+            
+            
+        default:
+            break;
+    }
+    }
+  }
+}, { deep: true });
+
+
+function empezar(){
+nJugadores.value--;
+jugar.value=true;
+}
 
 const jugador1Color = ref("rgba(255, 0, 0, 0.212)");
 const jugador2Color = ref("rgba(0, 0, 255, 0.212)");
-const jugador3Color = ref("rgba(255, 255, 0, 0.24)");
+const jugador3Color = ref("rgba(128, 0, 128, 0.212)");
 const jugador4Color = ref("rgba(0, 255, 0, 0.336)");
 const nJugadores = ref(0);
+
+function reiniciarColor(){
+
+    jugador1Color.value="rgba(255, 0, 0, 0.212)";
+    jugador2Color.value="rgba(0, 0, 255, 0.212)";
+    jugador3Color.value="rgba(255, 255, 0, 0.24)";
+    jugador4Color.value="rgba(0, 255, 0, 0.336)";
+}
+
 function unirse(num){
 
     switch (num) {
