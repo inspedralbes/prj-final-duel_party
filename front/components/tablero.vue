@@ -4,30 +4,28 @@
         <div class="rojo"> 
             <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy4.png" alt=""> </div>
             <div style="grid-column: 2; margin-top: 15px; margin-left:10px">  {{ movimiento[0].posicion }}o <br><br> 🏁 {{ movimiento[0].vuelta }} </div>
-            <div v-if="turno === 0"><dado :disabled="turno !== 0" @resultado="actualizarPosicion"/></div>
-           
         </div>
+        <div class="dado-rojo" v-if="turno === 0"><dado @resultado="actualizarPosicion"/></div>
         
         <div class="azul"  v-if="nJugadores>0"> 
-            <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy1.png" alt=""> </div>
-            <div style="grid-column: 2; margin-top: 15px; margin-left:10px">  {{ movimiento[1].posicion }}o <br><br> 🏁 {{ movimiento[1].vuelta }} </div>
-            <div v-if="turno === 1"><dado :disabled="turno !== 1" @resultado="actualizarPosicion"/></div>
+            <div style="grid-column: 2;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy1.png" alt=""> </div>
+            <div style="grid-column: 3; margin-top: 15px; margin-left:10px">  {{ movimiento[1].posicion }}o <br><br> 🏁 {{ movimiento[1].vuelta }} </div>
         </div>
+        <div class="dado-azul" v-if="turno === 1"><dado @resultado="actualizarPosicion"/></div>
 
          <div class="amarillo"  v-if="nJugadores>1"> 
             <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy2.png" alt=""> </div>
             <div style="grid-column: 2; margin-top: 15px; margin-left:10px">  {{ movimiento[2].posicion }}o <br><br> 🏁 {{ movimiento[2].vuelta }} </div>
-
-            <div v-if="turno === 2"><dado :disabled="turno !== 2" @resultado="actualizarPosicion"/>
-            </div>
+        </div>
+        <div class="dado-amarillo" v-if="turno === 2"><dado @resultado="actualizarPosicion"/>
            
          </div>
 
          <div class="verde" v-if="nJugadores>2">
             <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;" src="/avatar/boy3.png" alt=""> </div>
             <div style="grid-column: 2; margin-top: 15px; margin-left:10px">  {{ movimiento[3].posicion }}o <br><br> 🏁 {{ movimiento[3].vuelta }} </div>
-            <div v-if="turno === 3"><dado :disabled="turno !== 3" @resultado="actualizarPosicion"/>
-            </div>
+        </div>
+        <div class="dado-verde" v-if="turno === 3"><dado @resultado="actualizarPosicion"/>
          </div>
       
          
@@ -255,6 +253,14 @@ font-family: 'Press Start 2P', cursive;
 background-color: #1c1c1c;
 box-shadow: 0px 5px 10px rgba(255,0, 0, 0.5);
 }
+.dado-rojo{
+    width: 200px; 
+    height: 100px; 
+    position: absolute;
+    top:0px;
+    left: 0px;
+    margin-top:120px
+}
 .azul{width: 200px; height: 100px;
 position: absolute;
 top: 0px;
@@ -266,7 +272,14 @@ display: grid;
 grid-template-columns: 1fr 1fr 1fr;
 font-family: 'Press Start 2P', cursive; background-color: #1c1c1c;
 box-shadow: 0px 5px 10px rgba(0, 0, 255, 0.5);
-
+}
+.dado-azul{
+    width: 200px; 
+    height: 100px; 
+    position: absolute;
+    top:0px;
+    right: 0px;
+    margin-top:120px
 }
 .verde{width: 200px; height: 100px;
 position: absolute;
@@ -280,7 +293,14 @@ grid-template-columns: 1fr 1fr 1fr;
 font-family: 'Press Start 2P', cursive; 
 background-color: #1c1c1c;
 box-shadow: 0px -5px 10px rgba(0,255, 0, 0.5);
-
+}
+.dado-verde{
+width: 200px; 
+height: 100px;
+position: absolute;
+bottom: 0px;
+left: 0px;
+margin-bottom:170px;
 }
 .amarillo{width: 200px; height: 100px;
 position: absolute;
@@ -295,7 +315,14 @@ font-family: 'Press Start 2P', cursive;
 background-color: #1c1c1c;
 box-shadow: 0px -5px 10px rgba(255,255, 0);
 }
-
+.dado-amarillo{
+    width: 200px; 
+    height: 100px; 
+    position: absolute;
+    bottom:0px;
+    right: 0px;
+    margin-bottom:170px
+}
 
 .explosion{
     width: auto;

@@ -271,7 +271,7 @@ main {
     margin: 0 auto;
     position: relative;
     perspective: 1200px;
-    top: -140px;
+    top: -230px;
     transform: scale(0.5); 
     transform-origin: center;
 }
