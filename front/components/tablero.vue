@@ -92,11 +92,13 @@ const props = defineProps({
 },)
 import { reactive, ref } from 'vue';
 import { Coordenadas } from '../static/tablero'; 
+
+import socketManager from '../static/socket' 
 import dado from './dado.vue';
 
 const explosion = ref(false);
 const turno = ref(0);
-
+const socket= socketManager.getSocket();
 
 const nJugadores= ref(props.numero);
 const movimiento = reactive([{top:60,izq:90,animacion:false,posicionActual:-1,posicion:1,vuelta:0},
