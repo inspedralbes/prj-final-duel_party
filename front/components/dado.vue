@@ -118,7 +118,7 @@ const girarDado = () => {
 
     const cubito = document.querySelector('.cubito');
 
-    window.navigator.vibrate([1000]);
+  //  window.navigator.vibrate([1000]);
     agitar.currentTime = 0;
     agitar.play();
 
