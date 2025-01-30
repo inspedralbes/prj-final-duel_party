@@ -1,6 +1,6 @@
 <template>
     <main>
- <input type="text" v-model="nombre" class="input-sala" placeholder="nombre"/>
+ <input type="text" v-model="nombre" class="" placeholder="nombre"/>
  <button @click="siguiente" > Siguiente</button>
 </main>
 </template>

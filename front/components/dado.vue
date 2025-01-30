@@ -216,7 +216,7 @@ onMounted(() => {
 
 </script>
 
-<style>
+<style scoped>
 #confetti-canvas {
     position: fixed;
     z-index: 1;
