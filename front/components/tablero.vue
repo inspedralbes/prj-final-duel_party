@@ -92,7 +92,6 @@ const props = defineProps({
 },)
 import { reactive, ref } from 'vue';
 import { Coordenadas } from '../static/tablero'; 
-
 import socketManager from '../static/socket' 
 import dado from './dado.vue';
 
@@ -153,13 +152,13 @@ function actualizarPosicion(num) {
         if (index < num) {
            
             movimiento[turno.value].posicionActual += 1;
-            console.log(movimiento[turno.value].posicionActual);
+           
            
            
             if (movimiento[turno.value].posicionActual >= Coordenadas.length) {
                 movimiento[turno.value].posicionActual = 0; 
                 movimiento[turno.value].vuelta++;
-                console.log(movimiento[turno.value].posicionActual);
+                
             }
 
             
@@ -178,23 +177,27 @@ function actualizarPosicion(num) {
             if(turno.value>nJugadores.value){
                 turno.value = 0;
             }
-           
+            console.log(turno.value);
+            socket.emit('turno', turno.value, $nuxt.$store.state.roomKey);
         }
+        
     } 
     moverFicha();
-
    
+  
 }
 
 function dosEnCasilla(num){
    
     let aux = movimiento[num].posicionActual;
 
-    for (let index = 0; index < nJugadores.value; index++) {
+    for (let index = 0; index < nJugadores.value+1; index++) {
          
        
         if(num === index){
-         
+            console.log(
+                "hola"
+            );
         }else{
             if(aux ===  movimiento[index].posicionActual){
                 explosion.value = true;

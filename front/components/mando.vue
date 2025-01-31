@@ -1,5 +1,8 @@
 <template>
-
+  <main>
+    <div v-if="meToca">
+        me toca
+    </div>
     <div v-if="mensaje">
         ponlo hori porfa
     </div>
@@ -9,11 +12,11 @@
         <div class="controller">
             Jugador: {{ yo.playerNumber }}
     <div class="dpad">
-      <button class="up" @click="click('up')">↑</button>
-      <button class="left" @click="click('left')">←</button>
-      <button class="center" @click="click('center')"></button>
-      <button class="right" @click="click('right')">→</button>
-      <button class="down" @click="click('down')">↓</button>
+      <button class="up" @click="click('up')" :disabled="!meToca">↑</button>
+      <button class="left" @click="click('left')"  :disabled="!meToca">←</button>
+      <button class="center" @click="click('center')"  :disabled="!meToca"></button>
+      <button class="right" @click="click('right')"  :disabled="!meToca">→</button>
+      <button class="down" @click="click('down')"  :disabled="!meToca">↓</button>
     </div>
     <div class="buttons">
       <button class="b" @click="click('b')">B</button>
@@ -25,22 +28,40 @@
     </div>
 
 
-
+  </main>
 
 </template>
 <script setup>
-import { ref,computed } from "vue";  
-import { useStore } from 'vuex'; // Importar `useStore` de Vuex
+import { ref,computed } from "vue";   
+import socketManager from '../static/socket' 
 
 const yo= computed(() => $nuxt.$store.state);
 const emit = defineEmits();
- 
+const turno = ref(0);
+const socket=socketManager.getSocket();
+const meToca=ref(false);
+comprobarTurno();
 
- 
-function click(param){
-  emit('boton',param); 
-
+function comprobarTurno(){
+  if(turno.value===yo.value.playerNumber-1){
+    meToca.value=true;
+  }else{
+    meToca.value=false;
+  }
 }
+
+
+function click(param){
+    socket.emit('move', param, yo.value.playerNumber,yo.value.roomKey);
+    
+}
+
+socket.on('turno', (data) => {
+  turno.value = data;
+  comprobarTurno();  
+  
+});
+  
 const mensaje=ref(false)
 
 window.addEventListener('load', ()=>{

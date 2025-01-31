@@ -16,7 +16,7 @@
  </div>
 
  <div v-if="menu===4">
-    <mando @boton="boton"/>
+    <mando/>
  </div>
 
 
@@ -30,7 +30,6 @@ import socketManager from '../static/socket'
 const claveSala = computed(() => $nuxt.$store.state.roomKey);
 const yo= computed(() => $nuxt.$store.state);
 const claveActual=ref("");
-
 socketManager.RemSocket();
 
 const menu=ref(1)
@@ -40,10 +39,6 @@ const socket = socketManager.makeSocket(yo.value.username);
 const jugadores=reactive([{username:"", in:false},{username:"", in:false},{username:"", in:false}, {username:"", in:false}]);
 
 
-function boton(param){
-    socket.emit('move', param, yo.value.playerNumber,claveSala.value);
-    
-}
 
 function crearSala(){
      
@@ -72,6 +67,12 @@ socket.on('sala_llena',()=>{
 
     alert("sala llena")
 })
+
+socket.on('turno', (data) => {
+    console.log(data);
+    
+});
+
 
 socket.on('room-users', (data) => { 
     reiniciarSala();

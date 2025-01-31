@@ -68,7 +68,15 @@ io.on('connection', async (socket) => {
         io.to(conexiones[salas[claveSala][0].id].id).emit('move', data, username);
     });
 
+    socket.on('turno', (turno, claveSala) => {
 
+        salas[claveSala][0].user.turno = turno;
+        socket.broadcast.to(claveSala).emit('turno', turno);
+      
+        console.log(salas[claveSala][0].user.turno);
+
+
+    });
 
 
 

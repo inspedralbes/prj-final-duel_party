@@ -127,7 +127,7 @@ const girarDado = () => {
 
     dadoTimeout1 = setTimeout(() => {
         cubito.style.transition = `transform ${time}s`;
-        valorDado.value = Math.floor((Math.random() * 6) + 1);
+        valorDado.value = 3//Math.floor((Math.random() * 6) + 1);
         console.log(`Valor:${valorDado.value}`);
         
         
