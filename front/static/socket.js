@@ -4,7 +4,7 @@ let socketInstance;
 
 const makeSocket = (token) => {
   if (!socketInstance) {
-    socketInstance = io("http://localhost:20070", {
+    socketInstance = io("http://a23diemujper.prueba.daw.inspedralbes.cat:20071", {
       transports: ["websocket"],
       withCredentials: true,
       auth: {
