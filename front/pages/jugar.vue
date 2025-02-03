@@ -57,12 +57,6 @@ function reiniciarSala(){
     }
 }
 
-socket.on('move', (data,username) => {
-  
-   
-        console.log(data, username);
-  
-});
 socket.on('sala_llena',()=>{
 
     alert("sala llena")

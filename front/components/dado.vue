@@ -61,10 +61,21 @@
         <!--<button id="startButton" @click="requestPermission">Permitir acceso a sensores</button> -->
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue';
+<script setup> 
+import { ref, onMounted,watch } from 'vue';
 import confetti from 'canvas-confetti';
+import socketManager from '../static/socket';
+const socket=socketManager.getSocket(); 
 
+
+socket.on('move', (data,username) => {
+  
+  if(data==='a') 
+  girarDado();
+ 
+
+});
+ 
 const valorDado = ref(1);
 const time = 2;
 

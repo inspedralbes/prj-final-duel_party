@@ -63,9 +63,14 @@ io.on('connection', async (socket) => {
 
     });
 
-    socket.on('move', (data, username, claveSala) => {
+    socket.on('move', (data, playerNumber, claveSala) => {
 
-        io.to(conexiones[salas[claveSala][0].id].id).emit('move', data, username);
+        
+
+            io.to(conexiones[salas[claveSala][0].id].id).emit('move', data, playerNumber);
+
+       
+
     });
 
     socket.on('turno', (turno, claveSala) => {

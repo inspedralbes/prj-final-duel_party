@@ -145,6 +145,15 @@ function getPosicion(num){
 
     
 }
+
+
+socket.on('move', (data,username) => {
+  
+   
+  console.log(data, username);
+ 
+
+});
 function actualizarPosicion(num) {
     let index = 0;
 

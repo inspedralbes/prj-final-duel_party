@@ -21,6 +21,7 @@
 <script setup>
 
 import { reactive, ref,watch } from 'vue';
+import socket from '../static/socket';
 
 const props = defineProps({
   data: {

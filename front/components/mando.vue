@@ -52,7 +52,10 @@ function comprobarTurno(){
 
 
 function click(param){
+  if(turno.value===yo.value.playerNumber-1){
     socket.emit('move', param, yo.value.playerNumber,yo.value.roomKey);
+  }
+   
     
 }
 
