@@ -35,7 +35,6 @@ export default {
 }
 
 .btn-inicio {
-  margin: 10px;
   height: 70px;
   width: 250px;
   font-size: 26px;
@@ -47,7 +46,7 @@ export default {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
   transition: transform 0.3s, background-color 0.3s;
   font-family: 'Press Start 2P', cursive;
-
+  margin-left: 20px;
   
 }
 
