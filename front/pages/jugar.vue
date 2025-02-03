@@ -1,112 +1,158 @@
 <template>
-<main>
- 
-    <div v-if="menu===1">
-        <button @click="crearSala()">Crear una sala</button>
-        <button @click="unirseSala()"> Unirse a una sala</button>
-        <input type="text" v-model="claveActual" class="input-sala" placeholder="Clave de la sala" />
-       
-    </div>
+    <main>
+        <div class="div-inicio"  v-if="menu === 1">
+            <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
-    
- <div v-if="menu===3">
+            <div class="grid">
+                <button class="btn-inicio" @click="crearSala()">Crear una sala</button>
+                <input type="text" v-model="claveActual" class="input-sala" placeholder="Clave de la sala" />
+                <button class="btn-inicio" @click="unirseSala()">Unirse a una sala</button>
+            </div>
+        </div>
 
-<EleccionJugadores :data="jugadores" :numero="claveSala"/>
+        <div v-if="menu === 3">
+            <EleccionJugadores :data="jugadores" :numero="claveSala" />
+        </div>
 
- </div>
-
- <div v-if="menu===4">
-    <mando @boton="boton"/>
- </div>
-
-
-</main>
+        <div v-if="menu === 4">
+            <mando @boton="boton" />
+        </div>
+    </main>
 </template>
+
 <script setup>
-import { ref,reactive,computed } from "vue";
- 
-import socketManager from '../static/socket' 
-  
+import { ref, reactive, computed } from "vue";
+import socketManager from '../static/socket';
+
 const claveSala = computed(() => $nuxt.$store.state.roomKey);
-const yo= computed(() => $nuxt.$store.state);
-const claveActual=ref("");
+const yo = computed(() => $nuxt.$store.state);
+const claveActual = ref("");
 
 socketManager.RemSocket();
 
-const menu=ref(1)
-const nombre=ref("");
-const player=ref(0);
+const menu = ref(1);
 const socket = socketManager.makeSocket(yo.value.username);
-const jugadores=reactive([{username:"", in:false},{username:"", in:false},{username:"", in:false}, {username:"", in:false}]);
+const jugadores = reactive([
+    { username: "", in: false },
+    { username: "", in: false },
+    { username: "", in: false },
+    { username: "", in: false }
+]);
 
-
-function boton(param){
-    socket.emit('move', param, yo.value.playerNumber,claveSala.value);
-    
+function boton(param) {
+    socket.emit('move', param, yo.value.playerNumber, claveSala.value);
 }
 
-function crearSala(){
-     
+function crearSala() {
     socket.emit('create-room');
 }
-function unirseSala(){
+
+function unirseSala() {
     socket.emit('join-room', claveActual.value);
-   
-}
-function reiniciarSala(){
-
-    for (let index = 0; index < jugadores.length; index++) {
-        jugadores[index].username="";
-        jugadores[index].in=false;
-        
-    }
 }
 
-socket.on('move', (data,username) => {
-  
-   
-        console.log(data, username);
-  
+function reiniciarSala() {
+    jugadores.forEach(jugador => {
+        jugador.username = "";
+        jugador.in = false;
+    });
+}
+
+socket.on('move', (data, username) => {
+    console.log(data, username);
 });
-socket.on('sala_llena',()=>{
 
-    alert("sala llena")
-})
+socket.on('sala_llena', () => {
+    alert("sala llena");
+});
 
-socket.on('room-users', (data) => { 
+socket.on('room-users', (data) => {
     reiniciarSala();
-
-    for (let index = 1; index < data.users.length; index++) {
-        jugadores[index-1].username=data.users[index].username;
-        jugadores[index-1].in=true;
-    }
-    if(menu.value===4){
-   if(jugadores[yo.value.playerNumber-1].in===false){
-    $nuxt.$store.dispatch('updateNPlayer', yo.value.playerNumber-1)
-   }
-}
-   
-   console.log(jugadores)
-});
-
-socket.on("room-joined", (claveSala,socket) => {
-    menu.value=4;
-    $nuxt.$store.dispatch('updatePlayer', {claveSala,socket})
-    console.log(yo.value)
-
-    
+    data.users.slice(1).forEach((user, index) => {
+        jugadores[index].username = user.username;
+        jugadores[index].in = true;
     });
 
+    if (menu.value === 4 && !jugadores[yo.value.playerNumber - 1].in) {
+        $nuxt.$store.dispatch('updateNPlayer', yo.value.playerNumber - 1);
+    }
+
+    console.log(jugadores);
+});
+
+socket.on("room-joined", (claveSala, socket) => {
+    menu.value = 4;
+    $nuxt.$store.dispatch('updatePlayer', { claveSala, socket });
+    console.log(yo.value);
+});
 
 socket.on("room-created", (clave_Sala) => {
-     
-    $nuxt.$store.dispatch('updateKeyData', clave_Sala)
-    menu.value=3;
-    
-    });
-
+    $nuxt.$store.dispatch('updateKeyData', clave_Sala);
+    menu.value = 3;
+});
 </script>
 
-
 <style scoped>
+main {
+    margin: 0;
+    padding: 0;
+}
+.div-inicio {
+    place-items: center;
+  background-image: url('/images/fondo-inicio.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  font-family: 'Press Start 2P', cursive;
+}
+
+.grid {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 50vh;
+    margin-left: 20px;
+
+}
+
+.input-sala {
+    width: 340px;
+    font-size: 20px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    margin-bottom: 20px;
+    
+}
+
+.btn-inicio {
+    width: 350px;
+    font-size: 26px;
+    border: 1px solid black;
+    background-color: #292828;
+    color: #ffffff;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
+    transition: transform 0.3s, background-color 0.3s;
+    font-family: 'Press Start 2P', cursive;
+    margin-bottom: 100px;
+}
+
+.btn-inicio:hover {
+    background-color: #1cbc00;
+    transform: scale(1.05);
+}
+
+.btn-inicio:active {
+    transform: scale(1);
+}
 </style>
