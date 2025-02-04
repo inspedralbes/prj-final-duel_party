@@ -120,7 +120,7 @@ main {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    height: 50vh;
+    height: 40vh;
     margin-left: 20px;
 
 }
