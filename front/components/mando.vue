@@ -1,6 +1,13 @@
 <template>
   <main>
-    <div v-if="meToca">
+
+    <div v-if="permisos">
+  <button id="startButton" @click="requestPermission">Permitir acceso a sensores</button> 
+    </div>
+
+    <div v-else>
+
+      <div v-if="meToca">
         me toca
     </div>
     <div v-if="mensaje">
@@ -26,6 +33,8 @@
   </div> 
 
     </div>
+    </div>
+
 
 
   </main>
@@ -40,6 +49,7 @@ const emit = defineEmits();
 const turno = ref(0);
 const socket=socketManager.getSocket();
 const meToca=ref(false);
+const permisos=ref(true);
 comprobarTurno();
 
 function comprobarTurno(){
@@ -49,6 +59,44 @@ function comprobarTurno(){
     meToca.value=false;
   }
 }
+
+const requestPermission = () => {
+    const startButton = document.getElementById('startButton');
+
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+        DeviceMotionEvent.requestPermission().then((state) => {
+            if (state === 'granted') {
+                startDeviceMotionListener();
+                startButton.style.display = 'none';
+                permisos.value=true;
+            } else {
+                alert('Permiso denegado para acceder a los sensores.');
+            }
+        }).catch((error) => alert(`Error al solicitar permiso: ${error}`));
+    } else {
+        startDeviceMotionListener();
+        startButton.style.display = 'none';
+    }
+};
+
+
+const startDeviceMotionListener = () => {
+    window.addEventListener("devicemotion", (event) => {
+        const { x, y, z } = event.acceleration;
+        const { x: lastX, y: lastY, z: lastZ } = lastAcceleration.value;
+
+        const shakeMagnitude = Math.sqrt(
+            (x - lastX) ** 2 + (y - lastY) ** 2 + (z - lastZ) ** 2
+        );
+
+        if (shakeMagnitude > shakeThreshold){
+          socket.emit('move', 'a', yo.value.playerNumber,yo.value.roomKey);
+        }
+
+        lastAcceleration.value = { x, y, z };
+    });
+};
+
 
 
 function click(param){

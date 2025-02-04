@@ -183,39 +183,6 @@ const girarDado = () => {
 
 
 
-const startDeviceMotionListener = () => {
-    window.addEventListener("devicemotion", (event) => {
-        const { x, y, z } = event.acceleration;
-        const { x: lastX, y: lastY, z: lastZ } = lastAcceleration.value;
-
-        const shakeMagnitude = Math.sqrt(
-            (x - lastX) ** 2 + (y - lastY) ** 2 + (z - lastZ) ** 2
-        );
-
-        if (shakeMagnitude > shakeThreshold) girarDado();
-
-        lastAcceleration.value = { x, y, z };
-    });
-};
-
-const requestPermission = () => {
-    const startButton = document.getElementById('startButton');
-
-    if (typeof DeviceMotionEvent.requestPermission === 'function') {
-        DeviceMotionEvent.requestPermission().then((state) => {
-            if (state === 'granted') {
-                startDeviceMotionListener();
-                startButton.style.display = 'none';
-            } else {
-                alert('Permiso denegado para acceder a los sensores.');
-            }
-        }).catch((error) => alert(`Error al solicitar permiso: ${error}`));
-    } else {
-        startDeviceMotionListener();
-        startButton.style.display = 'none';
-    }
-};
-
 onMounted(() => {
     const canvas = document.getElementById('confetti-canvas');
     if (canvas) {
