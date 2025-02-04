@@ -1,6 +1,6 @@
 <template>
     <main>
-        <div class="div-inicio"  v-if="menu === 1">
+        <div class="div-inicio" v-if="menu === 1">
             <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
             <div class="grid">
@@ -14,12 +14,12 @@
             <EleccionJugadores :data="jugadores" :numero="claveSala" />
         </div>
 
- <div v-if="menu===4">
-    <mando/>
- </div>
+        <div v-if="menu === 4">
+            <mando />
+        </div>
 
 
-</main>
+    </main>
 </template>
 
 <script setup>
@@ -27,8 +27,8 @@ import { ref, reactive, computed } from "vue";
 import socketManager from '../static/socket';
 
 const claveSala = computed(() => $nuxt.$store.state.roomKey);
-const yo= computed(() => $nuxt.$store.state);
-const claveActual=ref("");
+const yo = computed(() => $nuxt.$store.state);
+const claveActual = ref("");
 socketManager.RemSocket();
 
 const menu = ref(1);
@@ -56,14 +56,14 @@ function reiniciarSala() {
     });
 }
 
-socket.on('sala_llena',()=>{
+socket.on('sala_llena', () => {
 
     alert("sala llena")
 })
 
 socket.on('turno', (data) => {
     console.log(data);
-    
+
 });
 
 
@@ -98,22 +98,23 @@ main {
     margin: 0;
     padding: 0;
 }
+
 .div-inicio {
     place-items: center;
-  background-image: url('/images/fondo-inicio.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+    background-image: url('/images/fondo-inicio.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-  font-family: 'Press Start 2P', cursive;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Press Start 2P', cursive;
 }
 
 .grid {
@@ -132,7 +133,7 @@ main {
     text-align: center;
     font-family: 'Press Start 2P', cursive;
     margin-bottom: 20px;
-    
+
 }
 
 .btn-inicio {

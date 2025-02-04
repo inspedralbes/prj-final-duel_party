@@ -6,6 +6,9 @@
       <button class="btn-inicio">EMPEZAR</button>
     </NuxtLink>
   </div>
+
+  
+
 </template>
 
 <script>
