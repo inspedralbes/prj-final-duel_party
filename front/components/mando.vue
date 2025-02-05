@@ -1,7 +1,7 @@
 <template>
   <main>
 
-    
+  
 
       <div v-if="meToca">
         me toca
@@ -29,7 +29,7 @@
   </div> 
 
     </div>
-    
+  
 
 
 
@@ -64,7 +64,7 @@ const requestPermission = () => {
             if (state === 'granted') {
                 startDeviceMotionListener();
                 startButton.style.display = 'none';
-                permisos.value=true;
+                permisos.value=false;
             } else {
                 alert('Permiso denegado para acceder a los sensores.');
             }
