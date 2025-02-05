@@ -28,7 +28,7 @@ const io = socketIo(server, {
 
 const salas = {};
 let conexiones = {};
-
+const basquet = require('./minijuegos/basquet');
 
 
 io.on('connection', async (socket) => {
@@ -36,6 +36,7 @@ io.on('connection', async (socket) => {
 
     socket.user = { username: socket.handshake.auth.username };
 
+    basquet(socket, io, salas, conexiones);
 
     socket.on('create-room', () => {
         const claveSala = uuidv4().slice(0, 5);
@@ -65,11 +66,7 @@ io.on('connection', async (socket) => {
 
     socket.on('move', (data, playerNumber, claveSala) => {
 
-        
-
             io.to(conexiones[salas[claveSala][0].id].id).emit('move', data, playerNumber);
-
-       
 
     });
 
@@ -202,7 +199,7 @@ io.on('connection', async (socket) => {
     });
 });
 
-const PORT = 20070;
+const PORT = 20071;
 server.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

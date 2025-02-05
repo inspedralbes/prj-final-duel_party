@@ -95,12 +95,16 @@ const startDeviceMotionListener = () => {
 
 
 
-function click(param){
+function clickC(param){
   if(turno.value===yo.value.playerNumber-1){
     socket.emit('move', param, yo.value.playerNumber,yo.value.roomKey);
   }
    
     
+}
+
+function click(param){
+  socket.emit('moveBasket', param, yo.value.playerNumber,yo.value.roomKey);
 }
 
 socket.on('turno', (data) => {

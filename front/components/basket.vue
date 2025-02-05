@@ -1,10 +1,12 @@
 <script setup>
 import { reactive, ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import socketManager from '../static/socket'; 
+
+const yo= computed(() => $nuxt.$store.state);
+const socket= socketManager.getSocket(); 
+const claveSala = computed(() => $nuxt.$store.state.roomKey);
+
 const props = defineProps({
-    data: {
-        type: Object,
-        required: true,
-    },
     jugadores: {
         type: Object,
         required: true,
@@ -68,80 +70,6 @@ function reiniciarInfo() {
 }
 
 
-function apagarAnimaciones_temblores() {
-
-    animaciones.temblor1 = false;
-    animaciones.temblor2 = false;
-    animaciones.llamas = false;
-
-
-}
-let puntosSeguidos = 0;
-
-function comprobarPunto(num) {
-
-    reiniciarInfo();
-
-    let apagar = 0;
-
-    apagarAnimaciones_temblores();
-    if (props.data.respuesta_correcta == num) {
-
-
-        if (progress.value < 0.3) {
-            puntosSeguidos++;
-            info.canasta = 3;
-        } else if (progress.value < 0.7) {
-            info.canasta = 2;
-            puntosSeguidos = 0;
-
-        } else if (progress.value < 1) {
-            info.canasta = 1;
-            puntosSeguidos = 0;
-        } else { }
-
-
-        if (puntosSeguidos == 3) {
-
-            apagar = 3;
-
-        }
-        if (puntosSeguidos == 4) {
-            apagar = 4;
-        }
-        if (puntosSeguidos >= 5) {
-            apagar = 5
-            info.racha = true;
-            animaciones.tiro_en_llamas = true;
-            tiroHecho.value = true;
-
-        }
-        else {
-            animaciones.encestar = true;
-            tiroHecho.value = true;
-
-        }
-
-    } else {
-        let aux = Math.floor(Math.random() * 5) + 1;
-        animaciones[`fallo${aux}`] = true;
-        tiroHecho.value = true;
-        info.fallo = true;
-        info.canasta = 0;
-        puntosSeguidos = 0;
-
-
-    }
-
-    index.value++;
-
-    setTimeout(() => {
-        apagarAnimaciones(apagar);
-        tiroHecho.value = false;
-    }, 500);
-
-
-}
 
 
 
@@ -149,89 +77,8 @@ const progress = ref(0.0);
 const color = ref('');
 const aux = ref(0);
 let idTemporizador = null;
-reiniciarTemporizador();
-watch(() => props.data, () => {
-    reiniciarTemporizador();
-});
-
-function reiniciarTemporizador() {
-
-    if (idTemporizador) {
-        clearInterval(idTemporizador);
-    }
-
-    progress.value = 0.0;
-    color.value = '';
-
-    aux.value = 1 / props.data.duracion;
-    iniciarTemporizador();
-}
-
-function iniciarTemporizador() {
-    idTemporizador = setInterval(() => {
-
-        progress.value = progress.value + aux.value;
-        props.data.duracion--;
-
-        if (progress.value > 0 && progress.value < 0.2) {
-            color.value = 'blue';
-        } else if (progress.value > 0.3 && progress.value < 0.6) {
-            color.value = 'green';
-        } else if (progress.value > 0.7 && progress.value < 0.9) {
-            color.value = 'red';
-        } else if (progress.value > 1) {
-
-            clearInterval(idTemporizador);
-            responder(-1);
-
-        }
-
-
-    }, 1000);
-}
-
-
-
 
 const emit = defineEmits();
-
-const tiroHecho = ref(false);
-
-function mezclarRespuestas() {
-    const respuestas = [
-        props.data.respuesta_correcta,
-        props.data.respuestaIncorrecta_1,
-        props.data.respuestaIncorrecta_2,
-        props.data.respuestaIncorrecta_3
-    ];
-    return respuestas.sort(() => Math.random() - 0.5);
-
-
-}
-
-const respuestasMezcladas = computed(() => mezclarRespuestas());
-
-function responder(num) {
-
-
-    comprobarPunto(num);
-
-    if (info.fallo) {
-        setTimeout(() => {
-            emit('siguiente', info);
-        }, 800);
-
-
-    } else {
-
-        emit('siguiente', info);
-    }
-
-    reiniciarTemporizador();
-
-
-}
-
 
 const divContenedor = ref(null);
 
@@ -241,7 +88,13 @@ const posicion = reactive([{top:0, left:0},{top:0, left:0},{top:0, left:0},{top:
 
 const j1 = ref(null);
 
-
+socket.on('moveBasket', (data,player) => {
+  
+  if(data==='a'){
+    obtenerPosicion(player-1);
+  }
+ 
+});
 
 function obtenerPosicion(num) {
    
@@ -271,7 +124,10 @@ function obtenerPosicion(num) {
          setTimeout(() => {
             posicion[num].top= -400 
          }, 400);
-       
+         setTimeout(() => {
+            posicion[num].top= 0; 
+            posicion[num].top=0;
+         }, 1000);
       }
     };
 </script>
@@ -279,7 +135,6 @@ function obtenerPosicion(num) {
 <template>
     <main id="main_arcade">
 
-        <div class="body_arcade">
             <RouterLink to="/jugar">
                 <img style="right: inherit;" src="/volver.png" alt="Volver" class="imagen_volver">
             </RouterLink>
@@ -287,7 +142,6 @@ function obtenerPosicion(num) {
             <img id="canasta" ref="divContenedor"
              src="/tablero.png" alt="">
 
-        </div>
 
 
 
@@ -296,11 +150,10 @@ function obtenerPosicion(num) {
 
 
         <div class="tiempo_fuera">
-            <div class="tiempo">{{ props.data.duracion }} </div>
+            <div class="tiempo">25 </div>
         </div>
 
-
-        <span class="titul"> {{ props.data.operacion }} </span>
+ 
 
         <div class="div_padre">
           <div v-if="props.jugadores[0].in" @click="obtenerPosicion(0)" ref="j1" id="j1" class="div">
@@ -441,20 +294,10 @@ function obtenerPosicion(num) {
      
 }
 
-#canasta {
-    grid-row: 1;
-    grid-column: span 3;
-    justify-self: center;
-
-
-
-}
+ 
 
 
 #main_arcade {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
     max-height: 100svh;
     background-image: url("/parque.jpg");
     background-position: center;
