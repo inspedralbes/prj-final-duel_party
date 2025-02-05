@@ -20,10 +20,10 @@ const data= reactive({
 })
 
 const jugadores = reactive([
-    { username: "diego", in: false },
-    { username: "elihu", in: false },
-    { username: "bryan", in: false },
-    { username: "abdiel", in: false }
+    { username: "diego", in: true },
+    { username: "elihu", in: true },
+    { username: "bryan", in: true },
+    { username: "abdiel", in: true }
 ]);
 
 </script>

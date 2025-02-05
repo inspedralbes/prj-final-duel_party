@@ -244,13 +244,34 @@ const j1 = ref(null);
 
 
 function obtenerPosicion(num) {
+   
+
+
       const div = divContenedor.value;
       if (div) {
         const rect = div.getBoundingClientRect(); // Obtener las coordenadas
         // Guardar las coordenadas
-        posicion[1].top= -400   // Ajustamos con scrollY
-        posicion[1].left= rect.left-(rect.left/1.8) // Ajustamos con scrollX
-        console.log(rect);
+        posicion[num].top= -450   // Ajustamos con scrollY
+        switch (num) {
+        case 1:
+           posicion[num].left= rect.left-(rect.left/1.8)
+            break;
+        case 0:
+          posicion[num].left= rect.left*1.080;
+            break;
+            case 2:
+          posicion[num].left= rect.left-(rect.left*1.19);
+            break;
+             case 3:
+          posicion[num].left= rect.left-(rect.left*1.82);
+            break;
+        default:
+            break;
+    }
+         setTimeout(() => {
+            posicion[num].top= -400 
+         }, 400);
+       
       }
     };
 </script>
@@ -265,22 +286,6 @@ function obtenerPosicion(num) {
 
             <img id="canasta" ref="divContenedor"
              src="/tablero.png" alt="">
-
-
-
-        <!--    <img id="balon" :class="{
-                'animacion_encestar': animaciones.encestar,
-                'animacion_fallo1': animaciones.fallo1,
-                'animacion_fallo2': animaciones.fallo2,
-                'animacion_fallo3': animaciones.fallo3,
-                'animacion_fallo4': animaciones.fallo4,
-                'animacion_fallo5': animaciones.fallo5,
-                'animacion_temblor1': animaciones.temblor1,
-                'animacion_temblor2': animaciones.temblor2,
-                'animacion_fuego': animaciones.llamas,
-                'animacion_encestar_llamas': animaciones.tiro_en_llamas
-
-            }" src="/balon.png" alt="" srcset="">-->
 
         </div>
 
@@ -298,19 +303,21 @@ function obtenerPosicion(num) {
         <span class="titul"> {{ props.data.operacion }} </span>
 
         <div class="div_padre">
-          <div @click="obtenerPosicion(0)" ref="j1" id="j1" class="div">
+          <div v-if="props.jugadores[0].in" @click="obtenerPosicion(0)" ref="j1" id="j1" class="div">
             <img id="balon1" class="balon"  :style="{ top: posicion[0].top + 'px', left: posicion[0].left + 'px' }"  src="/balon.png" alt="">
-          </div>
-          <div @click="obtenerPosicion(1)"  ref="j2" id="j2" class="div">  
+            <div class="jugador">{{ props.jugadores[0].username }}</div>  
+        </div>
+          <div v-if="props.jugadores[1].in" @click="obtenerPosicion(1)"  ref="j2" id="j2" class="div">  
             <img id="balon1" class="balon"  :style="{ top: posicion[1].top + 'px', left: posicion[1].left + 'px' }"  src="/balon.png" alt="">
-          </div>
-            <div @click="obtenerPosicion(2)" ref="j3" id="j3" class="div">
+            <div class="jugador">{{ props.jugadores[1].username }}</div>  
+        </div>
+            <div v-if="props.jugadores[2].in" @click="obtenerPosicion(2)" ref="j3" id="j3" class="div">
               <img id="balon1" class="balon"  :style="{ top: posicion[2].top + 'px', left: posicion[2].left + 'px' }"  src="/balon.png" alt="">
-
+              <div class="jugador">{{ props.jugadores[2].username }}</div>  
             </div>
-            <div @click="obtenerPosicion(3)" ref="j4" id="j4" class="div">
+            <div v-if="props.jugadores[3].in" @click="obtenerPosicion(3)" ref="j4" id="j4" class="div">
               <img id="balon1" class="balon"  :style="{ top: posicion[3].top + 'px', left: posicion[3].left + 'px' }"  src="/balon.png" alt="">
-
+              <div class="jugador">{{ props.jugadores[3].username }}</div>  
             </div>
 
         </div>
@@ -320,8 +327,10 @@ function obtenerPosicion(num) {
 </template>
 
 <style scoped>
-.abs{
-  position: absolute;
+.jugador{
+    display: grid; 
+    grid-column: 2;
+    margin-top: 10px;
 }
 .div_padre {
     display: grid;
@@ -427,7 +436,7 @@ function obtenerPosicion(num) {
     border-radius: 50%;
     left:0px;
     top:0px;
-    transition: top 0.5s ease, left 0.5s ease;
+    transition: top 0.5s ease, left 0.7s ease;
     position: absolute;
      
 }
