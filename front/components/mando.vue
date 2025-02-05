@@ -1,7 +1,11 @@
 <template>
   <main>
 
-  
+    <div v-if="permisos">
+  <button id="startButton" @click="requestPermission">Permitir acceso a sensores</button> 
+    </div>
+
+    <div v-else> 
 
       <div v-if="meToca">
         me toca
@@ -30,7 +34,7 @@
 
     </div>
   
-
+  </div>
 
 
   </main>

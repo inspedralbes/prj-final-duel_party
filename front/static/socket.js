@@ -2,9 +2,11 @@ import { io } from 'socket.io-client';
 
 let socketInstance;
 
+
 const makeSocket = (token) => {
   if (!socketInstance) {
-    socketInstance = io("http://localhost:20071", {
+    socketInstance = io("https://duelparty.cat", { // Usa HTTPS y el dominio
+      path: "/socket.io/", // Asegúrate de incluir el path
       transports: ["websocket"],
       withCredentials: true,
       auth: {
@@ -14,8 +16,6 @@ const makeSocket = (token) => {
   }
   return socketInstance;
 };
-
-
 const RemSocket=()=>{
 
   if (socketInstance) {
