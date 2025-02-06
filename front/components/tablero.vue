@@ -102,10 +102,7 @@
 <button @click="actualizarPosicion(5)" :disabled="movimiento[turno].animacion" > 5 </button>   
 <button @click="actualizarPosicion(6)" :disabled="movimiento[turno].animacion" > 6 </button>   
 -->
-        <div>
-            <basket :jugadores="jugadores"/>
-
-        </div>
+        
 
 
     </main>
@@ -119,13 +116,7 @@ const props = defineProps({
     },
 
 },)
-
-const jugadores = reactive([
-    { username: "diego", in: true },
-    { username: "elihu", in: true },
-    { username: "bryan", in: true },
-    { username: "abdiel", in: true }
-]);
+ 
 import { reactive, ref } from 'vue';
 import { Coordenadas } from '../static/tablero'; 
 import socketManager from '../static/socket' 

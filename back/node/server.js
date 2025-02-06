@@ -65,9 +65,9 @@ io.on('connection', async (socket) => {
     });
 
     socket.on('move', (data, playerNumber, claveSala) => {
-
+            if(salas[claveSala][0].user.turno==playerNumber-1){
             io.to(conexiones[salas[claveSala][0].id].id).emit('move', data, playerNumber);
-
+        }
     });
 
     socket.on('turno', (turno, claveSala) => {
