@@ -3,7 +3,7 @@ import { reactive, ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import socketManager from '../static/socket'; 
 
 const yo= computed(() => $nuxt.$store.state);
-const socket= socketManager.getSocket(); 
+const socket= socketManager.makeSocket(); 
 const claveSala = computed(() => $nuxt.$store.state.roomKey);
 
 const props = defineProps({
@@ -25,50 +25,7 @@ const index = ref(0)
 
 const info = reactive({ fallo: false, canasta: 0, racha: false })
 
-
-const animaciones = reactive({
-    encestar: false, fallo1: false, fallo2: false, fallo3: false, fallo4: false, fallo5: false, temblor1: false,
-    temblor2: false, llamas: false, tiro_en_llamas: false
-
-})
-
-
-function apagarAnimaciones(interrumptor) {
-
-    animaciones.encestar = false;
-    animaciones.fallo1 = false;
-    animaciones.fallo2 = false;
-    animaciones.fallo3 = false;
-    animaciones.fallo4 = false;
-    animaciones.fallo5 = false;
-    animaciones.tiro_en_llamas = false;
-
-    if (interrumptor == 3) {
-
-        animaciones.temblor1 = true
-
-
-    }
-    if (interrumptor == 4) {
-        animaciones.temblor2 = true;
-
-
-
-    }
-    if (interrumptor >= 5) {
-        animaciones.llamas = true
-    }
-
-
-}
-
-function reiniciarInfo() {
-
-    info.canasta = 0;
-    info.fallo = false;
-    info.racha = false;
-}
-
+ 
 
 
 
@@ -95,41 +52,35 @@ socket.on('moveBasket', (data,player) => {
   }
  
 });
+const aro = ref(2);
+const balon = ref(3);
+//const animaciones = reactive({a1:false,a2:false,a3:false,a4:false
+const animaciones = reactive({a0:false,a1:false,a2:false,a3:false,
+                              b0:3,b1:3,b2:3,b3:3,
+                              c0:2,c1:2,c2:2,c3:2
 
-function obtenerPosicion(num) {
-   
+});
 
 
-      const div = divContenedor.value;
-      if (div) {
-        const rect = div.getBoundingClientRect(); // Obtener las coordenadas
-        // Guardar las coordenadas
-        posicion[num].top= -450   // Ajustamos con scrollY
-        switch (num) {
-        case 1:
-           posicion[num].left= rect.left-(rect.left/1.8)
-            break;
-        case 0:
-          posicion[num].left= rect.left*1.080;
-            break;
-            case 2:
-          posicion[num].left= rect.left-(rect.left*1.19);
-            break;
-             case 3:
-          posicion[num].left= rect.left-(rect.left*1.82);
-            break;
-        default:
-            break;
-    }
-         setTimeout(() => {
-            posicion[num].top= -400 
-         }, 400);
-         setTimeout(() => {
-            posicion[num].top= 0; 
-            posicion[num].top=0;
-         }, 1000);
-      }
-    };
+function obtenerPosicion(num){
+    
+    animaciones[`a${num}`]=true;
+    console.log(animaciones[`a${num}`]);
+    setTimeout(() => {
+            
+        animaciones[`c${num}`]=3;
+        animaciones[`b${num}`]=2;
+         }, 500);
+    setTimeout(() => {
+        animaciones[`a${num}`]=false;
+        console.log(animaciones[`a${num}`]);
+        animaciones[`c${num}`]=2;
+        animaciones[`b${num}`]=3;
+        
+    }, 1000);
+    
+}
+
 </script>
 
 <template>
@@ -139,15 +90,16 @@ function obtenerPosicion(num) {
                 <img style="right: inherit;" src="/volver.png" alt="Volver" class="imagen_volver">
             </RouterLink>
 
-            <img id="canasta" ref="divContenedor"
-             src="/tablero.png" alt="">
 
 
+          <!--  <div class="div_padre_canasta">
+               
+               <div class="div_canasta"> <img src="/aro.png"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
+               <div class="div_canasta"> <img src="/aro.png"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
+               <div class="div_canasta"> <img src="/aro.png"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
 
-
-
-
-
+            </div>-->
+            
 
         <div class="tiempo_fuera">
             <div class="tiempo">25 </div>
@@ -156,20 +108,26 @@ function obtenerPosicion(num) {
  
 
         <div class="div_padre">
+        
           <div v-if="props.jugadores[0].in" @click="obtenerPosicion(0)" ref="j1" id="j1" class="div">
-            <img id="balon1" class="balon"  :style="{ top: posicion[0].top + 'px', left: posicion[0].left + 'px' }"  src="/balon.png" alt="">
+            <div class="div_canasta"> <img src="/aro.png" :style="{ zIndex: animaciones.c0 }"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
+            <img id="balon1" class="balon" :class="{ 'animacion_encestar': animaciones.a0}"  :style="{zIndex: animaciones.b0 }"  src="/balon.png" alt="">
             <div class="jugador">{{ props.jugadores[0].username }}</div>  
         </div>
+        
           <div v-if="props.jugadores[1].in" @click="obtenerPosicion(1)"  ref="j2" id="j2" class="div">  
-            <img id="balon1" class="balon"  :style="{ top: posicion[1].top + 'px', left: posicion[1].left + 'px' }"  src="/balon.png" alt="">
+            <div class="div_canasta"> <img src="/aro.png" :style="{ zIndex: animaciones.c1}"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
+            <img id="balon1" class="balon" :class="{ 'animacion_encestar': animaciones.a1}"  :style="{zIndex: animaciones.b1 }"  src="/balon.png" alt="">
             <div class="jugador">{{ props.jugadores[1].username }}</div>  
         </div>
             <div v-if="props.jugadores[2].in" @click="obtenerPosicion(2)" ref="j3" id="j3" class="div">
-              <img id="balon1" class="balon"  :style="{ top: posicion[2].top + 'px', left: posicion[2].left + 'px' }"  src="/balon.png" alt="">
+                <div class="div_canasta"> <img src="/aro.png" :style="{ zIndex: animaciones.c2 }"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
+                <img id="balon1" class="balon" :class="{ 'animacion_encestar': animaciones.a2}"  :style="{zIndex: animaciones.b2 }"  src="/balon.png" alt="">
               <div class="jugador">{{ props.jugadores[2].username }}</div>  
             </div>
             <div v-if="props.jugadores[3].in" @click="obtenerPosicion(3)" ref="j4" id="j4" class="div">
-              <img id="balon1" class="balon"  :style="{ top: posicion[3].top + 'px', left: posicion[3].left + 'px' }"  src="/balon.png" alt="">
+                <div class="div_canasta"> <img src="/aro.png" :style="{ zIndex: animaciones.c3 }"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
+                <img id="balon1" class="balon" :class="{ 'animacion_encestar': animaciones.a3}"  :style="{zIndex: animaciones.b3 }"  src="/balon.png" alt="">
               <div class="jugador">{{ props.jugadores[3].username }}</div>  
             </div>
 
@@ -180,13 +138,72 @@ function obtenerPosicion(num) {
 </template>
 
 <style scoped>
+
+@keyframes 
+ encestar {
+    0% {
+        transform: translateY(0); /* Empieza en la parte inferior */
+         
+    } 50%{
+
+       transform: translateY(-500px)  scale(0.8) rotate(-90deg);
+      
+    }
+    75% {
+        transform: translateY(-400px) scale(0.7) rotate(-180deg); /* Sube 200px hacia arriba */
+         
+    }
+    100% {
+        transform: translateY(-300px) scale(0.6) rotate(-180deg); /* Sube 200px hacia arriba */
+         
+    }
+  }
+
+.animacion_encestar {
+    animation: encestar 1s linear;
+}
+
 .jugador{
     display: grid; 
-    grid-column: 2;
+    grid-column: 1;
     margin-top: 10px;
+    margin-left: 10px;
+}
+.div_padre_canasta {
+    display: grid;
+    position: fixed;
+    top: 0;
+    margin-top: 50px;
+    grid-column: span 3;
+    gap: 20px;
+    width: 100%;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    justify-items: center;
+    /* Centra los elementos horizontalmente */
+    align-items: center;
+   
+   
+}
+.div_canasta{
+
+    width: fit-content;
+    margin-top: -480px;
+} 
+.aro{
+    position: absolute;
+    width: 80px;
+    margin-left: 60px;
+    margin-top: 115px;
+     
+    
+}
+.canasta{
+    width: 200px;
 }
 .div_padre {
     display: grid;
+    position: fixed;
+    bottom: 0;
     grid-column: span 3;
     gap: 20px;
     width: 100%;
@@ -215,44 +232,6 @@ function obtenerPosicion(num) {
 
 }
 
-@keyframes encestar {
-    0% {
-        transform: translateY(0);
-        /* Empieza en la parte inferior */
-
-    }
-
-    50% {
-
-        transform: translateY(-300px) scale(0.8) rotate(-90deg);
-
-    }
-
-    100% {
-        transform: translateY(-200px) scale(0.4) rotate(-180deg);
-        /* Sube 200px hacia arriba */
-
-    }
-}
-
-
-@keyframes fallo1 {
-    0% {
-        transform: translateY(0);
-        /* Empieza en la parte inferior */
-    }
-
-    50% {
-
-        transform: translateY(-300px) translateX(-100px) scale(0.8) rotate(-90deg);
-
-    }
-
-    100% {
-        transform: translateY(-200px) translateX(-150px) scale(0.4) rotate(-180deg);
-        /* Sube 200px hacia arriba */
-    }
-}
 
 .q-btn:disabled {
     opacity: 1 !important;
@@ -260,17 +239,6 @@ function obtenerPosicion(num) {
 
 }
  
-
-.animacion_encestar {
-
-
-    animation: encestar 0.5s linear;
-
-}
-
-.animacion_fallo1 {
-    animation: fallo1 0.5s linear;
-}
  
 .imagen_volver {
     position: fixed;
@@ -284,13 +252,15 @@ function obtenerPosicion(num) {
 
 
 .balon {
-    height: 70px;
-    width: 70px;
+    height: 90px;
+    width: 90px;
     border-radius: 50%;
     left:0px;
     top:0px;
+    margin-left: 55px;
     transition: top 0.5s ease, left 0.7s ease;
     position: absolute;
+    
      
 }
 
@@ -298,7 +268,8 @@ function obtenerPosicion(num) {
 
 
 #main_arcade {
-    max-height: 100svh;
+    height: 100svh;
+    width: 100vw;
     background-image: url("/parque.jpg");
     background-position: center;
     background-repeat: no-repeat;
@@ -306,21 +277,7 @@ function obtenerPosicion(num) {
 
 
 }
-
-.body_arcade {
-    grid-column: span 3;
-    text-align: center;
-    grid-row: span 2;
-
-    max-height: 80svh;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-
-
-
-
-}
+  
 
 .arcade {
     display: grid;
