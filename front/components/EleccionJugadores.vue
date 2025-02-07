@@ -11,8 +11,8 @@
     </div>
 
     <div v-else>
+        
         <tablero :numero="nJugadores"/>
-
     </div>
 
 </div>
@@ -22,6 +22,7 @@
 
 import { reactive, ref,watch } from 'vue';
 import socket from '../static/socket';
+import Ppt from './ppt.vue';
 
 const props = defineProps({
   data: {
@@ -68,8 +69,9 @@ watch(() => props.data, (newValue) => {
 
 
 function empezar(){
-nJugadores.value--;
-jugar.value=true;
+    $nuxt.$router.push('/minijuegos');
+//nJugadores.value--;
+//jugar.value=true;
 }
 
 const jugador1Color = ref("rgba(255, 0, 0, 0.212)");

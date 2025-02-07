@@ -16,6 +16,7 @@
 
         <div v-if="menu === 4">
             <mando />
+            <mando-ppt/>
         </div>
 
 

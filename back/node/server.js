@@ -85,6 +85,28 @@ io.on('connection', async (socket) => {
 
 
 
+    let eleccionesPPT = {};
+
+    io.on('connection', (socket) => {
+        socket.on('eleccionPPT', ({ jugador, eleccion }) => {
+            eleccionesPPT[jugador] = eleccion;
+
+            if (Object.keys(eleccionesPPT).length === 2) {
+                io.emit('resultadoPPT', eleccionesPPT);
+                
+            Object.keys(eleccionesPPT).forEach(key => delete eleccionesPPT[key]);
+            eleccionesPPT = {};
+            console.log("Elecciones después de reset:", eleccionesPPT);
+            }
+        });
+    });
+    socket.on('eleccionPPT', (data) => {
+        console.log("Jugador hizo una elección:", data);
+    });
+    
+
+
+
     socket.on('join-room', (claveSala) => {
         if (salas[claveSala].length < 5) {
             const room = io.sockets.adapter.rooms.get(claveSala);
@@ -197,7 +219,7 @@ io.on('connection', async (socket) => {
     socket.on('disconnect', () => {
         console.log(`Usuario desconectado: ${socket.id}`);
         delete conexiones[socket.id]
-
+        eleccionesPPT = {};
 
     });
 });
