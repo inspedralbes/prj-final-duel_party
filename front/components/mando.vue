@@ -2,6 +2,7 @@
   <main>
     <div v-if="permisos">
       <button  @click="requestPermissions">Pedir permisos para movimiento</button>
+      <button  @click="permisos=!permisos">Cambiar permisos</button>
     </div>
       <div v-if="meToca">
         me toca
