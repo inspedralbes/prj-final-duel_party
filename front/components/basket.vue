@@ -1,24 +1,9 @@
 <script setup>
 import { reactive, ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import socketManager from '../static/socket'; 
-
 const yo= computed(() => $nuxt.$store.state);
 const socket= socketManager.makeSocket(); 
 const claveSala = computed(() => $nuxt.$store.state.roomKey);
-
-const props = defineProps({
-    jugadores: {
-        type: Object,
-        required: true,
-    },
-
-
-},)
-
-
-
-
-
 const Canastas = ref(0)
 const valorCanasta = ref(0)
 const index = ref(0)
@@ -46,7 +31,7 @@ const posicion = reactive([{top:0, left:0},{top:0, left:0},{top:0, left:0},{top:
 const j1 = ref(null);
 
 socket.on('moveBasket', (data,player) => {
-  
+  console.log(data);
   if(data==='a'){
     obtenerPosicion(player-1);
   }
@@ -57,12 +42,13 @@ const balon = ref(3);
 //const animaciones = reactive({a1:false,a2:false,a3:false,a4:false
 const animaciones = reactive({a0:false,a1:false,a2:false,a3:false,
                               b0:3,b1:3,b2:3,b3:3,
-                              c0:2,c1:2,c2:2,c3:2
+                              c0:2,c1:2,c2:2,c3:2,
+                              p0:0,p1:0,p2:0,p3:0
 
 });
 
 
-function obtenerPosicion(num){
+function obtenerPosicionC(num,puntos){
     
     animaciones[`a${num}`]=true;
     console.log(animaciones[`a${num}`]);
@@ -76,10 +62,45 @@ function obtenerPosicion(num){
         console.log(animaciones[`a${num}`]);
         animaciones[`c${num}`]=2;
         animaciones[`b${num}`]=3;
-        
+        animaciones[`p${num}`]+=puntos;
     }, 1000);
     
 }
+
+
+function obtenerPosicion(num){
+    console.log(markerPosition.value);
+    if (markerPosition.value >= 40 && markerPosition.value <= 60) {
+    obtenerPosicionC(num,3);
+  } else if ((markerPosition.value >= 0 && markerPosition.value <= 20) || (markerPosition.value >= 80 && markerPosition.value <= 100)  ) {
+    obtenerPosicionC(num,2);
+  } else {
+     
+  }
+
+}
+
+const markerPosition = ref(0);
+
+const result = ref(null); 
+const resultMessage = ref('');
+ 
+
+const moveMarker = () => {
+  let direction = 1; 
+  const interval = setInterval(() => {
+    if (markerPosition.value >= 100) {
+      direction = -1;
+    } else if (markerPosition.value <= 0) {
+      direction = 1; 
+    }
+
+    markerPosition.value += direction;
+
+  }, 10);
+};
+
+moveMarker();
 
 </script>
 
@@ -92,43 +113,131 @@ function obtenerPosicion(num){
 
 
 
-          <!--  <div class="div_padre_canasta">
-               
-               <div class="div_canasta"> <img src="/aro.png"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
-               <div class="div_canasta"> <img src="/aro.png"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
-               <div class="div_canasta"> <img src="/aro.png"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
-
-            </div>-->
+         
             
 
-        <div class="tiempo_fuera">
-            <div class="tiempo">25 </div>
-        </div>
+      
 
  
 
         <div class="div_padre">
-        
-          <div v-if="props.jugadores[0].in" @click="obtenerPosicion(0)" ref="j1" id="j1" class="div">
-            <div class="div_canasta"> <img src="/aro.png" :style="{ zIndex: animaciones.c0 }"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
+          
+          <div v-if="yo.jugadores[0].in" @click="obtenerPosicion(0)" :class="{ 'disabled': animaciones.a0 }"  ref="j1" id="j1" class="div">
+            <div class="container">
+  
+    <div class="progress-bar">
+    
+      <div class="highlight-start"></div>
+      <div class="highlight-range"></div>
+      <div class="highlight-end"></div>
+
+      
+      <div
+        class="marker"
+        :style="{ left: markerPosition + '%' }"
+      ></div>
+    </div>
+   
+    <p v-if="result !== null">{{ resultMessage }}</p>
+  </div>
+  
+            <div class="div_canasta"> 
+                <div class="tiempo_fuera">
+            <div class="tiempo"> {{ animaciones.p0 }} </div>
+            </div> <img src="/aro.png" :style="{ zIndex: animaciones.c0 }"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
+         
             <img id="balon1" class="balon" :class="{ 'animacion_encestar': animaciones.a0}"  :style="{zIndex: animaciones.b0 }"  src="/balon.png" alt="">
-            <div class="jugador">{{ props.jugadores[0].username }}</div>  
+            <div class="jugador">{{ yo.jugadores[0].username }}</div>  
         </div>
         
-          <div v-if="props.jugadores[1].in" @click="obtenerPosicion(1)"  ref="j2" id="j2" class="div">  
-            <div class="div_canasta"> <img src="/aro.png" :style="{ zIndex: animaciones.c1}"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
+          <div v-if="yo.jugadores[1].in" @click="obtenerPosicion(1)" :class="{ 'disabled': animaciones.a1 }"   ref="j2" id="j2" class="div">  
+            <div class="container">
+   
+    <div class="progress-bar">
+    
+      <div class="highlight-start"></div>
+      <div class="highlight-range"></div>
+      <div class="highlight-end"></div>
+
+     
+      <div
+        class="marker"
+        :style="{ left: markerPosition + '%' }"
+      ></div>
+    </div>
+
+  
+   
+
+   
+    <p v-if="result !== null">{{ resultMessage }}</p>
+  </div>
+            <div class="div_canasta"> 
+                <div class="tiempo_fuera">
+            <div class="tiempo"> {{ animaciones.p1 }} </div>
+            </div> 
+                <img src="/aro.png" :style="{ zIndex: animaciones.c1}"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
             <img id="balon1" class="balon" :class="{ 'animacion_encestar': animaciones.a1}"  :style="{zIndex: animaciones.b1 }"  src="/balon.png" alt="">
-            <div class="jugador">{{ props.jugadores[1].username }}</div>  
+            <div class="jugador">{{ yo.jugadores[1].username }}</div>  
         </div>
-            <div v-if="props.jugadores[2].in" @click="obtenerPosicion(2)" ref="j3" id="j3" class="div">
-                <div class="div_canasta"> <img src="/aro.png" :style="{ zIndex: animaciones.c2 }"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
+            <div v-if="yo.jugadores[2].in" @click="obtenerPosicion(2)" :class="{ 'disabled': animaciones.a2 }"  ref="j3" id="j3" class="div">
+                <div class="container">
+   
+    <div class="progress-bar">
+     
+      <div class="highlight-start"></div>
+      <div class="highlight-range"></div>
+      <div class="highlight-end"></div>
+
+    
+      <div
+        class="marker"
+        :style="{ left: markerPosition + '%' }"
+      ></div>
+    </div>
+
+  
+   
+
+  
+    <p v-if="result !== null">{{ resultMessage }}</p>
+  </div>
+                <div class="div_canasta"> 
+                    <div class="tiempo_fuera">
+            <div class="tiempo"> {{ animaciones.p2 }} </div>
+            </div> 
+                    <img src="/aro.png" :style="{ zIndex: animaciones.c2 }"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
                 <img id="balon1" class="balon" :class="{ 'animacion_encestar': animaciones.a2}"  :style="{zIndex: animaciones.b2 }"  src="/balon.png" alt="">
-              <div class="jugador">{{ props.jugadores[2].username }}</div>  
+              <div class="jugador">{{ yo.jugadores[2].username }}</div>  
             </div>
-            <div v-if="props.jugadores[3].in" @click="obtenerPosicion(3)" ref="j4" id="j4" class="div">
-                <div class="div_canasta"> <img src="/aro.png" :style="{ zIndex: animaciones.c3 }"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
+            <div v-if="yo.jugadores[3].in" @click="obtenerPosicion(3)" :class="{ 'disabled': animaciones.a3 }"  ref="j4" id="j4" class="div">
+                <div class="container">
+   
+    <div class="progress-bar">
+    
+      <div class="highlight-start"></div>
+      <div class="highlight-range"></div>
+      <div class="highlight-end"></div>
+
+     
+      <div
+        class="marker"
+        :style="{ left: markerPosition + '%' }"
+      ></div>
+    </div>
+
+    
+   
+
+   
+    <p v-if="result !== null">{{ resultMessage }}</p>
+  </div>
+                <div class="div_canasta"> 
+                    <div class="tiempo_fuera">
+            <div class="tiempo"> {{ animaciones.p3 }} </div>
+            </div> <img src="/aro.png" :style="{ zIndex: animaciones.c3 }"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
                 <img id="balon1" class="balon" :class="{ 'animacion_encestar': animaciones.a3}"  :style="{zIndex: animaciones.b3 }"  src="/balon.png" alt="">
-              <div class="jugador">{{ props.jugadores[3].username }}</div>  
+              <div class="jugador">{{ yo.jugadores[3].username }}</div>  
             </div>
 
         </div>
@@ -158,6 +267,10 @@ function obtenerPosicion(num){
          
     }
   }
+  .disabled {
+  pointer-events: none;
+   
+}
 
 .animacion_encestar {
     animation: encestar 1s linear;
@@ -304,10 +417,9 @@ function obtenerPosicion(num){
 
 .tiempo_fuera {
 
-    grid-column: 2;
-    place-items: center;
-
-
+    
+    position: absolute;
+    margin-left: 60px;
 
 }
 
@@ -352,5 +464,67 @@ function obtenerPosicion(num){
     height: 20px;
     grid-column: span 2;
 
+}
+
+
+
+.container {
+  width: 300px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  margin-top: -300%;
+  margin-left: -25%;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 30px;
+  background-color: #ddd;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.highlight-range {
+  position: absolute;
+  top: 0;
+  left: 40%;
+  width: 20%; /* De 45% a 65% */
+  height: 100%;
+  background-color: rgba(0, 0, 255); /* Fondo amarillo translúcido */
+  pointer-events: none; /* Para que no interfiera con el marcador */
+}
+.highlight-start {
+  position: absolute;
+  top: 0;
+  left: 0%;
+  width: 20%; /* De 45% a 65% */
+  height: 100%;
+ background-color: rgba(255, 0,0); /* Fondo amarillo translúcido */
+  pointer-events: none; /* Para que no interfiera con el marcador */
+}
+.highlight-end {
+  position: absolute;
+  top: 0;
+  left: 80%;
+  width: 20%; /* De 45% a 65% */
+  height: 100%;
+  background-color: rgba(255, 0,0); /* Fondo amarillo translúcido */
+  pointer-events: none; /* Para que no interfiera con el marcador */
+}
+
+.marker {
+  width: 20px; /* El tamaño del "palo" */
+  height: 30px;
+  background-color: green; /* Color del marcador */
+  position: absolute;
+  top: 0;
+}
+
+button {
+  margin-top: 20px;
 }
 </style>

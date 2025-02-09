@@ -72,8 +72,12 @@ socket.on('room-users', (data) => {
     data.users.slice(1).forEach((user, index) => {
         jugadores[index].username = user.username;
         jugadores[index].in = true;
-    });
 
+       
+    });
+    $nuxt.$store.dispatch('updateJugadores', jugadores)
+    console.log("hola");
+    console.log($nuxt.$store.state.jugadores);
     if (menu.value === 4 && !jugadores[yo.value.playerNumber - 1].in) {
         $nuxt.$store.dispatch('updateNPlayer', yo.value.playerNumber - 1);
     }

@@ -1,11 +1,13 @@
 <template>
     <main>
         <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+      <div v-if="juego===0">
         <div class="rojo">
-            <div style="grid-column: 1;"> <img style="border-radius: 50%; width: auto; height: 100px;"
+            <div style="grid-column: 1; "> <img style="border-radius: 50%; width: auto; height: 100px;"
                     src="/avatar/boy4.png" alt=""> </div>
-            <div style="grid-column: 2; margin-top: 15px; margin-left:10px"> {{ movimiento[0].posicion }}o <br><br> 🏁
+            <div style="grid-column: 2;  margin-top: 15px; margin-left:10px"> {{ movimiento[0].posicion }}o <br><br> 🏁
                 {{ movimiento[0].vuelta }} </div>
+            <div style="grid-column: span 3;  ">{{ yo.jugadores[0].username }}</div>
         </div>
         <div class="dado-rojo" v-if="turno === 0">
             <dado @resultado="actualizarPosicion" />
@@ -16,6 +18,7 @@
                     src="/avatar/boy1.png" alt=""> </div>
             <div style="grid-column: 3; margin-top: 15px; margin-left:10px"> {{ movimiento[1].posicion }}o <br><br> 🏁
                 {{ movimiento[1].vuelta }} </div>
+                <div style="grid-column: span 3;  ">{{ yo.jugadores[1].username }}</div>
         </div>
         <div class="dado-azul" v-if="turno === 1">
             <dado @resultado="actualizarPosicion" />
@@ -26,6 +29,7 @@
                     src="/avatar/boy2.png" alt=""> </div>
             <div style="grid-column: 2; margin-top: 15px; margin-left:10px"> {{ movimiento[2].posicion }}o <br><br> 🏁
                 {{ movimiento[2].vuelta }} </div>
+                <div style="grid-column: span 3;  ">{{ yo.jugadores[2].username }}</div>
         </div>
         <div class="dado-amarillo" v-if="turno === 2">
             <dado @resultado="actualizarPosicion" />
@@ -37,6 +41,7 @@
                     src="/avatar/boy3.png" alt=""> </div>
             <div style="grid-column: 2; margin-top: 15px; margin-left:10px"> {{ movimiento[3].posicion }}o <br><br> 🏁
                 {{ movimiento[3].vuelta }} </div>
+                <div style="grid-column: span 3;  ">{{ yo.jugadores[3].username }}</div>
         </div>
         <div class="dado-verde" v-if="turno === 3">
             <dado @resultado="actualizarPosicion" />
@@ -94,16 +99,10 @@
             <img class="img" src="/tablero.jpeg" srcset="">
 
         </div>
-        <!--           
-<button @click="actualizarPosicion(1)" :disabled="movimiento[turno].animacion" > 1 </button>   
-<button @click="actualizarPosicion(2)" :disabled="movimiento[turno].animacion" > 2 </button>   
-<button @click="actualizarPosicion(3)" :disabled="movimiento[turno].animacion" > 3 </button>   
-<button @click="actualizarPosicion(4)" :disabled="movimiento[turno].animacion" > 4 </button>   
-<button @click="actualizarPosicion(5)" :disabled="movimiento[turno].animacion" > 5 </button>   
-<button @click="actualizarPosicion(6)" :disabled="movimiento[turno].animacion" > 6 </button>   
--->
-        
-
+    </div>
+    <div v-if="juego===1">
+        <basket/>
+    </div>
 
     </main>
 </template>
@@ -117,14 +116,16 @@ const props = defineProps({
 
 },)
  
-import { reactive, ref } from 'vue';
+import { reactive, ref,computed } from 'vue';
 import { Coordenadas } from '../static/tablero'; 
 import socketManager from '../static/socket' 
 import dado from './dado.vue';
 import Basket from './basket.vue';
 
+const yo= computed(() => $nuxt.$store.state);
 const explosion = ref(false);
 const turno = ref(0);
+const juego =ref(0);
 const socket= socketManager.getSocket();
 
 const nJugadores = ref(props.numero);
@@ -209,20 +210,43 @@ function actualizarPosicion(num) {
         } else {
 
             dosEnCasilla(turno.value);
+            
+            comprobarMinijuego(movimiento[turno.value].posicionActual);
+
+
             turno.value += 1;
 
             if (turno.value > nJugadores.value) {
                 turno.value = 0;
             }
-            console.log(turno.value);
+             
+           
             socket.emit('turno', turno.value, $nuxt.$store.state.roomKey);
         }
         
     } 
     moverFicha();
-   
+    
   
 }
+
+function comprobarMinijuego(num){
+
+    if(num===10 || num===22 || num===33 || num===42 ){
+
+        alert("MINIJUEGO, BASQUET")
+        socket.emit('minijuego', 1, $nuxt.$store.state.roomKey);
+        juego.value=1;
+        setTimeout(() => {
+            juego.value=0;
+          
+             }, 10000);
+
+    }
+
+
+}
+
 
 function dosEnCasilla(num) {
 
@@ -293,7 +317,7 @@ function pintarFicha(num) {
 
 .rojo {
     width: 200px;
-    height: 100px;
+    height: 125px;
     position: absolute;
     top: 0px;
     left: 0px;
@@ -301,7 +325,7 @@ function pintarFicha(num) {
     border-radius: 10%;
     color: #d59b3d;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr; 
     font-family: 'Press Start 2P', cursive;
     background-color: #1c1c1c;
     box-shadow: 0px 5px 10px rgba(255, 0, 0, 0.5);
@@ -318,7 +342,7 @@ function pintarFicha(num) {
 
 .azul {
     width: 200px;
-    height: 100px;
+    height: 125px;
     position: absolute;
     top: 0px;
     right: 0px;
@@ -343,7 +367,7 @@ function pintarFicha(num) {
 
 .verde {
     width: 200px;
-    height: 100px;
+    height: 125px;
     position: absolute;
     bottom: 0px;
     left: 0px;
@@ -368,7 +392,7 @@ function pintarFicha(num) {
 
 .amarillo {
     width: 200px;
-    height: 100px;
+    height: 125px;
     position: absolute;
     bottom: 0px;
     right: 0px;

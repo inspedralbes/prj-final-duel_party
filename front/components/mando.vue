@@ -42,8 +42,25 @@ import socketManager from '../static/socket'
 const socket = socketManager.getSocket();
 const yo = computed(() => $nuxt.$store.state);
 
+
+const juego= ref(0);
+
+
+function cambioJuego(data){
+
+  //0 = dado
+  //1 = basquet
+
+  juego.value = data;
+
+
+}
+
+
+
 const permisos = ref(true);
 const accelerationX = ref(0);
+
     const accelerationY = ref(0);
     const accelerationZ = ref(0);
 
@@ -62,7 +79,7 @@ const accelerationX = ref(0);
         accelerationX.value ** 2 + accelerationY.value ** 2 + accelerationZ.value ** 2
       );
       if(totalAcceleration > shakeThreshold){
-        socket.emit('move', 'a', yo.value.playerNumber, yo.value.roomKey);
+       click('a');
       
       }
       // Detectar sacudida cuando la aceleración total supera el umbral
@@ -136,13 +153,30 @@ function clickC(param) {
 }
 
 function click(param) {
-  socket.emit('moveBasket', param, yo.value.playerNumber, yo.value.roomKey);
+
+  switch (juego.value) {
+    case 0:
+     socket.emit('move', param, yo.value.playerNumber, yo.value.roomKey);
+      break;
+    case 1:
+      socket.emit('moveBasket', param, yo.value.playerNumber, yo.value.roomKey);
+      break;
+    default:
+      break;
+  }
+
+ 
 }
 
 socket.on('turno', (data) => {
   turno.value = data;
   comprobarTurno();
 
+});
+
+socket.on('minijuego', (data) => {
+  juego.value = data;
+   
 });
 
 const mensaje = ref(false)

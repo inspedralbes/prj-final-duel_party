@@ -47,6 +47,7 @@ io.on('connection', async (socket) => {
 
         conexiones[socket.id] = socket
         socket.user.turno = 0;
+        socket.user.juego = 0;
         salas[claveSala].push(socket);
 
         socket.join(claveSala);
@@ -68,6 +69,15 @@ io.on('connection', async (socket) => {
             if(salas[claveSala][0].user.turno==playerNumber-1){
             io.to(conexiones[salas[claveSala][0].id].id).emit('move', data, playerNumber);
         }
+    });
+
+    socket.on('minijuego', (data, claveSala) => {
+        salas[claveSala][0].user.juego = data;
+        socket.broadcast.to(claveSala).emit('minijuego', data);
+        
+        console.log(salas[claveSala][0].user.juego);
+
+
     });
 
     socket.on('turno', (turno, claveSala) => {
@@ -167,6 +177,7 @@ io.on('connection', async (socket) => {
                 const room = io.sockets.adapter.rooms.get(claveSala);
                 if (room) {
                     const usersActualizados = [...room].filter((id) => id !== socket.id);
+                   
                     io.to(claveSala).emit('room-users', {
                         room: claveSala,
                         users: usersActualizados.map(id => ({

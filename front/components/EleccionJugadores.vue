@@ -12,7 +12,7 @@
 
     <div v-else>
         <tablero :numero="nJugadores"/>
-
+     
     </div>
 
 </div>
@@ -35,7 +35,12 @@ const props = defineProps({
 
 },)
 
-
+const jugadores = reactive([
+    { username: "diego", in: true },
+    { username: "elihu", in: true },
+    { username: "bryan", in: true },
+    { username: "abdiel", in: true }
+]);
 const jugar=ref(false);
 
 watch(() => props.data, (newValue) => {
