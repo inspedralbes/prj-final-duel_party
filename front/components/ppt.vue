@@ -9,15 +9,16 @@ const mostrandoResultados = ref(false);
 const ganador = ref('');
 const eleccionHecha = ref(false);
 let animacionConfetti;
+const socketA=socket.getSocket();
 
-onMounted(() => {
-  socket.getSocket().on('resultadoPPT', (data) => {
+
+socketA.on('resultadoPPT', (data) => {
     resultado.value = data;
+    console.log("Resultados:", resultado.value);
     eleccionHecha.value = true;
     determinarGanador();
     mostrandoResultados.value = true;
   });
-});
 
 const determinarGanador = () => {
     jugadores.value = Object.keys(resultado.value);

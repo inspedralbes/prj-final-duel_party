@@ -28,6 +28,7 @@ const io = socketIo(server, {
 
 const salas = {};
 let conexiones = {};
+let eleccionesPPT = {};
 const basquet = require('./minijuegos/basquet');
 const ppt = require('./minijuegos/ppt');
 
@@ -38,7 +39,7 @@ io.on('connection', async (socket) => {
     socket.user = { username: socket.handshake.auth.username };
 
     basquet(socket, io, salas, conexiones);
-    ppt(socket, io, salas, conexiones);
+    ppt(socket, io,eleccionesPPT);
 
 
     socket.on('create-room', () => {
@@ -133,7 +134,7 @@ io.on('connection', async (socket) => {
 
 
 
-                console.log(salas[claveSala])
+                
 
                 io.to(conexiones[salas[claveSala][0].id].id).emit('room-users', {
                     room: claveSala,
