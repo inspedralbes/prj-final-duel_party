@@ -1,8 +1,11 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref,computed } from 'vue';
 import socket from '../static/socket';
 import confetti from 'canvas-confetti';
 
+
+
+const yo= computed(() => $nuxt.$store.state);
 const resultado = ref(null);
 const jugadores = ref([]);
 const mostrandoResultados = ref(false);
@@ -33,14 +36,14 @@ const determinarGanador = () => {
         (eleccion1 === 'papel' && eleccion2 === 'piedra') ||
         (eleccion1 === 'tijera' && eleccion2 === 'papel')
     ) {
-        ganador.value = `GANADOR: Jugador 1`;
+        ganador.value = yo.value.jugadores[0].username;
         lanzarConfeti();
         setTimeout(() => {
             emit('acabarJuego');
         }, 2500);
 
     } else {
-        ganador.value = `GANADOR: Jugador 2`;
+        ganador.value = yo.value.jugadores[1].username;
         lanzarConfeti();
         setTimeout(() => {
             emit('acabarJuego');
@@ -96,9 +99,9 @@ function lanzarConfeti() {
 
     <div class="contenedor" v-if=" !eleccionHecha && !mostrandoResultados">
       <div class="grid-img">
-        <div class="jugador1">JUGADOR 1</div>
+        <div class="jugador1">{{ yo.jugadores[0].username }}</div>
         <img class="j1" src="/images/ppt/j1-cargando.gif" alt="Jugador 1" />
-        <div class="jugador2">JUGADOR 2</div>
+        <div class="jugador2">{{ yo.jugadores[1].username }}</div>
         <img class="j2" src="/images/ppt/j2-cargando.gif" alt="Jugador 2" />
         <img class="vs" src="/images/ppt/vs.png" alt="vs">
       </div>
@@ -106,7 +109,7 @@ function lanzarConfeti() {
 
     <div class="contenedor" v-if="eleccionHecha && mostrandoResultados">
       <div class="grid-img">
-          <div class="ganador">{{ ganador }}</div>
+          <div class="ganador">GANADOR: {{ ganador }}</div>
           <img class="j1" :src="`/images/ppt/j1-${resultado[Object.keys(resultado)[0]]}.png`" alt="Jugador 1" />
           <img class="j2" :src="`/images/ppt/j2-${resultado[Object.keys(resultado)[1]]}.png`" alt="Jugador 2" />
           <img class="vs" src="/images/ppt/vs.png" alt="vs">
@@ -122,8 +125,7 @@ main {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  position: fixed;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
 }
 
