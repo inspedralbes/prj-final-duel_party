@@ -11,8 +11,8 @@
     </div>
 
     <div v-else>
-        <tablero :numero="nJugadores"/>
-     
+        <!-- <tablero :numero="nJugadores"/> -->
+        <ppt/>
     </div>
 
 </div>

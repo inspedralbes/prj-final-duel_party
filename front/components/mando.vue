@@ -12,8 +12,8 @@
       </div>
       <div class="mando" v-else>
 
-
-        <div class="controller">
+        <div v-if="juego===0 || juego===1">
+          <div class="controller">
           Jugador: {{ yo.playerNumber }}
           <div class="dpad">
             <button class="up" @click="click('up')" :disabled="!meToca">↑</button>
@@ -27,6 +27,10 @@
             <button class="a" @click="click('a')">A</button>
 
           </div>
+        </div>
+        </div>
+        <div v-if="juego===2">
+          <mando-ppt/>
         </div>
 
       </div>
@@ -51,7 +55,7 @@ function cambioJuego(data){
 
   //0 = dado
   //1 = basquet
-
+  //2 = ppt
   juego.value = data;
 
 

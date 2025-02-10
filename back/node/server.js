@@ -29,6 +29,7 @@ const io = socketIo(server, {
 const salas = {};
 let conexiones = {};
 const basquet = require('./minijuegos/basquet');
+const ppt = require('./minijuegos/ppt');
 
 
 io.on('connection', async (socket) => {
@@ -37,6 +38,8 @@ io.on('connection', async (socket) => {
     socket.user = { username: socket.handshake.auth.username };
 
     basquet(socket, io, salas, conexiones);
+    ppt(socket, io, salas, conexiones);
+
 
     socket.on('create-room', () => {
         const claveSala = uuidv4().slice(0, 5);
