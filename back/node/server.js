@@ -28,7 +28,7 @@ const io = socketIo(server, {
 
 const salas = {};
 let conexiones = {};
-
+let eleccionesPPT = {};
 
 
 io.on('connection', async (socket) => {
@@ -85,24 +85,21 @@ io.on('connection', async (socket) => {
 
 
 
-    let eleccionesPPT = {};
+    
 
-    io.on('connection', (socket) => {
+   
         socket.on('eleccionPPT', ({ jugador, eleccion }) => {
-            eleccionesPPT[jugador] = eleccion;
+            eleccionesPPT[claveSala][jugador] = eleccion;
 
-            if (Object.keys(eleccionesPPT).length === 2) {
-                io.emit('resultadoPPT', eleccionesPPT);
+            if (Object.keys(eleccionesPPT[claveSala]).length === 2) {
+                io.emit('resultadoPPT', eleccionesPPT[claveSala]);
                 
-            Object.keys(eleccionesPPT).forEach(key => delete eleccionesPPT[key]);
-            eleccionesPPT = {};
-            console.log("Elecciones después de reset:", eleccionesPPT);
+            Object.keys(eleccionesPPT[claveSala]).forEach(key => delete eleccionesPPT[claveSala][key]);
+            eleccionesPPT[claveSala] = {};
+            console.log("Elecciones después de reset:", eleccionesPPT[claveSala]);
             }
         });
-    });
-    socket.on('eleccionPPT', (data) => {
-        console.log("Jugador hizo una elección:", data);
-    });
+   
     
 
 
