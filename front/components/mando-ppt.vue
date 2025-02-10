@@ -25,16 +25,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref,computed } from 'vue';
 import socket from '../static/socket';
 
 const eleccionHecha = ref(false);
 const empate = ref(false);
 const mostrarBotones = ref(true);
 const resultadoFinal = ref(null);
+const yo= computed(() => $nuxt.$store.state);
 
 const enviarEleccion = (eleccion) => {
-    socket.getSocket().emit('eleccionPPT', { jugador: socket.getSocket().id, eleccion });
+    socket.getSocket().emit('eleccionPPT', { jugador: socket.getSocket().id, eleccion, claveSala: yo.value.roomKey });
     eleccionHecha.value = true;
     mostrarBotones.value = false;
 };
