@@ -60,7 +60,7 @@
                 marginLeft: movimiento[turno - 1 < 0 ? nJugadores : turno - 1].izq + 'px',
             }"> <img src="/explo.gif" alt="GIF"> </div>
 
-
+             <!-- Basquet -->
             <img class="balon" src="/balon.png" alt="logo" id="logo" :style="{
                 marginTop: miniBasquet[0].top + 'px',
                 marginLeft: miniBasquet[0].izq - 9 + 'px',
@@ -74,8 +74,22 @@
                 marginLeft: miniBasquet[2].izq - 9 + 'px',
             }">
             <img class="balon" src="/balon.png" alt="logo" id="logo" :style="{
-                marginTop: miniBasquet[3].top - 9 + 'px',
+                marginTop: miniBasquet[3].top - 12 + 'px',
                 marginLeft: miniBasquet[3].izq + 'px',
+            }">
+
+            <!-- PPT -->
+            <img class="ppt" src="/ppt1.png" alt="logo" id="logo" :style="{
+                marginTop: miniPpt[0].top - 10 + 'px',
+                marginLeft: miniPpt[0].izq - 9 + 'px',
+            }">
+            <img class="ppt" src="/ppt2.png" alt="logo" id="logo" :style="{
+                marginTop: miniPpt[1].top - 9 + 'px',
+                marginLeft: miniPpt[1].izq -15 + 'px',
+            }">
+            <img class="ppt" src="/ppt3.png" alt="logo" id="logo" :style="{
+                marginTop: miniPpt[2].top - 9+ 'px',
+                marginLeft: miniPpt[2].izq -17 + 'px',
             }">
 
 
@@ -103,6 +117,9 @@
     <div v-if="juego===1">
         <basket/>
     </div>
+    <div v-if="juego===2">
+        <ppt @acabarJuego="acabarJuego"/>
+    </div>
 
     </main>
 </template>
@@ -129,15 +146,22 @@ const juego =ref(0);
 const socket= socketManager.getSocket();
 
 const nJugadores = ref(props.numero);
-const movimiento = reactive([{ top: 60, izq: 90, animacion: false, posicionActual: -1, posicion: 1, vuelta: 0 },
+const movimiento = reactive([
+{ top: 60, izq: 90, animacion: false, posicionActual: -1, posicion: 1, vuelta: 0 },
 { top: 60, izq: 60, animacion: false, posicionActual: -1, posicion: 2, vuelta: 0 },
 { top: 90, izq: 90, animacion: false, posicionActual: -1, posicion: 3, vuelta: 0 },
 { top: 90, izq: 60, animacion: false, posicionActual: -1, posicion: 4, vuelta: 0 }]);
 
-const miniBasquet = reactive([{ top: Coordenadas[10][0], izq: Coordenadas[10][1], posicion: 10 },
+const miniBasquet = reactive([
+{ top: Coordenadas[10][0], izq: Coordenadas[10][1], posicion: 10 },
 { top: Coordenadas[22][0], izq: Coordenadas[22][1], posicion: 22 },
 { top: Coordenadas[33][0], izq: Coordenadas[33][1], posicion: 33 },
 { top: Coordenadas[42][0], izq: Coordenadas[42][1], posicion: 42 }]);
+
+const miniPpt = reactive([
+{ top: Coordenadas[15][0], izq: Coordenadas[22][1], posicion: 15 },
+{ top: Coordenadas[27][0], izq: Coordenadas[27][1], posicion: 27 },
+{ top: Coordenadas[38][0], izq: Coordenadas[38][1], posicion: 38 }]);
 
 
 
@@ -238,15 +262,26 @@ function comprobarMinijuego(num){
         socket.emit('minijuego', 1, $nuxt.$store.state.roomKey);
         juego.value=1;
         setTimeout(() => {
-            juego.value=0;
-            socket.emit('minijuego', 0, $nuxt.$store.state.roomKey);
+           acabarJuego();
              }, 10000);
 
     }
 
+    if(num===15 || num===27 || num===38){
+        alert("MINIJUEGO, PPT")
+        socket.emit('minijuego', 2, $nuxt.$store.state.roomKey);
+        juego.value=2;
+                          
+
 
 }
+}
 
+function acabarJuego(){
+    juego.value=0;
+    socket.emit('minijuego', 0, $nuxt.$store.state.roomKey);
+
+}
 
 function dosEnCasilla(num) {
 
@@ -451,7 +486,11 @@ function pintarFicha(num) {
     height: auto;
 
 }
-
+.ppt{
+    position: absolute;
+    width: auto;
+    height: 40px;
+}
 .balon {
     position: absolute;
     width: 40px;

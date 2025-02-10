@@ -10,7 +10,7 @@ const ganador = ref('');
 const eleccionHecha = ref(false);
 let animacionConfetti;
 const socketA=socket.getSocket();
-
+const emit = defineEmits();
 
 socketA.on('resultadoPPT', (data) => {
     resultado.value = data;
@@ -27,7 +27,7 @@ const determinarGanador = () => {
 
     if (eleccion1 === eleccion2) {
         ganador.value = 'EMPATE';
-        setTimeout(reiniciarJuego, 5000); 
+        setTimeout(reiniciarJuego, 2000); 
     } else if (
         (eleccion1 === 'piedra' && eleccion2 === 'tijera') ||
         (eleccion1 === 'papel' && eleccion2 === 'piedra') ||
@@ -35,9 +35,16 @@ const determinarGanador = () => {
     ) {
         ganador.value = `GANADOR: Jugador 1`;
         lanzarConfeti();
+        setTimeout(() => {
+            emit('acabarJuego');
+        }, 2500);
+
     } else {
         ganador.value = `GANADOR: Jugador 2`;
         lanzarConfeti();
+        setTimeout(() => {
+            emit('acabarJuego');
+        }, 2500);
     }
 };
 

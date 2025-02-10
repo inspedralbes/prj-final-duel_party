@@ -48,7 +48,7 @@ const socket = socketManager.getSocket();
 const yo = computed(() => $nuxt.$store.state);
 
 
-const juego= ref(2);
+const juego= ref(0);
 
 
 function cambioJuego(data){
