@@ -239,7 +239,7 @@ function comprobarMinijuego(num){
         juego.value=1;
         setTimeout(() => {
             juego.value=0;
-          
+            socket.emit('minijuego', 0, $nuxt.$store.state.roomKey);
              }, 10000);
 
     }

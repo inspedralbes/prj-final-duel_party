@@ -2,7 +2,7 @@
 import { reactive, ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import socketManager from '../static/socket'; 
 const yo= computed(() => $nuxt.$store.state);
-const socket= socketManager.makeSocket(); 
+const socket= socketManager.getSocket(); 
 const claveSala = computed(() => $nuxt.$store.state.roomKey);
 const Canastas = ref(0)
 const valorCanasta = ref(0)
@@ -281,6 +281,21 @@ moveMarker();
     grid-column: 1;
     margin-top: 10px;
     margin-left: 10px;
+}
+.pruebasdsdadasds{
+  display: grid;
+    position: fixed;
+    top: 0;
+    margin-top: 50px;
+    grid-column: span 3;
+    gap: 20px;
+    width: 100%;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    justify-items: center;
+    /* Centra los elementos horizontalmente */
+    align-items: center;
+
+
 }
 .div_padre_canasta {
     display: grid;
