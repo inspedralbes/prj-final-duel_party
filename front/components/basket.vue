@@ -1,6 +1,6 @@
 <script setup>
 import { reactive, ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import socketManager from '../static/socket'; 
+import socketManager from '../static/socket';  
 const yo= computed(() => $nuxt.$store.state);
 const socket= socketManager.getSocket(); 
 const claveSala = computed(() => $nuxt.$store.state.roomKey);
@@ -9,11 +9,6 @@ const valorCanasta = ref(0)
 const index = ref(0)
 
 const info = reactive({ fallo: false, canasta: 0, racha: false })
-
- 
-
-
-
 
 const progress = ref(0.0);
 const color = ref('');
@@ -26,6 +21,12 @@ const divContenedor = ref(null);
 
 const posicion = reactive([{top:0, left:0},{top:0, left:0},{top:0, left:0},{top:0, left:0}]);
  
+
+setTimeout(() => {
+    alert("Ganador: "+ yo.value.jugadores[ganador()].username);
+    emit('acabarJuego',ganador());
+    
+}, 10000);
 
 
 const j1 = ref(null);
@@ -46,6 +47,22 @@ const animaciones = reactive({a0:false,a1:false,a2:false,a3:false,
                               p0:0,p1:0,p2:0,p3:0
 
 });
+
+
+function ganador(){
+  const posiciones = { p0: animaciones.p0, p1: animaciones.p1, p2: animaciones.p2, p3: animaciones.p3 };
+
+  // Encontrar el valor máximo
+  const maxValor = Math.max(...Object.values(posiciones));
+
+  // Encontrar la clave asociada al valor máximo
+  const claveMax = Object.keys(posiciones).find(key => posiciones[key] === maxValor);
+
+  // Extraer solo el número de la clave (p0 → 0, p1 → 1, etc.)
+  return claveMax ? parseInt(claveMax.replace('p', ''), 10) : null;
+}
+
+
 
 
 function obtenerPosicionC(num,puntos){
@@ -282,21 +299,7 @@ moveMarker();
     margin-top: 10px;
     margin-left: 10px;
 }
-.pruebasdsdadasds{
-  display: grid;
-    position: fixed;
-    top: 0;
-    margin-top: 50px;
-    grid-column: span 3;
-    gap: 20px;
-    width: 100%;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    justify-items: center;
-    /* Centra los elementos horizontalmente */
-    align-items: center;
-
-
-}
+ 
 .div_padre_canasta {
     display: grid;
     position: fixed;
@@ -491,7 +494,7 @@ moveMarker();
   justify-content: center;
   align-items: center;
   position: absolute;
-  margin-top: -300%;
+  margin-top: -150%;
   margin-left: -25%;
 }
 

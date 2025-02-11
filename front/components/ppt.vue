@@ -39,14 +39,14 @@ const determinarGanador = () => {
         ganador.value = yo.value.jugadores[0].username;
         lanzarConfeti();
         setTimeout(() => {
-            emit('acabarJuego');
+            emit('acabarJuego',0);
         }, 2500);
 
     } else {
         ganador.value = yo.value.jugadores[1].username;
         lanzarConfeti();
         setTimeout(() => {
-            emit('acabarJuego');
+            emit('acabarJuego',1);
         }, 2500);
     }
 };

@@ -115,7 +115,7 @@
         </div>
     </div>
     <div v-if="juego===1">
-        <basket/>
+        <basket @acabarJuego="acabarJuego"/>
     </div>
     <div v-if="juego===2">
         <ppt @acabarJuego="acabarJuego"/>
@@ -144,7 +144,7 @@ const explosion = ref(false);
 const turno = ref(0);
 const juego =ref(0);
 const socket= socketManager.getSocket();
-
+const duelos= reactive([]);
 const nJugadores = ref(props.numero);
 const movimiento = reactive([
 { top: 60, izq: 90, animacion: false, posicionActual: -1, posicion: 1, vuelta: 0 },
@@ -261,14 +261,12 @@ function comprobarMinijuego(num){
         alert("MINIJUEGO, BASQUET")
         socket.emit('minijuego', 1, $nuxt.$store.state.roomKey);
         juego.value=1;
-        setTimeout(() => {
-           acabarJuego();
-             }, 10000);
+         
 
     }
 
     if(num===15 || num===27 || num===38){
-        alert("MINIJUEGO, PPT")
+        alert("MINIJUEGO, PPT");
         socket.emit('minijuego', 2, $nuxt.$store.state.roomKey);
         juego.value=2;
                           
@@ -277,9 +275,21 @@ function comprobarMinijuego(num){
 }
 }
 
-function acabarJuego(){
+function acabarJuego(data){
+    
     juego.value=0;
     socket.emit('minijuego', 0, $nuxt.$store.state.roomKey);
+    let aux = turno.value;
+    turno.value=data;
+    console.log("turno:" + turno.value);
+    actualizarPosicion(10);
+    
+    setTimeout(() => {
+        turno.value=aux;
+    }, 3000);
+    
+    console.log("turno2:" + turno.value);
+
 
 }
 
