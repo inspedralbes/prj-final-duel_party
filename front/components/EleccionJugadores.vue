@@ -7,12 +7,11 @@
         <div class="jugador2" :style="{backgroundColor: jugador2Color}" >{{ props.data[1].username }}<br>Presiona <br>  <span @click="unirse(2)"> A </span>  <br> para estar Listo</div>
         <div class="jugador3" :style="{backgroundColor: jugador3Color}" >{{ props.data[2].username }} <br>Presiona <br>  <span @click="unirse(3)"> A </span> <br> para estar Listo</div>
         <div class="jugador4" :style="{backgroundColor: jugador4Color}">{{ props.data[3].username }} <br>Presiona <br>  <span @click="unirse(4)"> A </span>  <br> para estar Listo</div>
-        <div @click="empezar()" v-if="nJugadores>1"> <button>Empezar</button> </div>
+        <div class="empezar" @click="empezar()" v-if="nJugadores>1"> <button>EMPEZAR</button> </div>
     </div>
 
     <div v-else>
         <tablero :numero="nJugadores"/>  
-       
     </div>
 
 </div>
@@ -77,18 +76,18 @@ nJugadores.value--;
 jugar.value=true;
 }
 
-const jugador1Color = ref("rgba(255, 0, 0, 0.212)");
-const jugador2Color = ref("rgba(0, 0, 255, 0.212)");
-const jugador3Color = ref("rgba(128, 0, 128, 0.212)");
-const jugador4Color = ref("rgba(0, 255, 0, 0.336)");
+const jugador1Color = ref("rgba(255, 0, 0, 0.412)");
+const jugador2Color = ref("rgba(0, 0, 255, 0.412)");
+const jugador3Color = ref("rgba(128, 0, 128, 0.412)");
+const jugador4Color = ref("rgba(0, 255, 0, 0.436)");
 const nJugadores = ref(0);
 
 function reiniciarColor(){
 
-    jugador1Color.value="rgba(255, 0, 0, 0.212)";
-    jugador2Color.value="rgba(0, 0, 255, 0.212)";
-    jugador3Color.value="rgba(255, 255, 0, 0.24)";
-    jugador4Color.value="rgba(0, 255, 0, 0.336)";
+    jugador1Color.value="rgba(255, 0, 0, 0.412)";
+    jugador2Color.value="rgba(0, 0, 255, 0.412)";
+    jugador3Color.value="rgba(128, 0, 128, 0.412)";
+    jugador4Color.value="rgba(0, 255, 0, 0.436)";
 }
 
 function unirse(num){
@@ -119,9 +118,25 @@ function unirse(num){
 
 
 </script>
+
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
  
+span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+  height: 70px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 24px;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  margin: 0 auto;
+}
 
 .selector{
     display: grid;
@@ -130,7 +145,17 @@ function unirse(num){
     grid-area: s;
     height: 10vh;
     gap: 0;
-    font-size: 45px;
+    font-size: 30px;
+    background-color: brown;
+    color: white;  
+    border: solid black 5px;  
+    background-color: #8B4513; 
+    color: white;
+    border: 5px solid #5A2A0A;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 10);
+    padding: 0px; 
+    z-index: 1; 
+    margin-bottom: 60px;
 }
 .centrar_main{
     display: grid;
@@ -138,12 +163,17 @@ function unirse(num){
     align-items: center;
     height: 100vh;
     width: 100vw;
-   
+    font-family: 'Press Start 2P', cursive;
+    background-image: url('/images/fondo_elecciones.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
 }
 .main{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 12% 1fr 1fr 1fr;  
+    grid-template-rows: 16% 1fr 1fr 1fr;  
     grid-template-areas:
     "s s s s"
     "a b c d"
@@ -151,49 +181,45 @@ function unirse(num){
     "e e e e";
     height: 80vh;
     width: 80vw;
-    
-
+    gap: 0px; 
+    padding: 10px; 
+    box-sizing: border-box; 
+    color: white;
 
 }
  
+.jugador1,.jugador2,.jugador3,.jugador4{
+  height: 400px;
+  display: grid;
+  font-size: 30px;
+  text-align: center;
+  margin-bottom: 20px;
+}
 .empezar{
-    display: grid;
-    grid-area: e;
-    font-size: 30px;
-    text-align: center;
+  display: grid;
+  grid-area: e;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  text-align: center;
+  height: 100px;
 
 }
 .jugador1{
-    display: grid;
     grid-area: a;
-  
-    font-size: 30px;
-    text-align: center;
 
 }
 
-
 .jugador2{
-    display: grid;
     grid-area: b;
-     
-    font-size: 30px;
-    text-align: center;
 
 }
 .jugador3{
-    display: grid;
     grid-area: c;
-   
-    font-size: 30px;
-    text-align: center;
 }
 .jugador4{
-    display: grid;
     grid-area: d;
-     
-    font-size: 30px;
-    text-align: center;
 }
+
 
 </style>
