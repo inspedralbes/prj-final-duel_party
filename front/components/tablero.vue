@@ -320,7 +320,7 @@ function acabarJuego(data){
     
     setTimeout(() => {
         turno.value=aux;
-    }, 3000);
+    }, 2000);
     socket.emit('turno', turno.value, $nuxt.$store.state.roomKey);
     console.log("turno2:" + turno.value);
 

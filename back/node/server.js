@@ -102,7 +102,6 @@ io.on('connection', async (socket) => {
 
         salas[claveSala][0].user.turno = turno;
         socket.broadcast.to(claveSala).emit('turno', turno);
-      
         console.log(salas[claveSala][0].user.turno);
 
 
