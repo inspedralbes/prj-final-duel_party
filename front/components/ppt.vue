@@ -3,6 +3,13 @@ import { ref,computed } from 'vue';
 import socket from '../static/socket';
 import confetti from 'canvas-confetti';
 
+const props = defineProps({
+    jugadores: {
+        type: Object,
+        required: true,
+    },
+
+},)
 
 
 const yo= computed(() => $nuxt.$store.state);
@@ -36,14 +43,14 @@ const determinarGanador = () => {
         (eleccion1 === 'papel' && eleccion2 === 'piedra') ||
         (eleccion1 === 'tijera' && eleccion2 === 'papel')
     ) {
-        ganador.value = yo.value.jugadores[0].username;
+        ganador.value = yo.value.jugadores[props.jugadores.j1].username;
         lanzarConfeti();
         setTimeout(() => {
             emit('acabarJuego',0);
         }, 2500);
 
     } else {
-        ganador.value = yo.value.jugadores[1].username;
+        ganador.value = yo.value.jugadores[props.jugadores.j2].username;
         lanzarConfeti();
         setTimeout(() => {
             emit('acabarJuego',1);
@@ -99,9 +106,9 @@ function lanzarConfeti() {
 
     <div class="contenedor" v-if=" !eleccionHecha && !mostrandoResultados">
       <div class="grid-img">
-        <div class="jugador1">{{ yo.jugadores[0].username }}</div>
+        <div class="jugador1">{{ yo.jugadores[props.jugadores.j1].username }}</div>
         <img class="j1" src="/images/ppt/j1-cargando.gif" alt="Jugador 1" />
-        <div class="jugador2">{{ yo.jugadores[1].username }}</div>
+        <div class="jugador2">{{ yo.jugadores[props.jugadores.j2].username }}</div>
         <img class="j2" src="/images/ppt/j2-cargando.gif" alt="Jugador 2" />
         <img class="vs" src="/images/ppt/vs.png" alt="vs">
       </div>

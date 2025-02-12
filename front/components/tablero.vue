@@ -118,7 +118,7 @@
         <basket @acabarJuego="acabarJuego"/>
     </div>
     <div v-if="juego===2">
-        <ppt @acabarJuego="acabarJuego"/>
+        <ppt :jugadores="duelos" @acabarJuego="acabarJuego"/>
     </div>
 
     </main>
@@ -144,7 +144,7 @@ const explosion = ref(false);
 const turno = ref(0);
 const juego =ref(0);
 const socket= socketManager.getSocket();
-const duelos= reactive([]);
+const duelos= reactive({j1:"",j2:""});
 const nJugadores = ref(props.numero);
 const movimiento = reactive([
 { top: 60, izq: 90, animacion: false, posicionActual: -1, posicion: 1, vuelta: 0 },
@@ -259,15 +259,40 @@ function comprobarMinijuego(num){
     if(num===10 || num===22 || num===33 || num===42 ){
 
         alert("MINIJUEGO, BASQUET")
-        socket.emit('minijuego', 1, $nuxt.$store.state.roomKey);
+        socket.emit('minijuego', 1, $nuxt.$store.state.roomKey,{modo:4});
         juego.value=1;
          
 
     }
 
     if(num===15 || num===27 || num===38){
-        alert("MINIJUEGO, PPT");
-        socket.emit('minijuego', 2, $nuxt.$store.state.roomKey);
+        
+        let bucle=true
+        let aux = turno.value;
+        let aux2;
+        console.log(bucle,aux,aux2);
+        aux=aux-1;
+        if(aux<0){
+            aux=0;
+        }
+        while(bucle){
+            aux2= Math.floor(Math.random() * 4);
+            if(aux2!==aux && yo.value.jugadores[aux2].in){
+                bucle=false;
+            }
+             
+        }
+        
+        if(aux<aux2){
+            duelos.j1=aux;
+            duelos.j2=aux2;
+        }else{
+            duelos.j1=aux2;
+            duelos.j2=aux;
+        }
+
+        alert("MINIJUEGO, PPT "+ yo.value.jugadores[duelos.j1].username + " VS " + yo.value.jugadores[duelos.j2].username);
+        socket.emit('minijuego', 2, $nuxt.$store.state.roomKey,{modo:1,jugador1:duelos.j1+1,jugador2:duelos.j2+1});
         juego.value=2;
                           
 
@@ -278,7 +303,7 @@ function comprobarMinijuego(num){
 function acabarJuego(data){
     
     juego.value=0;
-    socket.emit('minijuego', 0, $nuxt.$store.state.roomKey);
+    socket.emit('minijuego', 0, $nuxt.$store.state.roomKey,{modo:4});
     let aux = turno.value;
     turno.value=data;
     console.log("turno:" + turno.value);
