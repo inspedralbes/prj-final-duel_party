@@ -12,7 +12,6 @@
 
     <div v-else>
         <tablero :numero="nJugadores"/>  
-       
     </div>
 
 </div>
