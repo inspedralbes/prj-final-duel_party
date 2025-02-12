@@ -120,6 +120,10 @@
     <div v-if="juego===2">
         <ppt :jugadores="duelos" @acabarJuego="acabarJuego"/>
     </div>
+    <instrucciones :data="instrucciones.minijuego"/>
+    <div v-if="instrucciones.activar"> 
+        <instrucciones :data="instrucciones.minijuego"/>
+    </div>
 
     </main>
 </template>
@@ -146,6 +150,7 @@ const juego =ref(0);
 const nVueltas = ref(1);
 const socket= socketManager.getSocket();
 const duelos= reactive({j1:"",j2:""});
+const instrucciones = reactive({activar:false,minijuego:1});
 const nJugadores = ref(props.numero);
 const movimiento = reactive([
 { top: 60, izq: 90, animacion: false, posicionActual: -1, posicion: 1, vuelta: 0 },
@@ -267,7 +272,8 @@ function comprobarMinijuego(num){
 
     if(num===10 || num===22 || num===33 || num===42 ){
 
-        alert("MINIJUEGO, BASQUET")
+        instrucciones.minijuego=1;
+        instrucciones.activar=true;
         socket.emit('minijuego', 1, $nuxt.$store.state.roomKey,{modo:4});
         juego.value=1;
          
