@@ -3,7 +3,7 @@ module.exports = (socket, io,eleccionesPPT) => {
 
    
      
-socket.on('eleccionPPT', ({ jugador, eleccion,claveSala }) => {
+socket.on('eleccionPPT', ({ jugador, eleccion,claveSala,number }) => {
 
 
     console.log(`Jugador: ${jugador}, Elección: ${eleccion}, Sala: ${claveSala}`);

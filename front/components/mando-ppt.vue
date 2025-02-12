@@ -35,7 +35,7 @@ const resultadoFinal = ref(null);
 const yo= computed(() => $nuxt.$store.state);
 
 const enviarEleccion = (eleccion) => {
-    socket.getSocket().emit('eleccionPPT', { jugador: socket.getSocket().id, eleccion, claveSala: yo.value.roomKey });
+    socket.getSocket().emit('eleccionPPT', { jugador: socket.getSocket().id, eleccion, claveSala: yo.value.roomKey,number: yo.value.playerNumber-1 });
     eleccionHecha.value = true;
     mostrarBotones.value = false;
 };
