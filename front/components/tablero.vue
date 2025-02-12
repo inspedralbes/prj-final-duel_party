@@ -143,6 +143,7 @@ const yo= computed(() => $nuxt.$store.state);
 const explosion = ref(false);
 const turno = ref(0);
 const juego =ref(0);
+const nVueltas = ref(1);
 const socket= socketManager.getSocket();
 const duelos= reactive({j1:"",j2:""});
 const nJugadores = ref(props.numero);
@@ -232,7 +233,7 @@ function actualizarPosicion(num) {
 
             setTimeout(moverFicha, 200);
         } else {
-
+            comprobarGanador(turno.value);
             dosEnCasilla(turno.value);
             
             comprobarMinijuego(movimiento[turno.value].posicionActual);
@@ -253,6 +254,14 @@ function actualizarPosicion(num) {
     
   
 }
+function comprobarGanador(num){  
+
+    if(movimiento[num].vuelta==nVueltas.value){
+        alert("Ganador: "+yo.value.jugadores[num].username );
+    }
+
+}
+
 
 function comprobarMinijuego(num){
 
