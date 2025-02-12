@@ -25,7 +25,7 @@ const props = defineProps({
         required: true,
     },
 
-},)
+},) 
 let data=[
     {
         titulo:"Baloncesto 🏀",
