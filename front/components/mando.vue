@@ -4,9 +4,9 @@
 
       <div class="cartel" v-if="!permisos">
 
-          <h3>Permisos Requeridos</h3>
-          <button class="btn-permisos"" @click="requestPermissions">Activa permisos para movimiento</button>
-          <button class="btn-permisos"" @click="permisos = !permisos">Aceptar</button>
+          <h3> Activar Permisos Requeridos</h3>
+          <button class="btn-permisos"" @click="requestPermissions">IPHONE</button>
+          <button class="btn-permisos"" @click="permisos = !permisos">ANDROID</button>
       </div>
 
       <div v-if="mensaje">
