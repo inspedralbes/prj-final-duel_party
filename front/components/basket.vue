@@ -92,6 +92,7 @@ function obtenerPosicionC(num,puntos){
 
 function obtenerPosicion(num){
     console.log(markerPosition.value);
+    if(animaciones[`a${num}`]===false){
     if (markerPosition.value >= 40 && markerPosition.value <= 60) {
     obtenerPosicionC(num,3);
   } else if ((markerPosition.value >= 0 && markerPosition.value <= 20) || (markerPosition.value >= 80 && markerPosition.value <= 100)  ) {
@@ -99,6 +100,7 @@ function obtenerPosicion(num){
   } else {
      
   }
+}
 
 }
 
