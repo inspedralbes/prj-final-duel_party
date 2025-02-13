@@ -10,7 +10,7 @@
       <li>🏆 {{ data[props.data].i3 }}</li>
   </ul>
 
-  <button class="btn-jugar">🚀 Jugar Ahora</button>
+  <button class="btn-jugar" @click="empezar">🚀 Jugar Ahora</button>
 </div>
  
 </main>
@@ -25,7 +25,10 @@ const props = defineProps({
         required: true,
     },
 
-},) 
+},)  
+
+const emit = defineEmits();
+
 let data=[
     {
         titulo:"Baloncesto 🏀",
@@ -35,7 +38,7 @@ let data=[
        
     },
     {
-        titulo:"Piedra, Papel, Tijera <br>🫱 🤛",
+        titulo:"Piedra, Papel, Tijera 🫱 🤛",
         i1:"3 botones con las diferentes jugadas.",
         i2:"Selecciona una de ellas.",
         i3:"Gana al rival.",
@@ -46,6 +49,9 @@ let data=[
 
 const baloncesto=reactive({})
 
+function empezar(){
+  emit('empezar');
+}
 
 
 
@@ -57,14 +63,20 @@ const baloncesto=reactive({})
 .minijuego-anuncio {
   width: 80%;
   max-width: 400px;
-  margin: 20px auto;
   padding: 20px;
   text-align: center;
-  background: linear-gradient(135deg, #ff8a00, #e52e71);
+ /* background: linear-gradient(90deg, #ff8a00, #e52e71);*/
+ background-image: url('/2.jpg');
+ background-size: cover;
+ background-repeat: no-repeat;
+ background-position: bottom;
+ 
   color: white;
   border-radius: 12px;
   font-family: 'Press Start 2P', cursive;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+  border:2px solid black;
+   
 }
 
 .minijuego-anuncio h2 {

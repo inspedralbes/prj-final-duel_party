@@ -1,6 +1,7 @@
 <script setup>
 import { reactive, ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import socketManager from '../static/socket';  
+import Win from './win.vue';
 const yo= computed(() => $nuxt.$store.state);
 const socket= socketManager.getSocket(); 
 const claveSala = computed(() => $nuxt.$store.state.roomKey);
@@ -23,12 +24,16 @@ const posicion = reactive([{top:0, left:0},{top:0, left:0},{top:0, left:0},{top:
  
 
 setTimeout(() => {
-    alert("Ganador: "+ yo.value.jugadores[ganador()].username);
-    emit('acabarJuego',ganador());
+   winner.value=ganador();
+    setTimeout(() => {
+        emit('acabarJuego',winner.value);
+    }, 3000);
+    
+    
     
 }, 10000);
 
-
+const winner= ref(-1);
 const j1 = ref(null);
 
 socket.on('moveBasket', (data,player) => {
@@ -127,7 +132,7 @@ moveMarker();
             <RouterLink to="/jugar">
                 <img style="right: inherit;" src="/volver.png" alt="Volver" class="imagen_volver">
             </RouterLink>
-
+           
 
 
          
@@ -138,7 +143,7 @@ moveMarker();
  
 
         <div class="div_padre">
-          
+          <win class="abosolute" v-if="winner>=0" :data="yo.jugadores[winner].username"/>
           <div v-if="yo.jugadores[0].in" @click="obtenerPosicion(0)" :class="{ 'disabled': animaciones.a0 }"  ref="j1" id="j1" class="div">
             <div class="container">
   
@@ -289,6 +294,13 @@ moveMarker();
    
 }
 
+.abosolute{
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
 .animacion_encestar {
     animation: encestar 1s linear;
 }

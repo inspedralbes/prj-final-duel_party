@@ -1,7 +1,7 @@
 <template>
     <main>
         <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-      <div v-if="juego===0">
+      <div v-if="juego===0 || empezar===false">
         <div class="rojo">
             <div style="grid-column: 1; "> <img style="border-radius: 50%; width: auto; height: 100px;"
                     src="/avatar/boy4.png" alt=""> </div>
@@ -51,10 +51,7 @@
 
 
         <div id="tablero">
-            <div v-if="turno === 0">Rojo</div>
-            <div v-if="turno === 1">Azul</div>
-            <div v-if="turno === 3">Verde</div>
-            <div v-if="turno === 2">Amarillo</div>
+           
             <div v-if="explosion" class="explosion" :style="{
                 marginTop: movimiento[turno - 1 < 0 ? nJugadores : turno - 1].top + 'px',
                 marginLeft: movimiento[turno - 1 < 0 ? nJugadores : turno - 1].izq + 'px',
@@ -110,20 +107,18 @@
                 marginTop: movimiento[3].top + 'px',
                 marginLeft: movimiento[3].izq + 'px',
             }"></div>
+            <instr v-if="instrucciones.activar" class="absolute" @empezar="empezarJuego" :data="instrucciones.minijuego-1"/>
             <img class="img" src="/tablero.jpeg" srcset="">
 
         </div>
     </div>
-    <div v-if="juego===1">
+    <div v-if="juego===1 && empezar">
         <basket @acabarJuego="acabarJuego"/>
     </div>
-    <div v-if="juego===2">
+    <div v-if="juego===2  && empezar">
         <ppt :jugadores="duelos" @acabarJuego="acabarJuego"/>
     </div>
-    <instrucciones :data="instrucciones.minijuego"/>
-    <div v-if="instrucciones.activar"> 
-        <instrucciones :data="instrucciones.minijuego"/>
-    </div>
+
 
     </main>
 </template>
@@ -147,6 +142,7 @@ const yo= computed(() => $nuxt.$store.state);
 const explosion = ref(false);
 const turno = ref(0);
 const juego =ref(0);
+const empezar = ref(false);
 const nVueltas = ref(1);
 const socket= socketManager.getSocket();
 const duelos= reactive({j1:"",j2:""});
@@ -267,6 +263,10 @@ function comprobarGanador(num){
 
 }
 
+function empezarJuego(){
+    empezar.value=true;
+}
+
 
 function comprobarMinijuego(num){
 
@@ -305,8 +305,9 @@ function comprobarMinijuego(num){
             duelos.j1=aux2;
             duelos.j2=aux;
         }
-
-        alert("MINIJUEGO, PPT "+ yo.value.jugadores[duelos.j1].username + " VS " + yo.value.jugadores[duelos.j2].username);
+        instrucciones.minijuego=2;
+        instrucciones.activar=true;
+        
         socket.emit('minijuego', 2, $nuxt.$store.state.roomKey,{modo:1,jugador1:duelos.j1+1,jugador2:duelos.j2+1});
         juego.value=2;
                           
@@ -318,17 +319,20 @@ function comprobarMinijuego(num){
 function acabarJuego(data){
     
     juego.value=0;
+    empezar.value=false;
+    instrucciones.activar=false;
+    instrucciones.minijuego=0;
     socket.emit('minijuego', 0, $nuxt.$store.state.roomKey,{modo:4});
     let aux = turno.value;
     turno.value=data;
-    console.log("turno:" + turno.value);
+     
     actualizarPosicion(10);
-    
     setTimeout(() => {
         turno.value=aux;
-    }, 2000);
-    socket.emit('turno', turno.value, $nuxt.$store.state.roomKey);
-    console.log("turno2:" + turno.value);
+        socket.emit('turno', turno.value, $nuxt.$store.state.roomKey);
+    }, 3000);
+    
+     
 
 
 }
@@ -586,5 +590,10 @@ function pintarFicha(num) {
     position: absolute;
     transition: all 0.2s ease-in;
     border: 1px solid black;
+}
+.absolute{
+    position: absolute;
+    margin-left: 110px;
+    margin-top: 90px;
 }
 </style>
