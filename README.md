@@ -1,16 +1,21 @@
-# transversals
-Esquema mínim de carpetes pels projectes transversals
+# 🎮 DuelParty - Proyecto de Juego de Mesa Multijugador 🕹️
 
-És obligatori seguir aquesta estructura tot i que la podeu ampliar.
+## Integrantes:
+- **Diego Mujica** 💡
+- **Elihu Valdelomar** 💡
 
-## Atenció
-Un cop comenceu heu de canviar aquesta explicació amb la corresponent al vostre projecte (utilitzant markdown)
+## Descripción del Proyecto:
+**DuelParty** es un juego de mesa **multijugador local** que ofrece una experiencia interactiva utilizando los **dispositivos móviles** de los jugadores. En este juego, de **2 a 4 jugadores**, competirán entre sí jugando diversos **minijuegos** en un **tablero dinámico**. ¡El objetivo es ser el primero en dar las vueltas establecidas , mientras te diviertes con diferentes desafíos!
 
-# Aquest fitxer ha de contenir com a mínim:
- * Nom dels integrants
- * Nom del projecte
- * Petita descripció
- * Adreça del gestor de tasques (taiga, jira, trello...)
- * Adreça del prototip gràfic del projecte (Penpot, figma, moqups...)
- * URL de producció (quan la tingueu)
- * Estat: (explicació d'en quin punt està)
+## 🚀 Estado del Proyecto:
+Actualmente, el proyecto se encuentra en **desarrollo**. Estamos trabajando en la implementación de los primeros **minijuegos** ,en la optimización de la interfaz y mejora del diseño. 
+
+## 📅 Herramientas de Trabajo:
+- **NODE.JS** : servidor sockets.io.
+- **NUXT.JS** : frontend
+
+## 🌐 URL de Producción:
+- **URL de Producción**: [duelparty.com](https://duelparty.com) (disponible)
+
+## 🛠️ Estado de Desarrollo:
+El proyecto está en fase inicial, estamos implementando los minijuegos y la funcionalidad básica del tablero.
