@@ -5,8 +5,8 @@
       <div class="cartel" v-if="!permisos">
 
           <h3> Activar Permisos Requeridos</h3>
-          <button class="btn-permisos"" @click="requestPermissions">IPHONE</button>
-          <button class="btn-permisos"" @click="permisos = !permisos">ANDROID</button>
+          <button class="btn-permisos" @click="requestPermissions">IPHONE</button>
+          <button class="btn-permisos" @click="permisos = !permisos">ANDROID</button>
       </div>
 
       <div v-if="mensaje">
@@ -65,7 +65,7 @@ function cambioJuego(data){
 
 
 const canShake =ref(true);
-const permisos = ref(true);
+const permisos = ref(false);
 const accelerationX = ref(0);
 
     const accelerationY = ref(0);
