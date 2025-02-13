@@ -1,20 +1,24 @@
 <template>
   <main>
-    <div v-if="permisos">
-      <button  @click="requestPermissions">Pedir permisos para movimiento</button>
-      <button  @click="permisos=!permisos">Cambiar permisos</button>
-    </div>
-      <div v-if="meToca">
-        me toca
+    <div class="mando">
+
+      <div class="cartel" v-if="!permisos">
+
+          <h3>Permisos Requeridos</h3>
+          <button class="btn-permisos"" @click="requestPermissions">Activa permisos para movimiento</button>
+          <button class="btn-permisos"" @click="permisos = !permisos">Aceptar</button>
       </div>
+
       <div v-if="mensaje">
         ponlo horizontal porfa
       </div>
-      <div class="mando" v-else>
-
-        <div v-if="juego===0 || juego===1">
-          <div class="controller">
-          Jugador: {{ yo.playerNumber }}
+      
+      <div v-if="permisos && (juego === 0 || juego === 1)">
+        <div class="turno" v-if="meToca">
+          TU TURNO!
+        </div>
+        <div class="nJugador">JUGADOR:{{yo.playerNumber}}</div>
+        <div class="controller">
           <div class="dpad">
             <button class="up" @click="click('up')" :disabled="!meToca">▲</button>
             <button class="left" @click="click('left')" :disabled="!meToca">◄</button>
@@ -25,22 +29,20 @@
           <div class="buttons">
             <button class="b" @click="click('b')">B</button>
             <button class="a" @click="click('a')">A</button>
-
           </div>
         </div>
-        </div>
-        <div v-if="juego===2">
-          <mando-ppt/>
-        </div>
-
       </div>
 
-   
-
-
+      <div v-if="juego === 2">
+        <mando-ppt />
+      </div>
+    </div>
   </main>
-
 </template>
+
+
+
+
 <script setup>
 import { ref, computed,onMounted, onUnmounted } from "vue";
 import socketManager from '../static/socket'
@@ -63,7 +65,7 @@ function cambioJuego(data){
 
 
 
-const permisos = ref(true);
+const permisos = ref(false);
 const accelerationX = ref(0);
 
     const accelerationY = ref(0);
@@ -225,6 +227,57 @@ window.addEventListener('resize', () => {
 <style scoped>
 
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+.cartel{
+  background-color: #8B4513;
+  border: 5px solid #5A2A0A;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 250px;
+  margin: 20px auto;
+}
+
+.btn-permisos {
+  background: #ec9252; 
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  margin: 5px;
+  width: 100%;
+  display: block;
+}
+
+.btn-permisos:focus{
+  background-color: #621111;
+}
+
+.nJugador{
+    text-align: center;
+    color: white;
+    margin-bottom: 60px;
+    padding: 10px;
+
+}
+.turno {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex; 
+    width: 170px;
+    background-color: #0eba45; 
+    color: white;
+    border: 5px solid #0a6b22;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 10);
+    z-index: 1; 
+    margin: 0 auto 60px auto;
+    padding: 10px;
+}
 
 .mando {
   margin: 0;

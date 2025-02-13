@@ -146,7 +146,6 @@ span {
     height: 10vh;
     gap: 0;
     font-size: 30px;
-    background-color: brown;
     color: white;  
     border: solid black 5px;  
     background-color: #8B4513; 
