@@ -260,7 +260,7 @@ window.addEventListener('resize', () => {
 .nJugador{
     text-align: center;
     color: white;
-    margin-bottom: 60px;
+    margin-bottom: 30px;
     padding: 10px;
 
 }
@@ -275,10 +275,13 @@ window.addEventListener('resize', () => {
     border: 5px solid #0a6b22;
     box-shadow: 0 0 50px rgba(0, 0, 0, 10);
     z-index: 1; 
-    margin: 0 auto 60px auto;
+    margin: 0 auto 10px auto;
     padding: 10px;
 }
+main{
+  background-color: #1a1a1a;
 
+}
 .mando {
   margin: 0;
   padding: 0;
@@ -286,7 +289,6 @@ window.addEventListener('resize', () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #1a1a1a;
   height: 100vh;
   width: 98vw;
   overflow: hidden;
