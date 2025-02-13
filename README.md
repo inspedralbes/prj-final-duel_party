@@ -1,4 +1,4 @@
-# 🎲 DuelParty - Proyecto de Juego de Mesa Multijugador 🕹️
+# 🎲 DuelParty - Proyecto de Juego de Mesa Multijugador Local🕹️
 
 ## Integrantes:
 - **Diego Mujica** 💡
