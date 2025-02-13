@@ -1,46 +1,48 @@
 <template>
   <main>
-    <div v-if="permisos">
-      <button  @click="requestPermissions">Pedir permisos para movimiento</button>
-      <button  @click="permisos=!permisos">Cambiar permisos</button>
-    </div>
-      <div v-if="meToca">
-        me toca
+    <div class="mando">
+
+      <div class="cartel" v-if="!permisos">
+
+          <h3> Activar Permisos Requeridos</h3>
+          <button class="btn-permisos"" @click="requestPermissions">IPHONE</button>
+          <button class="btn-permisos"" @click="permisos = !permisos">ANDROID</button>
       </div>
+
       <div v-if="mensaje">
         ponlo horizontal porfa
       </div>
-      <div class="mando" v-else>
-
-        <div v-if="juego===0 || juego===1">
-          <div class="controller">
-          Jugador: {{ yo.playerNumber }}
+      
+      <div v-if="permisos && (juego === 0 || juego === 1)">
+        <div class="turno" v-if="meToca">
+          TU TURNO!
+        </div>
+        <div class="nJugador">JUGADOR:{{yo.playerNumber}}</div>
+        <div class="controller">
           <div class="dpad">
-            <button class="up" @click="click('up')" :disabled="!meToca">↑</button>
-            <button class="left" @click="click('left')" :disabled="!meToca">←</button>
+            <button class="up" @click="click('up')" :disabled="!meToca">▲</button>
+            <button class="left" @click="click('left')" :disabled="!meToca">◄</button>
             <button class="center" @click="click('center')" :disabled="!meToca"></button>
-            <button class="right" @click="click('right')" :disabled="!meToca">→</button>
-            <button class="down" @click="click('down')" :disabled="!meToca">↓</button>
+            <button class="right" @click="click('right')" :disabled="!meToca">►</button>
+            <button class="down" @click="click('down')" :disabled="!meToca">▼</button>
           </div>
           <div class="buttons">
             <button class="b" @click="click('b')">B</button>
             <button class="a" @click="click('a')">A</button>
-
           </div>
         </div>
-        </div>
-        <div v-if="juego===2">
-          <mando-ppt/>
-        </div>
-
       </div>
 
-   
-
-
+      <div v-if="juego === 2">
+        <mando-ppt />
+      </div>
+    </div>
   </main>
-
 </template>
+
+
+
+
 <script setup>
 import { ref, computed,onMounted, onUnmounted } from "vue";
 import socketManager from '../static/socket'
@@ -225,7 +227,66 @@ window.addEventListener('resize', () => {
 
 
 </script>
+
+
 <style scoped>
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+.cartel{
+  background-color: #8B4513;
+  border: 5px solid #5A2A0A;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 250px;
+  margin: 20px auto;
+}
+
+.btn-permisos {
+  background: #ec9252; 
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  margin: 5px;
+  width: 100%;
+  display: block;
+}
+
+.btn-permisos:focus{
+  background-color: #621111;
+}
+
+.nJugador{
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+    padding: 10px;
+
+}
+.turno {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex; 
+    width: 170px;
+    background-color: #0eba45; 
+    color: white;
+    border: 5px solid #0a6b22;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 10);
+    z-index: 1; 
+    margin: 0 auto 10px auto;
+    padding: 10px;
+}
+main{
+  background-color: #1a1a1a;
+
+}
 .mando {
   margin: 0;
   padding: 0;
@@ -233,26 +294,27 @@ window.addEventListener('resize', () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #f0f0f0;
-
   height: 100vh;
   width: 98vw;
   overflow: hidden;
+  font-family: 'Press Start 2P', cursive;
+  color: #fff;
 }
 
 .controller {
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin: 0;
+  gap: 20px;
 }
 
 .dpad {
   display: grid;
   grid-template-areas:
-    "up up up"
+    ". up ."
     "left center right"
-    "down down down";
-  gap: 0;
+    ". down .";
+  gap: 10px;
   justify-items: center;
   align-items: center;
   grid-column: 1;
@@ -262,19 +324,23 @@ window.addEventListener('resize', () => {
 .dpad button {
   width: 60px;
   height: 60px;
-  background-color: #333;
+  background-color: #444;
   color: #fff;
-  border: none;
+  border: 2px solid #666;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
   touch-action: manipulation;
+  box-shadow: 0px 4px 0px #333;
+  transition: all 0.1s ease;
 }
 
 .dpad button:active {
-  background-color: #555;
+  background-color: #666;
+  box-shadow: 0px 2px 0px #333;
+  transform: translateY(2px);
 }
 
 .dpad .up {
@@ -296,6 +362,8 @@ window.addEventListener('resize', () => {
 .dpad .center {
   grid-area: center;
   background-color: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .buttons {
@@ -305,25 +373,58 @@ window.addEventListener('resize', () => {
   align-items: center;
   gap: 3rem;
   grid-column: 2;
-
-
 }
 
 .buttons button {
   width: 80px;
   height: 80px;
-  background-color: #007bff;
+  background-color: #ff4757;
   color: #fff;
-  border: none;
+  border: 2px solid #ff6b81;
   border-radius: 50%;
-  font-size: 18px;
+  font-size: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
   touch-action: manipulation;
+  box-shadow: 0px 4px 0px #ff6b81;
+  transition: all 0.1s ease;
 }
 
 .buttons button:active {
-  background-color: #0056b3;
+  background-color: #ff6b81;
+  box-shadow: 0px 2px 0px #ff4757;
+  transform: translateY(2px);
+  color: black;
+}
+
+.buttons .b {
+  background-color: #226fec;
+  border-color: #226fec;
+  box-shadow: 0px 4px 0px #144491;
+}
+
+.buttons .b:active {
+  background-color: #ffffff;
+  box-shadow: 0px 2px 0px #ffffff;
+}
+
+.buttons .a {
+  background-color: #fa2323;
+  border-color: #fa2323;
+  box-shadow: 0px 4px 0px #991616;
+}
+
+.buttons .a:active {
+  background-color: #ffffff;
+  box-shadow: 0px 2px 0px #ffffff;
+}
+
+/* Estilo para el mensaje de orientación */
+.mensaje {
+  font-size: 18px;
+  color: #ff4757;
+  text-align: center;
+  margin-top: 20px;
 }
 </style>
