@@ -47,13 +47,9 @@ io.on('connection', async (socket) => {
         if (!salas[claveSala]) {
             salas[claveSala] = [];  // Inicializamos la sala como un array vacío
         }
-        let aux = {};
-
-        conexiones[socket.id] = socket
-        socket.user.turno = 0;
-        socket.user.juego = 0;
+        
         salas[claveSala].push(socket);
-
+        conexiones[socket.id] = socket
         socket.join(claveSala);
 
         socket.emit('room-created', claveSala);
@@ -110,7 +106,8 @@ io.on('connection', async (socket) => {
 
 
     socket.on('join-room', (claveSala) => {
-        if (salas[claveSala].length < 5) {
+     
+        if (salas[claveSala].length < 3) {
             const room = io.sockets.adapter.rooms.get(claveSala);
             if (!salas[claveSala]) {
                 salas[claveSala] = [];  // Inicializamos la sala como un array vacío
@@ -120,34 +117,19 @@ io.on('connection', async (socket) => {
                 socket.join(claveSala);
                 console.log(`Usuario ${socket.user.username} (ID=${socket.user.id}) se unió a la sala: ${claveSala}`);
 
-
-
-
                 salas[claveSala].push(socket);
                 conexiones[socket.id] = socket
                 switch (salas[claveSala].length) {
                     case 2:
-                        socket.user.player = 1;
+                        socket.user.username = "jugador 1";
                         break;
                     case 3:
-                        socket.user.player = 2;
+                        socket.user.username = "jugador 2"
                         break;
-                    case 4:
-                        socket.user.player = 3;
-                        break;
-                    case 5:
-                        socket.user.player = 4;
-                        break;
-
-                    default:
-                        break;
+               
                 }
 
                 socket.emit('room-joined', claveSala, socket.user);
-
-
-
-                
 
                 io.to(conexiones[salas[claveSala][0].id].id).emit('room-users', {
                     room: claveSala,
@@ -162,7 +144,7 @@ io.on('connection', async (socket) => {
                 socket.emit('error', 'Sala no encontrada');
             }
         } else {
-            socket.emit('sala_llena')
+            socket.emit('sala_llena');
 
         }
     });

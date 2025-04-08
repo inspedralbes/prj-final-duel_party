@@ -3,11 +3,11 @@
      
     <div class="main" v-if="!jugar">
         <div class="selector"> {{ props.numero }} numero de jugadores: {{ nJugadores }} </div> 
-        <div class="jugador1" :style="{backgroundColor: jugador1Color}"> {{ props.data[0].username }} <br>Presiona <br> <span @click="unirse(1)"> A </span>  <br> para estar Listo</div>
-        <div class="jugador2" :style="{backgroundColor: jugador2Color}" >{{ props.data[1].username }}<br>Presiona <br>  <span @click="unirse(2)"> A </span>  <br> para estar Listo</div>
-        <div class="jugador3" :style="{backgroundColor: jugador3Color}" >{{ props.data[2].username }} <br>Presiona <br>  <span @click="unirse(3)"> A </span> <br> para estar Listo</div>
-        <div class="jugador4" :style="{backgroundColor: jugador4Color}">{{ props.data[3].username }} <br>Presiona <br>  <span @click="unirse(4)"> A </span>  <br> para estar Listo</div>
-        <div class="empezar" @click="empezar()" v-if="nJugadores>1"> <button>EMPEZAR</button> </div>
+        <div class="jugador1" :style="{backgroundColor: jugador1Color}"> {{ props.data[0].username }} <br>Presiona <br> <span > A </span>  <br> para estar Listo</div>
+        <div class="jugador2" style="opacity: 0;" :style="{backgroundColor: jugador2Color}" >{{ props.data[0].username }}<br>Presiona <br>  <span > A </span>  <br> para estar Listo</div>
+        <div class="jugador3" style="opacity: 0;" :style="{backgroundColor: jugador3Color}" >{{ props.data[0].username }} <br>Presiona <br>  <span > A </span> <br> para estar Listo</div>
+        <div class="jugador4" :style="{backgroundColor: jugador2Color}">{{ props.data[1].username }} <br>Presiona <br>  <span > A </span>  <br> para estar Listo</div>
+        <div class="empezar" @click="empezar()" v-if="nJugadores>1"> <button>VS</button> </div>
     </div>
 
     <div v-else>

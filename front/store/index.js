@@ -7,8 +7,6 @@ export const state = () => ({
     jugadores: [
       { username: "", in: false },
       { username: "", in: false },
-      { username: "", in: false },
-      { username: "", in: false }
     ],
     juego:0,
   })

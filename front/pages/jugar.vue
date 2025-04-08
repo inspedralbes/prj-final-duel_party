@@ -32,10 +32,8 @@ const claveActual=ref("");
 socketManager.RemSocket();
 
 const menu = ref(1);
-const socket = socketManager.makeSocket(yo.value.username);
+const socket = socketManager.makeSocket("jugar");
 const jugadores = reactive([
-    { username: "", in: false },
-    { username: "", in: false },
     { username: "", in: false },
     { username: "", in: false }
 ]);
