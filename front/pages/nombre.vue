@@ -22,7 +22,7 @@ function siguiente() {
     alert("pon Nombre")
   } else {
     $nuxt.$store.dispatch('updateNamePlayer', nombre.value)
-    $nuxt.$router.push('/jugar');
+    $nuxt.$router.push('/adivinaPersonaje');
   }
 }
 
