@@ -1,8 +1,11 @@
 <template>
     <div class="contenedor">
-      <div class="juego-container">
+      <!-- Pantalla de selección de categoría -->
+      <div v-if="!mostrarJuego" class="juego-container">
         <div class="titulo-container">
           <h1 class="titulo">ADIVINA EL PERSONAJE</h1>
+
+
           <div class="subtitulo">¡ELIGE UNA CATEGORÍA!</div>
         </div>
         
@@ -19,23 +22,47 @@
           PRESIONA UN BOTÓN PARA COMENZAR
         </div>
       </div>
+  
+      <!-- Pantalla del juego -->
+      <juego-personaje 
+        v-if="mostrarJuego" 
+        :categoria="categoriaSeleccionada"
+        @volver="volverASeleccion" 
+      />
+  
+      <!-- Componente de prueba para desarrollo -->
+      <test-inclinacion v-if="mostrarJuego && modoDesarrollo" />
     </div>
   </template>
   
   <script setup>
   import { ref } from 'vue';
   import BotonCategoria from '~/components/BotonCategoria.vue';
+  import JuegoPersonaje from '~/components/JuegoPersonaje.vue';
+  import TestInclinacion from '~/components/TestInclinacion.vue';
   
   const categorias = [
     { id: 1, nombre: 'ACTORES', icono: '🎭' },
     { id: 2, nombre: 'CANTANTES', icono: '🎤' },
     { id: 3, nombre: 'DEPORTISTAS', icono: '⚽' },
-    { id: 4, nombre: 'PERSONAJES DE FICCIÓN', icono: '🦸' },
+    { id: 4, nombre: 'PERSONAJES DE FICCIÓN', icono: '🦸' }
   ];
   
+  // Variables reactivas para controlar el estado de la aplicación
+  const mostrarJuego = ref(false);
+  const categoriaSeleccionada = ref(null);
+  const modoDesarrollo = ref(false); // Cambia a true para activar el componente de prueba
+  
+  // Función para seleccionar categoría e iniciar el juego
   const seleccionarCategoria = (categoria) => {
     console.log(`Categoría seleccionada: ${categoria.nombre}`);
-    // Aquí puedes implementar la lógica para iniciar el juego con la categoría elegida
+    categoriaSeleccionada.value = categoria;
+    mostrarJuego.value = true;
+  };
+  
+  // Función para volver a la pantalla de selección de categoría
+  const volverASeleccion = () => {
+    mostrarJuego.value = false;
   };
   </script>
   
@@ -51,7 +78,7 @@
     padding: 20px;
     font-family: 'Press Start 2P', cursive;
   }
-  
+ 
   .juego-container {
     background-color: #000;
     border: 8px solid #fff;
