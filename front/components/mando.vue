@@ -17,7 +17,7 @@
         <div class="turno" v-if="meToca">
           TU TURNO!
         </div>
-        <div class="nJugador">JUGADOR:{{yo.playerNumber}}</div>
+        <div class="nJugador">{{yo.username}}</div>
         <div class="controller">
           <div class="dpad">
             <button class="up" @click="click('up')" :disabled="!meToca">▲</button>
@@ -55,9 +55,6 @@ const juego= ref(0);
 
 function cambioJuego(data){
 
-  //0 = dado
-  //1 = basquet
-  //2 = ppt
   juego.value = data;
 
 
@@ -156,28 +153,11 @@ function comprobarTurno() {
 }
 
 
-function clickC(param) {
-  if (turno.value === yo.value.playerNumber - 1) {
-    socket.emit('move', param, yo.value.playerNumber, yo.value.roomKey);
-  }
-
-
-}
 
 function click(param) {
-
-  switch (juego.value) {
-    case 0:
-     socket.emit('move', param, yo.value.playerNumber, yo.value.roomKey);
-      break;
-    case 1:
-      socket.emit('moveBasket', param, yo.value.playerNumber, yo.value.roomKey);
-      break;
-    default:
-      break;
-  }
-
- 
+  socket.emit('move', param, yo.value.username, yo.value.roomKey);
+  console.log(yo.value.username);
+  
 }
 
 socket.on('turno', (data) => {

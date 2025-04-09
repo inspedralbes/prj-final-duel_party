@@ -54,14 +54,13 @@ function reiniciarSala() {
     });
 }
 
-socket.on('sala_llena',()=>{
+socket.on('error', (data) => {
+    alert(data)
+})   
 
-    alert("sala llena")
-})
-
-socket.on('turno', (data) => {
-    console.log(data);
-    
+socket.on('sala_cerrada', () => {
+    alert("Sala cerrada")
+    $nuxt.$router.push('/');
 });
 
 
@@ -73,20 +72,14 @@ socket.on('room-users', (data) => {
 
        
     });
-    $nuxt.$store.dispatch('updateJugadores', jugadores)
-    console.log("hola");
-    console.log($nuxt.$store.state.jugadores);
-    if (menu.value === 4 && !jugadores[yo.value.playerNumber - 1].in) {
-        $nuxt.$store.dispatch('updateNPlayer', yo.value.playerNumber - 1);
-    }
-
-    console.log(jugadores);
+    console.log(data)
 });
 
-socket.on("room-joined", (claveSala, socket) => {
+socket.on("room-joined", (claveSala, username) => {
     menu.value = 4;
-    $nuxt.$store.dispatch('updatePlayer', { claveSala, socket });
-    console.log(yo.value);
+    $nuxt.$store.dispatch('updatePlayer', { claveSala, username });
+     
+    console.log(yo.value.username);
 });
 
 socket.on("room-created", (clave_Sala) => {
@@ -102,7 +95,7 @@ main {
 }
 .div-inicio {
     place-items: center;
-  background-image: url('/images/fondo-inicio.jpg');
+  background-image: url('/images/fondo-inicio.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -134,6 +127,7 @@ main {
     text-align: center;
     font-family: 'Press Start 2P', cursive;
     margin-bottom: 20px;
+    padding: 10px;
     
 }
 
@@ -148,10 +142,12 @@ main {
     transition: transform 0.3s, background-color 0.3s;
     font-family: 'Press Start 2P', cursive;
     margin-bottom: 100px;
+    padding: 20px;
+    border-radius: 10%;
 }
 
 .btn-inicio:hover {
-    background-color: #1cbc00;
+    background-color: #00a6bc;
     transform: scale(1.05);
 }
 

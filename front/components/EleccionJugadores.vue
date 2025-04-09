@@ -2,12 +2,35 @@
 <div class="centrar_main">
      
     <div class="main" v-if="!jugar">
-        <div class="selector"> {{ props.numero }} numero de jugadores: {{ nJugadores }} </div> 
-        <div class="jugador1" :style="{backgroundColor: jugador1Color}"> {{ props.data[0].username }} <br>Presiona <br> <span > A </span>  <br> para estar Listo</div>
-        <div class="jugador2" style="opacity: 0;" :style="{backgroundColor: jugador2Color}" >{{ props.data[0].username }}<br>Presiona <br>  <span > A </span>  <br> para estar Listo</div>
-        <div class="jugador3" style="opacity: 0;" :style="{backgroundColor: jugador3Color}" >{{ props.data[0].username }} <br>Presiona <br>  <span > A </span> <br> para estar Listo</div>
-        <div class="jugador4" :style="{backgroundColor: jugador2Color}">{{ props.data[1].username }} <br>Presiona <br>  <span > A </span>  <br> para estar Listo</div>
-        <div class="empezar" @click="empezar()" v-if="nJugadores>1"> <button>VS</button> </div>
+        <div class="selector"> Sala:{{ props.numero }}</div> 
+        
+        <div class="jugador1" :style="{backgroundColor: jugador1Color}">
+          
+       {{ props.data[0].username }} <br>
+
+          <div v-if="jugadoresListos.jugador1">
+            <span> LISTO </span>
+          </div>
+          <div v-else>
+        <span class="animacion" v-if="props.data[0].in"> Sacude el movil para estar Listo </span>
+        <span class="animacion" v-else> Esperando jugador </span> </div>
+      </div>
+        <div class="jugador2" :style="{backgroundColor: jugador2Color}"> 
+        {{ props.data[1].username }} <br> 
+       
+       
+        <div v-if="jugadoresListos.jugador2">
+            <span> LISTO </span>
+          </div>
+          <div v-else>
+        <span class="animacion" v-if="props.data[1].in"> Sacude el movil para estar Listo </span> 
+        <span class="animacion" v-else> Esperando jugador </span> </div>
+
+          </div>
+      
+
+
+        <div class="empezar"> VS </div>
     </div>
 
     <div v-else>
@@ -20,7 +43,8 @@
 <script setup>
 
 import { reactive, ref,watch } from 'vue';
-import socket from '../static/socket';
+import socketManager from '../static/socket'
+const socket = socketManager.getSocket();
 
 const props = defineProps({
   data: {
@@ -33,15 +57,14 @@ const props = defineProps({
   },
 
 },)
+ 
 
-const jugadores = reactive([
-    { username: "diego", in: true },
-    { username: "elihu", in: true },
-    { username: "bryan", in: true },
-    { username: "abdiel", in: true }
-]);
-const jugar=ref(false);
+const jugadoresListos=reactive({
+  jugador1:false,
+  jugador2:false,
+});
 
+const jugar=ref(false); 
 watch(() => props.data, (newValue) => {
   reiniciarColor();
   console.log(newValue)
@@ -51,12 +74,7 @@ watch(() => props.data, (newValue) => {
     if (newValue[index].in) {
       nJugadores.value++;
       switch (nJugadores.value) {
-        case 4: jugador4Color.value="green";
-        
-        
-        case 3: jugador3Color.value="purple";
-        
-        
+     
         case 2: jugador2Color.value="blue";
         
         
@@ -77,51 +95,45 @@ jugar.value=true;
 }
 
 const jugador1Color = ref("rgba(255, 0, 0, 0.412)");
-const jugador2Color = ref("rgba(0, 0, 255, 0.412)");
-const jugador3Color = ref("rgba(128, 0, 128, 0.412)");
-const jugador4Color = ref("rgba(0, 255, 0, 0.436)");
+const jugador2Color = ref("rgba(0, 0, 255, 0.412)"); 
 const nJugadores = ref(0);
 
 function reiniciarColor(){
 
     jugador1Color.value="rgba(255, 0, 0, 0.412)";
-    jugador2Color.value="rgba(0, 0, 255, 0.412)";
-    jugador3Color.value="rgba(128, 0, 128, 0.412)";
-    jugador4Color.value="rgba(0, 255, 0, 0.436)";
+    jugador2Color.value="rgba(0, 0, 255, 0.412)"; 
+    jugadoresListos.jugador1=false;
+    jugadoresListos.jugador2=false;
 }
 
-function unirse(num){
+ socket.on('move', (data, username) => {
+  console.log(username)
+  if(username===props.data[0].username){
+   jugadoresListos.jugador1=true;
+  }else{
+    jugadoresListos.jugador2=true;
+  }
 
-    switch (num) {
-        case 1: jugador1Color.value="red";
-            
-            break;
-            case 2: jugador2Color.value="blue";
-            
-            break;
-            case 3: jugador3Color.value="yellow";
-            
-            break;
-            case 4: jugador4Color.value="green";
-            
-            break;
-        default:
-            break;
-    }
-    nJugadores.value++;
-    if(nJugadores.value>1){
-
-    }
-}
-
-
-
+ });
 
 </script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+
+@keyframes cargando{
+0%{
+
+  opacity: 1;
+}
+50%{
+  opacity: 0;
+}
+100%{
+  opacity: 1;
+}
+}
  
 span {
   display: flex;
@@ -129,15 +141,17 @@ span {
   align-items: center;
   width: 70px;
   height: 70px;
-  background-color: rgb(255, 255, 255);
-  border-radius: 50%;
   font-weight: bold;
   font-size: 24px;
-  color: rgb(0, 0, 0);
+  color: white;
   text-align: center;
   margin: 0 auto;
+ 
 }
 
+.animacion{
+  animation: cargando 1s infinite linear;
+}
 .selector{
     display: grid;
     justify-content: center;
@@ -163,7 +177,7 @@ span {
     height: 100vh;
     width: 100vw;
     font-family: 'Press Start 2P', cursive;
-    background-image: url('/images/fondo_elecciones.jpg');
+    background-image: url('/images/fondo-inicio.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -187,21 +201,24 @@ span {
 
 }
  
-.jugador1,.jugador2,.jugador3,.jugador4{
-  height: 400px;
+.jugador1,.jugador2{
+  padding-top: 30px;
+  height: 370px;
   display: grid;
   font-size: 30px;
   text-align: center;
   margin-bottom: 20px;
+  box-shadow: white 0px 0px 50px;
 }
 .empezar{
   display: grid;
   grid-area: e;
   justify-content: center;
   align-items: center;
-  font-size: 30px;
+  font-size: 70px;
   text-align: center;
   height: 100px;
+  background: none;
 
 }
 .jugador1{
@@ -210,13 +227,6 @@ span {
 }
 
 .jugador2{
-    grid-area: b;
-
-}
-.jugador3{
-    grid-area: c;
-}
-.jugador4{
     grid-area: d;
 }
 

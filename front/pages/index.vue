@@ -16,7 +16,7 @@ export default {
 
 <style scoped>
 .div-inicio {
-  background-image: url('/images/fondo-inicio.jpg');
+  background-image: url('/images/fondo-inicio.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -51,7 +51,7 @@ export default {
 }
 
 .btn-inicio:hover {
-  background-color: #1cbc00;
+  background-color: #00a6bc;
   color: #ffffff;
   transform: scale(1.05);
 }
