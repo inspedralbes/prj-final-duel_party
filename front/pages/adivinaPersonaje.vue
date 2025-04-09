@@ -28,21 +28,17 @@
       <div class="timer-circle">
         <svg class="timer-svg">
           <circle
-            class="timer-background"
-            r="90"
-            cx="100"
-            cy="100"
-          ></circle>
-          <circle
-            class="timer-progress"
-            r="90"
-            cx="100"
-            cy="100"
-            :style="{
-              strokeDashoffset: `${440 * (1 - tiempoRestante / 60)}`
-            }"
-          ></circle>
-        </svg>
+    class="timer-progress"
+    r="90"
+    cx="100"
+    cy="100"
+    :style="{
+      strokeDasharray: `${circumference} ${circumference}`,
+      strokeDashoffset: `${circumference * (1 - tiempoRestante / 60)}`
+    }"
+  ></circle>
+</svg>
+
         <div class="timer-text">{{ tiempoRestante }}s</div>
       </div>
     </div>
@@ -79,8 +75,23 @@ const categoriaSeleccionada = ref(null);
 const modoDesarrollo = ref(false); // Cambia a true para activar el componente de prueba
 const tiempoRestante = ref(60); // Tiempo inicial de 1 minuto
 const contadorAciertos = ref(0); // Contador de aciertos
+const circumference = 2 * Math.PI * 90; // 2πr donde r es el radio (90)
 
 let intervalId = null;
+
+
+
+const iniciarCuentaAtras = () => {
+  tiempoRestante.value = 60;
+  contadorAciertos.value = 0;
+  intervalId = setInterval(() => {
+    if (tiempoRestante.value > 0) {
+      tiempoRestante.value--;
+    } else {
+      clearInterval(intervalId);
+    }
+  }, 1000);
+};
 
 // Función para seleccionar categoría e iniciar el juego
 const seleccionarCategoria = (categoria) => {
@@ -90,18 +101,6 @@ mostrarJuego.value = true;
 iniciarCuentaAtras();
 };
 
-// Función para iniciar la cuenta atrás
-const iniciarCuentaAtras = () => {
-tiempoRestante.value = 60;
-contadorAciertos.value = 0;
-intervalId = setInterval(() => {
-  if (tiempoRestante.value > 0) {
-    tiempoRestante.value--;
-  } else {
-    clearInterval(intervalId);
-  }
-}, 1000);
-};
 
 // Función para volver a la pantalla de selección de categoría
 const volverASeleccion = () => {
@@ -158,8 +157,10 @@ clearInterval(intervalId);
 .timer-progress {
   stroke: #ff0;
   stroke-linecap: round;
-  stroke-dasharray: 440;
+  stroke-dasharray: 565.48; /* Valor inicial del circumference */
   transition: stroke-dashoffset 1s linear;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
 }
 
 .timer-text {
