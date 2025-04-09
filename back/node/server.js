@@ -108,13 +108,8 @@ io.on('connection', async (socket) => {
        
         const room = io.sockets.adapter.rooms.get(claveSala);
       
-       
-        if (!salas[claveSala]) {
-            socket.emit('error', 'Sala no encontrada');
-            return;
-          }
           
-        if(salas[claveSala]==undefined || !room){
+        if(!salas[claveSala] || !room){
             socket.emit('error', 'Sala no encontrada');
             return;
         }
@@ -196,11 +191,15 @@ io.on('connection', async (socket) => {
 
 
                 }
-                salas[claveSala].splice(salas[claveSala].indexOf(socket.user), 1);
-                if (salas[claveSala].length === 0) {
+                if(salas[claveSala]){
+                    salas[claveSala].splice(salas[claveSala].indexOf(socket.user), 1);
+                    if (salas[claveSala].length === 0) {
 
-                    delete salas[claveSala];
+                        delete salas[claveSala];
+                    }
                 }
+               
+               
             }
         }
 
