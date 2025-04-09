@@ -1,4 +1,3 @@
-y
 <template>
     <div class="juego-container">
         <div class="carta-personaje" :class="{ 'animacion-salida': animacionSalida }">
