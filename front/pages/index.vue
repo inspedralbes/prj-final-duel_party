@@ -1,7 +1,7 @@
 <template>
   
   <div class="div-inicio">
-    <NuxtLink to="/nombre">
+    <NuxtLink to="/jugar">
       <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
       <button class="btn-inicio">EMPEZAR</button>
     </NuxtLink>
@@ -12,11 +12,13 @@
 export default {
   name: 'IndexPage'
 }
+
+
 </script>
 
 <style scoped>
 .div-inicio {
-  background-image: url('/images/fondo-inicio.jpg');
+  background-image: url('/images/fondo-inicio.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -51,7 +53,7 @@ export default {
 }
 
 .btn-inicio:hover {
-  background-color: #1cbc00;
+  background-color: #00a6bc;
   color: #ffffff;
   transform: scale(1.05);
 }

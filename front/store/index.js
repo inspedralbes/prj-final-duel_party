@@ -3,14 +3,10 @@
 export const state = () => ({
     username: '',
     roomKey: '',
-    playerNumber: '',
     jugadores: [
       { username: "", in: false },
       { username: "", in: false },
-      { username: "", in: false },
-      { username: "", in: false }
     ],
-    juego:0,
   })
 
 
@@ -47,9 +43,9 @@ export const mutations = {
 
 export const actions = {
     updatePlayer({ commit }, playerData) {
-      commit('setUsername', playerData.socket.username);
+      commit('setUsername', playerData.username);
       commit('setRoomKey', playerData.claveSala);
-      commit('setPlayerNumber', playerData.socket.player);
+      
      
     },
     updateJuego({ commit }, juego) {

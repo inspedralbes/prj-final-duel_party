@@ -47,13 +47,9 @@ io.on('connection', async (socket) => {
         if (!salas[claveSala]) {
             salas[claveSala] = [];  // Inicializamos la sala como un array vacío
         }
-        let aux = {};
-
-        conexiones[socket.id] = socket
-        socket.user.turno = 0;
-        socket.user.juego = 0;
+        socket.user.claveSala = claveSala;
         salas[claveSala].push(socket);
-
+        conexiones[socket.id] = socket
         socket.join(claveSala);
 
         socket.emit('room-created', claveSala);
@@ -69,10 +65,10 @@ io.on('connection', async (socket) => {
 
     });
 
-    socket.on('move', (data, playerNumber, claveSala) => {
-            if(salas[claveSala][0].user.turno==playerNumber-1){
-            io.to(conexiones[salas[claveSala][0].id].id).emit('move', data, playerNumber);
-        }
+    socket.on('move', (data, username, claveSala) => {
+          
+    io.to(conexiones[salas[claveSala][0].id].id).emit('move', data, username);
+       
     });
 
     socket.on('minijuego', (data, claveSala,config) => {
@@ -106,48 +102,40 @@ io.on('connection', async (socket) => {
 
 
     });
-
-
+ 
 
     socket.on('join-room', (claveSala) => {
-        if (salas[claveSala].length < 5) {
-            const room = io.sockets.adapter.rooms.get(claveSala);
-            if (!salas[claveSala]) {
-                salas[claveSala] = [];  // Inicializamos la sala como un array vacío
-            }
+       
+        const room = io.sockets.adapter.rooms.get(claveSala);
+      
+          
+        if(!salas[claveSala] || !room){
+            socket.emit('error', 'Sala no encontrada');
+            return;
+        }
 
-            if (room) {
+        if (salas[claveSala].length < 3) {
+            
+            if (!salas[claveSala]) {
+                salas[claveSala] = [];   
+            }
                 socket.join(claveSala);
                 console.log(`Usuario ${socket.user.username} (ID=${socket.user.id}) se unió a la sala: ${claveSala}`);
-
-
-
 
                 salas[claveSala].push(socket);
                 conexiones[socket.id] = socket
                 switch (salas[claveSala].length) {
                     case 2:
-                        socket.user.player = 1;
+                        socket.user.username = "Jugador "+uuidv4().slice(0, 2);
                         break;
                     case 3:
-                        socket.user.player = 2;
+                        socket.user.username = "Jugador "+uuidv4().slice(0, 2);
+                       
                         break;
-                    case 4:
-                        socket.user.player = 3;
-                        break;
-                    case 5:
-                        socket.user.player = 4;
-                        break;
-
-                    default:
-                        break;
+               
                 }
 
-                socket.emit('room-joined', claveSala, socket.user);
-
-
-
-                
+                socket.emit('room-joined', claveSala, socket.user.username);
 
                 io.to(conexiones[salas[claveSala][0].id].id).emit('room-users', {
                     room: claveSala,
@@ -157,12 +145,9 @@ io.on('connection', async (socket) => {
                         player: io.sockets.sockets.get(id)?.user?.player || 0,
                     }))
                 });
-            } else {
-                console.log(`Intento de unión a sala inexistente: ${claveSala}`);
-                socket.emit('error', 'Sala no encontrada');
-            }
+             
         } else {
-            socket.emit('sala_llena')
+            socket.emit('error', 'Sala llena');
 
         }
     });
@@ -206,11 +191,15 @@ io.on('connection', async (socket) => {
 
 
                 }
-                salas[claveSala].splice(salas[claveSala].indexOf(socket.user), 1);
-                if (salas[claveSala].length === 0) {
+                if(salas[claveSala]){
+                    salas[claveSala].splice(salas[claveSala].indexOf(socket.user), 1);
+                    if (salas[claveSala].length === 0) {
 
-                    delete salas[claveSala];
+                        delete salas[claveSala];
+                    }
                 }
+               
+               
             }
         }
 
@@ -220,8 +209,15 @@ io.on('connection', async (socket) => {
     });
 
     socket.on('disconnect', () => {
-        console.log(`Usuario desconectado: ${socket.id}`);
+        console.log(`Usuario desconectado: ${socket.id}`); 
+        const claveSala = socket.user.claveSala;
+        if(claveSala===undefined){
+            return;
+        }
+        io.to(claveSala).emit('sala_cerrada') 
+        delete salas[claveSala];
         delete conexiones[socket.id]
+
 
 
     });
