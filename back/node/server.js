@@ -31,7 +31,7 @@ let conexiones = {};
 let eleccionesPPT = {};
 const basquet = require('./minijuegos/basquet');
 const ppt = require('./minijuegos/ppt');
-
+const globos = require('./minijuegos/globos');
 
 io.on('connection', async (socket) => {
 
@@ -39,6 +39,7 @@ io.on('connection', async (socket) => {
     socket.user = { username: socket.handshake.auth.username };
 
     basquet(socket, io, salas, conexiones);
+    globos(socket,io ,salas, conexiones);
     ppt(socket, io,eleccionesPPT);
 
 
@@ -121,7 +122,7 @@ io.on('connection', async (socket) => {
 
                 socket.emit('room-joined', claveSala, socket.user.username);
 
-                io.to(conexiones[salas[claveSala][0].id].id).emit('room-users', {
+                io.to(claveSala).emit('room-users', {
                     room: claveSala,
                     users: [...room].map(id => ({
                         id,

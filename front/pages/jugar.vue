@@ -78,7 +78,8 @@ socket.on('room-users', (data) => {
 
        
     });
-    console.log(data)
+    $nuxt.$store.dispatch('updateJugadores', jugadores);
+    console.log(yo.value)
 });
 
 socket.on("room-joined", (claveSala, username) => {
@@ -88,8 +89,8 @@ socket.on("room-joined", (claveSala, username) => {
     console.log(yo.value.username);
 });
 
-socket.on("room-created", (clave_Sala) => {
-    $nuxt.$store.dispatch('updateKeyData', clave_Sala);
+socket.on("room-created", (claveSala) => {
+   $nuxt.$store.dispatch('updatePlayer', { claveSala, username:"host" });
     menu.value = 3;
 });
 </script>
