@@ -1,7 +1,7 @@
 <template>
   
   <div class="div-inicio">
-    <NuxtLink to="/prueva">
+    <NuxtLink to="/jugar">
       <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
       <button class="btn-inicio">EMPEZAR</button>
     </NuxtLink>

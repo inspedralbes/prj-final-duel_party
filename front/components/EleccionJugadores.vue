@@ -115,6 +115,10 @@ function reiniciarColor(){
     jugadoresListos.jugador2=true;
   }
 
+  if(jugadoresListos.jugador1 && jugadoresListos.jugador2){
+    $nuxt.$router.push('/minijuegos');
+  }
+
  });
 
 </script>

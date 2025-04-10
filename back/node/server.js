@@ -71,26 +71,11 @@ io.on('connection', async (socket) => {
        
     });
 
-    socket.on('minijuego', (data, claveSala,config) => {
-        salas[claveSala][0].user.juego = data;
-        switch (config.modo) {
-            case 1:
-                io.to(conexiones[salas[claveSala][config.jugador1].id].id).emit('minijuego', data);
-                io.to(conexiones[salas[claveSala][config.jugador2].id].id).emit('minijuego', data);
-
-                break;
-            case 4:
-                socket.broadcast.to(claveSala).emit('minijuego', data);
-                break;
+    socket.on('minijuego', (claveSala, minijuego) => {
         
-            default:
-                break;
-        }
-
+        socket.broadcast.to(claveSala).emit('minijuego', minijuego);
+        console.log("esa");
         
-    
-
-
     });
 
     socket.on('turno', (turno, claveSala) => {

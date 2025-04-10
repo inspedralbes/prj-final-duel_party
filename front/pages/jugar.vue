@@ -15,7 +15,7 @@
         </div>
 
  <div v-if="menu===4">
-    <globos/>
+    <mando/>
  </div>
 
 
@@ -64,6 +64,11 @@ socket.on('sala_cerrada', () => {
     $nuxt.$router.push('/');
 });
 
+socket.on('minijuego', (data) => {
+    $nuxt.$store.dispatch('updateJuego', data);
+    $nuxt.$router.push('/minijuegos');
+
+});
 
 socket.on('room-users', (data) => {
     reiniciarSala();

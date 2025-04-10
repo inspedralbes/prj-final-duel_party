@@ -1,10 +1,14 @@
 <script setup>
-import { reactive, ref } from 'vue';
-
+import { reactive, ref,computed } from 'vue';
+import socketManager from '../static/socket'
 const azules = ref(10);
 const rojos = ref(10);
 const globos = ref([]);
+const yo= computed(() => $nuxt.$store.state);
+const socket = socketManager.getSocket();
+
  
+
 function explotar(index) {
   globos.value[index].explotado = true;
 }
@@ -25,11 +29,21 @@ for (let index = 0; index < 20; index++) {
     rojos.value--;
     globos.value.push({ color: "rojo", explotado: false });
   }
+
+  
 }
+
+
+
 </script>
 
 <template>
   <main>
+
+
+
+
+    
     <div class="parent">
       <img
         v-for="(globo, index) in globos"
@@ -69,7 +83,7 @@ main {
 }
 
 .images {
-  width: 100px;
+  width: 80px;
 }
 
 .parent {
@@ -77,7 +91,7 @@ main {
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(4, 1fr);
   grid-column-gap: 70px;
-  grid-row-gap: 0px;
+  grid-row-gap: -10px;
   justify-content: center;
   align-items: center;
   top: 50%;
@@ -86,6 +100,8 @@ main {
   position: absolute;
   
 }
+
+
 
  
 </style>
