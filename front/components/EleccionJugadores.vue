@@ -161,12 +161,12 @@ span {
     height: 10vh;
     gap: 0;
     font-size: 30px;
-    color: white;  
-    border: solid black 5px;  
-    background-color: #8B4513; 
+    opacity: 0.91;
+    color: white;   
+    background-color: #ce53b9; 
     color: white;
-    border: 5px solid #5A2A0A;
-    box-shadow: 0 0 50px rgba(0, 0, 0, 10);
+    border: 1px solid #ffffff;
+    box-shadow: 0 0px 20px white;
     padding: 0px; 
     z-index: 1; 
     margin-bottom: 60px;
