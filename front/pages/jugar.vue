@@ -15,7 +15,7 @@
         </div>
 
  <div v-if="menu===4">
-    <mando/>
+    <globos/>
  </div>
 
 

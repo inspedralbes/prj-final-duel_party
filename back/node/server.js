@@ -88,8 +88,7 @@ io.on('connection', async (socket) => {
         }
 
         
-       
-        console.log(salas[claveSala][0].user.juego);
+    
 
 
     });

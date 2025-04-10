@@ -1,6 +1,6 @@
 <template>
     <main>
-        <basket :jugadores="jugadores"/>
+        <globos/>
     </main>
 </template>
 <script setup>
