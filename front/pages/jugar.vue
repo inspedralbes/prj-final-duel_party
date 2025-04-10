@@ -59,7 +59,8 @@ socket.on('error', (data) => {
 })   
 
 socket.on('sala_cerrada', () => {
-    alert("Sala cerrada")
+    socketManager.RemSocket();
+    alert("Sala cerrada");
     $nuxt.$router.push('/');
 });
 

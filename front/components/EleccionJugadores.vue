@@ -111,6 +111,7 @@ function reiniciarColor(){
   if(username===props.data[0].username){
    jugadoresListos.jugador1=true;
   }else{
+    jugadoresListos.jugador1=true;
     jugadoresListos.jugador2=true;
   }
 

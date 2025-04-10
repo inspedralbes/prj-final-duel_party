@@ -12,6 +12,8 @@
 export default {
   name: 'IndexPage'
 }
+
+
 </script>
 
 <style scoped>
