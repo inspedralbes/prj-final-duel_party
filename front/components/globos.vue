@@ -4,6 +4,7 @@ import socketManager from '../static/socket'
 const azules = ref(10);
 const rojos = ref(10);
 const globos = ref([]);
+const puntaje=reactive({azul:0,rojo:0,ronda:1});
 const yo= computed(() => $nuxt.$store.state);
 const menu=ref(0);
 const socket = socketManager.getSocket();
@@ -23,6 +24,14 @@ function actualizarTemporizador() {
 
 let temporizador = setInterval(actualizarTemporizador, 1000);
  
+
+
+function reiniciarTemporizador() {
+  clearInterval(temporizador);       // Detiene el temporizador actual
+  tiempoRestante.value = 5;          // Reinicia el valor del tiempo
+  temporizador = setInterval(actualizarTemporizador, 1000);  // Vuelve a iniciar el temporizador
+}
+
 for (let index = 0; index < 20; index++) {
   let numero = Math.floor(Math.random() * 2) + 1;
   if (azules.value === 0) {
@@ -99,6 +108,14 @@ socket.on('ganador_globos', (data) => {
    }else{
      menu.value = 2;
    }
+ }else{
+  if(data===0){
+    puntaje.rojo++;
+  }else{
+    puntaje.azul++;
+  }
+  puntaje.ronda++;
+  reiniciarTemporizador();
  }
 }); 
 
@@ -134,7 +151,7 @@ socket.on('recibir_globos', (data) => {
         <img class="images" src="/images/globos/rojo.webp">
       </div>
       <h2 class="player-name">{{ yo.jugadores[0].username }}</h2>
-       
+      <h2 class="player-name">{{ puntaje.rojo }}</h2>
     </div>
     
     <div class="vs-container">
@@ -147,10 +164,11 @@ socket.on('recibir_globos', (data) => {
         <img class="images" src="/images/globos/azul.webp">
       </div>
       <h2 class="player-name">{{ yo.jugadores[1].username }}</h2>
+      <h2 class="player-name">{{ puntaje.azul }}</h2>
        
   </div>
   <br>
- 
+  
 </div>
 
 
