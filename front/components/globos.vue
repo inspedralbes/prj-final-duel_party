@@ -22,9 +22,6 @@ function actualizarTemporizador() {
 }
 
 let temporizador = setInterval(actualizarTemporizador, 1000);
-
-
-
  
 for (let index = 0; index < 20; index++) {
   let numero = Math.floor(Math.random() * 2) + 1;
@@ -48,23 +45,79 @@ for (let index = 0; index < 20; index++) {
 function explotar(index) {
   globos.value[index].explotado = true;
   socket.emit('enviar_globos', yo.value.roomKey, globos);
+  globos_restantes();
+ 
 
 }
+function globos_restantes(){
+  console.log("que tal");
+  
+  let aux=[0,0]
+  globos.value.forEach(element => {
+    if(element.color==="azul" && element.explotado===true){
+      aux[0]++;
+    }else{
+      if(element.explotado===true){
+        aux[1]++;
+      }
+      
+    }
+
+  });
+  azules.value=aux[0];
+  rojos.value=aux[1];
+
+  if(azules.value===10){
+    socket.emit('ganador_globos', yo.value.roomKey, 1);
+    azules.value=0;
+    rojos.value=0;
+   
+  }else{
+    if(rojos.value===10){
+      socket.emit('ganador_globos', yo.value.roomKey, 0);
+      azules.value=0;
+      rojos.value=0;
+    }
+   
+  }
+ console.log(azules.value);
+ console.log(rojos.value);
+ 
+  
+}
+
+
+
+
+
+socket.on('ganador_globos', (data) => {
+ if(yo.value.username!=="host"){
+  console.log("holaaaa");
+  
+   if(yo.value.jugadores[data].username===yo.value.username){
+     menu.value = 1;
+   }else{
+     menu.value = 2;
+   }
+ }
+}); 
+
+
+
 function enviar(){
 
   socket.emit('enviar_globos', yo.value.roomKey, globos);
 
 }
  
-  console.log(yo.value.roomKey, globos.value);
-  
 
- 
 socket.on('recibir_globos', (data) => {
  if(yo.value.username!=="host"){
   globos.value = data.value;
-  console.log(data.value)
-  menu.value = 1;
+   
+  globos_restantes();
+  menu.value = 3;
+ 
  }
 }); 
 
@@ -132,7 +185,33 @@ socket.on('recibir_globos', (data) => {
   
 
     </div>
+    <div v-else-if="menu === 1">
+  <div class="battle-container">
     
+    
+    <div class="player-card">
+      
+      <h2 class="player-name">GANADOR</h2>
+       
+  </div>
+
+</div>
+    </div>
+    <div v-else-if="menu === 2">
+      <div class="battle-container">
+    
+    
+    <div class="player-card">
+      
+      <h2 class="player-name">PERDEDOR</h2>
+       
+  </div>
+
+</div>
+    </div>
+
+
+
     <div v-else class="parent">
       <img
         v-for="(globo, index) in globos"
@@ -206,9 +285,27 @@ main {
       align-items: center;
       padding: 2rem;
       border-radius: 10px;
+      color:white;
       background: linear-gradient(45deg, #222, #333);
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
+
+    .battle-container_ganador {
+      position: absolute;
+      font-family: 'Press Start 2P', cursive;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      max-width: 1000px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem;
+      border-radius: 10px;
+      background: linear-gradient(45deg, #222, #333);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }   
     
     .player-card {
       flex: 1;
