@@ -1,11 +1,12 @@
 <template>
     <main>
-        <globos/>
+        <Montaña/>
     </main>
 </template>
 <script setup>
 
 import { reactive } from 'vue';
+import Montaña from '../components/montaña.vue';
 
 
 const jugadores = reactive([
