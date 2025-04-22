@@ -4,12 +4,12 @@ import socketManager from '../static/socket'
 const azules = ref(10);
 const rojos = ref(10);
 const globos = ref([]);
-const puntaje=reactive({azul:0,rojo:0,ronda:1});
+const puntaje=reactive({punto:["white","white","white","white","white"],azul:0,rojo:0,ronda:0});
 const yo= computed(() => $nuxt.$store.state);
 const menu=ref(0);
-const socket = socketManager.getSocket();
+const socket = socketManager.getSocket(); 
+const emit = defineEmits();
 
- 
 // temporizador
 let tiempoRestante = ref(5);  
 
@@ -27,6 +27,7 @@ let temporizador = setInterval(actualizarTemporizador, 1000);
 
 
 function reiniciarTemporizador() {
+  
   clearInterval(temporizador);       // Detiene el temporizador actual
   tiempoRestante.value = 5;          // Reinicia el valor del tiempo
   temporizador = setInterval(actualizarTemporizador, 1000);  // Vuelve a iniciar el temporizador
@@ -55,12 +56,26 @@ function explotar(index) {
   globos.value[index].explotado = true;
   socket.emit('enviar_globos', yo.value.roomKey, globos);
   globos_restantes();
+  if(azules.value===10){
+    azules.value=0;
+    rojos.value=0;
+    socket.emit('ganador_globos', yo.value.roomKey, 1);
+    
+   
+  }else{
+    if(rojos.value===10){
+      azules.value=0;
+      rojos.value=0;
+      socket.emit('ganador_globos', yo.value.roomKey, 0);
+     
+    }
+   
+  }
  
 
 }
-function globos_restantes(){
-  console.log("que tal");
-  
+function globos_restantes(){ 
+
   let aux=[0,0]
   globos.value.forEach(element => {
     if(element.color==="azul" && element.explotado===true){
@@ -76,21 +91,8 @@ function globos_restantes(){
   azules.value=aux[0];
   rojos.value=aux[1];
 
-  if(azules.value===10){
-    socket.emit('ganador_globos', yo.value.roomKey, 1);
-    azules.value=0;
-    rojos.value=0;
-   
-  }else{
-    if(rojos.value===10){
-      socket.emit('ganador_globos', yo.value.roomKey, 0);
-      azules.value=0;
-      rojos.value=0;
-    }
-   
-  }
- console.log(azules.value);
- console.log(rojos.value);
+  
+ 
  
   
 }
@@ -100,6 +102,7 @@ function globos_restantes(){
 
 
 socket.on('ganador_globos', (data) => {
+ 
  if(yo.value.username!=="host"){
   console.log("holaaaa");
   
@@ -110,31 +113,43 @@ socket.on('ganador_globos', (data) => {
    }
  }else{
   if(data===0){
+    puntaje.punto[puntaje.ronda]="red";
     puntaje.rojo++;
+    
   }else{
+    puntaje.punto[puntaje.ronda]="blue";
     puntaje.azul++;
   }
-  puntaje.ronda++;
   reiniciarTemporizador();
  }
+ puntaje.ronda++;
+
+ if(puntaje.azul===3){
+  emit('ganador',1);
+ }
+ if(puntaje.rojo===3){
+  emit('ganador',0);
+ }
+
+
 }); 
 
 
 
 function enviar(){
-
+  if(yo.value.username==="host"){
   socket.emit('enviar_globos', yo.value.roomKey, globos);
-
+  }
 }
  
 
 socket.on('recibir_globos', (data) => {
  if(yo.value.username!=="host"){
   globos.value = data.value;
-   
   globos_restantes();
   menu.value = 3;
  
+  console.log(puntaje.ronda);
  }
 }); 
 
@@ -168,7 +183,14 @@ socket.on('recibir_globos', (data) => {
        
   </div>
   <br>
-  
+<div class="rondas">
+ <div class="ronda" :style="{ backgroundColor: puntaje.punto[0] }"></div>
+ <div class="ronda" :style="{ backgroundColor: puntaje.punto[1] }"></div>
+ <div class="ronda" :style="{ backgroundColor: puntaje.punto[2] }"></div>
+ <div class="ronda" :style="{ backgroundColor: puntaje.punto[3] }"></div>
+ <div class="ronda" :style="{ backgroundColor: puntaje.punto[4] }"></div>
+ 
+ </div>
 </div>
 
 
@@ -231,15 +253,20 @@ socket.on('recibir_globos', (data) => {
 
 
     <div v-else class="parent">
-      <img
-        v-for="(globo, index) in globos"
-        :key="index"
-        class="images"
-        :src="`/images/globos/${globo.color}.webp`"
-        :class="{ opacity: globo.explotado }"  
-        @click="explotar(index)"
-      />
-    </div>
+  <img
+    v-for="(globo, index) in globos"
+    :key="index"
+    class="images"
+    :class="[
+      puntaje.ronda === 2 ? 'mover_izquierda' : '',
+      puntaje.ronda === 3 ? 'mover_arriba' : '',
+      puntaje.ronda === 4 ? 'mover_izquierda' : '',
+      { opacity: globo.explotado }
+    ]"
+    :src="`/images/globos/${globo.color}.webp`"
+    @click="explotar(index)"
+  />
+</div>
   </main>
 </template>
 
@@ -253,7 +280,30 @@ main {
    
 }
 
+@keyframes mover_arriba {
+  0% {
+    transform: translateY(0);
+  }50%{
+    transform: translateY(-100px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 
+}
+
+
+@keyframes mover_izquierda {
+  0% {
+    transform: translateX(0);
+  }50%{
+    transform: translateX(-100px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+
+}
 @keyframes explotar{
     0%{
         scale: 1;
@@ -263,6 +313,14 @@ main {
         scale: 1.2;
         opacity: 0; 
     }
+}
+
+
+.mover_izquierda {
+  animation: mover_izquierda  0.5s infinite;
+}
+.mover_arriba{
+  animation: mover_arriba  0.5s infinite;
 }
 
 .opacity {
@@ -288,7 +346,21 @@ main {
   position: absolute;
   
 }
-
+.ronda{
+  display:inline-block;
+  width:25px;
+  height:25px;
+  border-radius:50%;
+  background-color:white;
+  margin-left:10px
+    
+}
+.rondas{
+  position:absolute;
+   top: 80%;
+   left: 50%;
+   transform: translate(-50%, -50%);     
+}
 
 .battle-container {
       position: absolute;

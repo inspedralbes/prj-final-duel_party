@@ -8,8 +8,9 @@ module.exports = (socket, io, salas, conexiones) => {
 });
 
 socket.on('ganador_globos', (claveSala,globos) => {
+         
         
-    socket.broadcast.to(claveSala).emit('ganador_globos', globos);
+        io.to(claveSala).emit('ganador_globos', globos);
    
 });
 

@@ -1,6 +1,6 @@
 <template>
     <main class="main">
-<Globos v-if="yo.juego===1"/>
+<Globos v-if="yo.juego===1" @ganador="ganador"/>
  
 <div v-else class="menu-container">
     <div class="decoration decoration-1"></div>
@@ -35,10 +35,7 @@
         <div class="minigame-name">Adiniva Quien</div>
       </div>
       
-      <div class="minigame">
-        <div class="minigame-icon">🔪</div>
-        <div class="minigame-name">Cuchillos</div>
-      </div>
+  
       
       <div class="minigame">
         <div class="minigame-icon">💣</div>
@@ -59,12 +56,15 @@
         <div class="minigame-icon">🖼️</div>
         <div class="minigame-name">Adivina Imagen</div>
       </div>
-      
+      <!--
       <div class="minigame">
         <div class="minigame-icon">🤼</div>
         <div class="minigame-name">Sumo</div>
       </div>
-    
+      <div class="minigame">
+        <div class="minigame-icon">🔪</div>
+        <div class="minigame-name">Cuchillos</div>
+      </div>-->
     </div>
     
     <div class="menu-footer">
@@ -88,9 +88,14 @@ const yo= computed(() => $nuxt.$store.state);
 const visibleMinijuegos = ref(true);
 // globos 1
 // adivina persona 2
+function ganador(data){
+  $nuxt.$store.dispatch('updateJuego', 0); 
+   alert("Ganador: " +yo.value.jugadores[data].username);
+  }
 if(yo.value.username==="host"){
     $nuxt.$store.dispatch('updateJuego', 0); 
 }
+
 function modo(data){
     $nuxt.$store.dispatch('updateJuego', data); 
     socket.emit('minijuego', yo.value.roomKey,data );
