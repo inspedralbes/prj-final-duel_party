@@ -87,9 +87,7 @@ import socketManager from '../static/socket'
 import Mando from '../components/mando.vue';
 const socket = socketManager.getSocket();
 const yo= computed(() => $nuxt.$store.state);  
-if(yo.value.juego==''){
-      $nuxt.$router.push('/');
-    }
+
 
 function ganador(data){
   $nuxt.$store.dispatch('updateJuego', 0); 
