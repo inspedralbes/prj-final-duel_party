@@ -1,11 +1,11 @@
 <template>
-  <div class="contenedor">
-    <div class="juego-container">
-      <button class="boton-volver" @click="volverAlMenu">← VOLVER</button>
+  <div class="contenedor1">
+    <div class="juego-container2">
+      <button class="boton-volver2" @click="volverAlMenu">← VOLVER</button>
 
-      <div class="carta-personaje">
+      <div class="carta-personaje2">
         <div class="personaje-info">
-          <h2 class="personaje-nombre">{{ $route.query.personaje }}</h2>
+          <h2 class="personaje-nombre2">{{ $route.query.personaje }}</h2>
           <div class="timer">{{ formatTime(tiempo) }}</div>
           <p class="instruccion">Pausa y envia el tiempo cuando el personaje</p>
         </div>
@@ -66,7 +66,7 @@ onUnmounted(() => {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-.contenedor {
+.contenedor1 {
   background-color: rgb(108, 163, 240);
   width: 100vw;
   height: 100vh;
@@ -76,7 +76,7 @@ onUnmounted(() => {
   font-family: 'Press Start 2P', cursive;
 }
 
-.juego-container {
+.juego-container2 {
   background-color: #000;
   border: 8px solid #fff;
   border-radius: 10px;
@@ -115,7 +115,7 @@ onUnmounted(() => {
   margin: 20px 0;
 }
 
-.boton-volver {
+.boton-volver2 {
   position: absolute;
   top: 8px;
   left: 30px;
@@ -190,7 +190,7 @@ onUnmounted(() => {
   }
 }
 
-.carta-personaje {
+.carta-personaje2 {
   background-color: #000;
   border: 6px solid #fff;
   border-radius: 12px;

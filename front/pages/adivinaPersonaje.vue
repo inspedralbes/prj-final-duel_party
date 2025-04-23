@@ -1,11 +1,15 @@
 <template>
+
+
   <div class="contenedor">
     <div class="juego-container">
-      <div class="titulo-container">
+      <!-- Título del juego -->
+      <div v-if="!juegoIniciado" class="titulo-container">
         <h1 class="titulo">ADIVINA EL PERSONAJE</h1>
       </div>
 
-      <div class="pasos-container">
+      <!-- Pasos del juego -->
+      <div v-if="!juegoIniciado" class="pasos-container">
         <div class="paso" :class="{ 'paso-activo': paso === 1 }">
           <span class="paso-numero">1</span>
           <span class="paso-texto">Selecciona quién empieza</span>
@@ -21,7 +25,7 @@
       </div>
 
       <!-- Selección de jugador -->
-      <div v-if="paso === 1" class="seleccion-container">
+      <div v-if="paso === 1 && !juegoIniciado" class="seleccion-container">
         <h2 class="subtitulo">¿QUIÉN EMPIEZA?</h2>
         <div class="botones-container">
           <button 
@@ -42,7 +46,7 @@
       </div>
 
       <!-- Selección de categoría -->
-      <div v-if="paso === 2" class="seleccion-container">
+      <div v-if="paso === 2 && !juegoIniciado" class="seleccion-container">
         <h2 class="subtitulo">ELIGE UNA CATEGORÍA</h2>
         <div class="categorias-grid">
           <button 
@@ -59,18 +63,51 @@
       </div>
 
       <!-- Botón de inicio -->
-      <div v-if="paso === 3" class="seleccion-container">
+      <div v-if="paso === 3 && !juegoIniciado" class="seleccion-container">
         <div class="resumen">
           <p>Jugador inicial: Jugador {{ jugadorSeleccionado }}</p>
           <p>Categoría: {{ categoriaSeleccionada?.nombre }}</p>
+          <button class="boton-empezar" @click="empezarJuego">
+            ¡EMPEZAR JUEGO!
+          </button>
         </div>
-        <button class="boton-empezar" @click="empezarJuego">
-          ¡EMPEZAR JUEGO!
-        </button>
       </div>
 
+      <div v-if="juegoIniciado" class="pantalla-partida">
+  <button class="boton-volver" @click="volverAlMenu">← VOLVER</button>
+
+  <h2 class="titulo-partida">PARTIDA EN CURSO</h2>
+  
+  <div class="jugadores-container">
+    <div class="jugador-card" :class="{ 'jugador-activo': jugadorSeleccionado === 1 }">
+      <div class="jugador-titulo">JUGADOR 1</div>
+      <div class="jugador-estado">
+        {{ jugadorSeleccionado === 1 ? 'ADIVINANDO...' : 'ESPERANDO' }}
+      </div>
+      <div class="jugador-tiempo" v-if="tiempoJugador1">
+        Tiempo: {{ tiempoJugador1 }}
+      </div>
+    </div>
+
+    <div class="jugador-card" :class="{ 'jugador-activo': jugadorSeleccionado === 2 }">
+      <div class="jugador-titulo">JUGADOR 2</div>
+      <div class="jugador-estado">
+        {{ jugadorSeleccionado === 2 ? 'ADIVINANDO...' : 'ESPERANDO' }}
+      </div>
+      <div class="jugador-tiempo" v-if="tiempoJugador2">
+        Tiempo: {{ tiempoJugador2 }}
+      </div>
+    </div>
+  </div>
+
+  <div class="estado-juego">
+    <p class="categoria-actual">Categoría: {{ categoriaSeleccionada?.nombre }}</p>
+    <p class="instrucciones-juego">Esperando resultados de los jugadores...</p>
+  </div>
+</div>
+
       <!-- Navegación entre pasos -->
-      <div class="navegacion">
+      <div v-if="!juegoIniciado" class="navegacion">
         <button 
           v-if="paso > 1" 
           class="boton-nav" 
@@ -92,10 +129,14 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-
+const vista = ref(0);
 const paso = ref(1);
 const jugadorSeleccionado = ref(null);
 const categoriaSeleccionada = ref(null);
+const juegoIniciado = ref(false);
+const tiempoJugador1 = ref(null);
+const tiempoJugador2 = ref(null);
+
 
 const categorias = [
   { id: 1, nombre: 'ACTORES', icono: '🎭' },
@@ -119,18 +160,132 @@ const seleccionarCategoria = (categoria) => {
 };
 
 const empezarJuego = () => {
-  $nuxt.$router.push({
-    path: '/jugadorInicioAP',
-    query: { 
-      categoria: categoriaSeleccionada.value.nombre,
-      jugador: jugadorSeleccionado.value
-    }
-  });
+  juegoIniciado.value = true;
+  // Mantenemos el envío de datos pero sin navegar
+  const datos = {
+    categoria: categoriaSeleccionada.value.nombre,
+    jugador: jugadorSeleccionado.value
+  };
+  // Aquí más adelante implementaremos la lógica de sockets
 };
+const volverAlMenu = () => {
+  $nuxt.$router.push('/adivinaPersonaje');
+};
+
 </script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+
+.pantalla-partida {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  height: 100%; 
+  padding: 20px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  }
+
+.titulo-partida {
+  color: #ff0;
+  font-size: 32px;
+  text-align: center;
+  font-family: 'Press Start 2P', cursive;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 0 #f00;
+}
+
+.jugadores-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 80px; /* Más espacio entre las tarjetas */
+  width: 100%; /* Asegura que ocupe todo el ancho del contenedor */
+  flex-grow: 1; 
+}
+
+.jugador-card {
+  background-color: #000;
+  border: 4px solid #666;
+  border-radius: 12px;
+  padding: 30px;
+  width: 300px; /* Tarjetas más grandes */
+  height: 250px; /* Altura fija */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.boton-volver {
+    position: absolute;
+    top: 15px;
+    left: 30px;
+    background-color: #333;
+    color: white;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    padding: 6px 10px;
+    border: 2px solid white;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+.jugador-activo {
+  border-color: #ff0;
+  box-shadow: 0 0 20px rgba(255, 255, 0, 0.3);
+}
+
+.jugador-titulo {
+  color: #fff;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.jugador-estado {
+  color: #0f0;
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.jugador-tiempo {
+  color: #ff0;
+  font-size: 20px;
+  margin-top: 10px;
+}
+
+.estado-juego {
+  width: 100%;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 12px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.categoria-actual {
+  color: #ff0;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.instrucciones-juego {
+  color: #0f0;
+  font-size: 16px;
+  animation: parpadeo 2s infinite;
+}
+
+@keyframes parpadeo {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
 
 .game-content {
   display: flex;
@@ -188,17 +343,18 @@ const empezarJuego = () => {
 
 
 .boton-volver {
-  margin-top: 1rem;
-  background-color: #ff0;
-  color: #000;
-  border: none;
-  padding: 1rem 2rem;
-  font-size: 1rem;
-  cursor: pointer;
-  border-radius: 5px;
-  text-transform: uppercase;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #333;
+  color: white;
   font-family: 'Press Start 2P', cursive;
-  transition: all 0.3s ease;
+  font-size: 14px;
+  padding: 10px 15px;
+  border: 2px solid white;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 10;
 }
 
 .boton-volver:hover {
@@ -209,12 +365,14 @@ const empezarJuego = () => {
 
 .contenedor {
   background-color: rgb(108, 163, 240);
-  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 0px;
   font-family: 'Press Start 2P', cursive;
+  overflow: hidden;
 }
 
 .juego-container {
