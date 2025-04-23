@@ -14,10 +14,7 @@
             <EleccionJugadores :data="jugadores" :numero="claveSala" />
         </div>
 
- <div v-if="menu===4">
-    <mando/>
- </div>
-
+      
 
 </main>
 </template>
@@ -66,8 +63,6 @@ socket.on('sala_cerrada', () => {
 
 socket.on('minijuego', (data) => {
     $nuxt.$store.dispatch('updateJuego', data);
-    $nuxt.$router.push('/minijuegos');
-
 });
 
 socket.on('room-users', (data) => {
@@ -83,8 +78,9 @@ socket.on('room-users', (data) => {
 });
 
 socket.on("room-joined", (claveSala, username) => {
-    menu.value = 4;
+    $nuxt.$store.dispatch('updateJuego', -1);
     $nuxt.$store.dispatch('updatePlayer', { claveSala, username });
+    $nuxt.$router.push('/minijuegos');
      
     console.log(yo.value.username);
 });

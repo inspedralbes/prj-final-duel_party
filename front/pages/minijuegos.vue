@@ -1,8 +1,9 @@
 <template>
     <main class="main">
 <Globos v-if="yo.juego===1" @ganador="ganador"/>
- 
-<div v-else class="menu-container">
+
+<Mando v-if="yo.juego===-1"/>
+<div v-if="yo.juego===0"class="menu-container">
     <div class="decoration decoration-1"></div>
     <div class="decoration decoration-2"></div>
     <div class="decoration decoration-3"></div>
@@ -83,24 +84,32 @@
 import { ref,computed } from 'vue';
 import Globos from '../components/globos.vue';
 import socketManager from '../static/socket'
+import Mando from '../components/mando.vue';
 const socket = socketManager.getSocket();
-const yo= computed(() => $nuxt.$store.state); 
-const visibleMinijuegos = ref(true);
-// globos 1
-// adivina persona 2
+const yo= computed(() => $nuxt.$store.state);  
+if(yo.value.juego==''){
+      $nuxt.$router.push('/');
+    }
+
 function ganador(data){
   $nuxt.$store.dispatch('updateJuego', 0); 
    alert("Ganador: " +yo.value.jugadores[data].username);
+   socket.emit('minijuego', yo.value.roomKey,-1 );
   }
+
 if(yo.value.username==="host"){
     $nuxt.$store.dispatch('updateJuego', 0); 
-}
+} 
+ 
+
 
 function modo(data){
+  // globos 1
+  // adivina persona 2
     $nuxt.$store.dispatch('updateJuego', data); 
     socket.emit('minijuego', yo.value.roomKey,data );
 }
- 
+
 
  
 
