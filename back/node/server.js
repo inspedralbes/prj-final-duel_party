@@ -32,6 +32,7 @@ let eleccionesPPT = {};
 const basquet = require('./minijuegos/basquet');
 const ppt = require('./minijuegos/ppt');
 const globos = require('./minijuegos/globos');
+const penales = require('./minijuegos/penales');
 
 io.on('connection', async (socket) => {
 
@@ -40,6 +41,7 @@ io.on('connection', async (socket) => {
 
     basquet(socket, io, salas, conexiones);
     globos(socket,io ,salas, conexiones);
+    penales(socket,io ,salas, conexiones);
     ppt(socket, io,eleccionesPPT);
 
 
