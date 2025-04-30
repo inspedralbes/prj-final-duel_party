@@ -8,6 +8,7 @@ export const state = () => ({
       { username: "", in: false },
     ],
     juego:'',
+    permisos:false,
   })
 
 
@@ -36,7 +37,9 @@ export const mutations = {
         state.jugadores[index].username = jugador.username;
         state.jugadores[index].in = jugador.in;
       }
-    }
+    },
+    setPermisos(state, permisos) {
+      state.permisos = permisos;}
   }
   
 
@@ -72,5 +75,8 @@ export const actions = {
       },
     resetPlayerData({ commit }) {
       commit('resetPlayer');
+    },
+    updatePermisos({ commit }, permisos) {
+      commit('setPermisos', permisos);
     }
   }

@@ -6,7 +6,7 @@
 
           <h3> Activar Permisos Requeridos</h3>
           <button class="btn-permisos" @click="requestPermissions">IPHONE</button>
-          <button class="btn-permisos" @click="permisos = !permisos">ANDROID</button>
+          <button class="btn-permisos" @click="permisos =dar_permisos">ANDROID</button>
       </div>
 
       <div v-if="mensaje">
@@ -28,7 +28,7 @@
           </div>
           <div class="buttons">
             <button class="b" @click="click('b')">B</button>
-            <button class="a" @click="click('x')">A</button>
+            <button class="a" @click="click('a')">A</button>
           </div>
         </div>
       </div>
@@ -60,9 +60,17 @@ function cambioJuego(data){
 
 }
 
+function dar_permisos(){
+  permisos.value = true;
+  $nuxt.$store.dispatch('updatePermisos', permisos.value);
+}
+
 
 const canShake =ref(true);
 const permisos = ref(false);
+if(yo.value.permisos){
+  permisos.value = true;
+}
 const accelerationX = ref(0);
 
     const accelerationY = ref(0);
@@ -121,6 +129,7 @@ const accelerationX = ref(0);
     };
 
     const startListening = () => {
+      dar_permisos();
       if (window.DeviceMotionEvent) {
         window.addEventListener('devicemotion', handleMotion);
       }
