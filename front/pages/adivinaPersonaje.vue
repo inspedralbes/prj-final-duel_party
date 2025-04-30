@@ -144,6 +144,19 @@
     </div>
   </div>
 
+  <div v-if="vista === 3" class="contenedor-ganador">
+    <div class="resultado-juego">
+      <h1 class="titulo-ganador">¡{{ mensajeGanador }}!</h1>
+      <div class="tiempos-finales">
+        <p>Jugador 1: {{ formatTime(resultados.jugador1 || 0) }}</p>
+        <p>Jugador 2: {{ formatTime(resultados.jugador2 || 0) }}</p>
+      </div>
+      <button class="boton-nuevo-juego" @click="volverAlMenu">
+        JUGAR DE NUEVO
+      </button>
+    </div>
+  </div>
+
 </div>
 
 
@@ -152,8 +165,15 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import JuegoPersonaje from '~/components/JuegoPersonaje.vue';
+import socketManager from '../static/socket';
 
-const vista = ref(1);
+
+
+const mensajeGanador = ref('');
+
+
+
+const vista = ref(0);
 const paso = ref(1);
 const jugadorSeleccionado = ref(null);
 const categoriaSeleccionada = ref(null);
@@ -164,6 +184,12 @@ const tiempoPausado = ref(false);
 const tiempo = ref(0);
 const tiempoFinal = ref(0);
 const personajeSeleccionado = ref(null);
+
+const resultados = ref({
+  jugador1: null,
+  jugador2: null
+});
+
 
 const formatTime = (time) => {
   const minutes = Math.floor(time / 60);
@@ -176,23 +202,32 @@ const pararTiempo = () => {
   tiempoPausado.value = !tiempoPausado.value;
 };
 
-const enviarTiempo = () =>{
-  tiempoFinal.value = tiempo.value;
-  console.log("Tiempo final enviado:", formatTime(tiempoFinal.value));
-}
 
+
+
+
+const enviarTiempo = () => {
+    if (!tiempoPausado.value) return;
+    tiempoFinal.value = tiempo.value;
+    vista.value = 0;
+};
 
 let timer;
 onMounted(() => {
-  timer = setInterval(() => {
-    if (!tiempoPausado.value) {
-      tiempo.value++;
-    }
-  }, 1000);
+  // Iniciar el temporizador cuando corresponda
+  if (vista.value === 2 && !tiempoPausado.value) {
+    timer = setInterval(() => {
+      if (!tiempoPausado.value) {
+        tiempo.value++;
+      }
+    }, 1000);
+  }
 });
 
 onUnmounted(() => {
-  clearInterval(timer);
+  if (timer) {
+    clearInterval(timer);
+  }
 });
 
 
@@ -279,18 +314,31 @@ const seleccionarPersonajeAleatorio = () => {
 };
 
 const empezarJuego = () => {
-  seleccionarPersonajeAleatorio();
-  juegoIniciado.value = true;
-
-  const datos = {
-    categoria: categoriaSeleccionada.value.nombre,
-    jugador: jugadorSeleccionado.value
-  };
-
-  // Aquí hay que implementar la lógica de sockets
+    seleccionarPersonajeAleatorio();
+    juegoIniciado.value = true;
+    vista.value = jugadorSeleccionado.value === 1 ? 1 : 2;
+    
 };
+
+
+
 const volverAlMenu = () => {
-  $nuxt.$router.push('/adivinaPersonaje');
+    vista.value = 0;
+    paso.value = 1;
+    jugadorSeleccionado.value = null;
+    categoriaSeleccionada.value = null;
+    juegoIniciado.value = false;
+    tiempoJugador1.value = null;
+    tiempoJugador2.value = null;
+    tiempoPausado.value = false;
+    tiempo.value = 0;
+    tiempoFinal.value = 0;
+    personajeSeleccionado.value = null;
+    resultados.value = {
+        jugador1: null,
+        jugador2: null
+    };
+    mensajeGanador.value = '';
 };
 
 </script>
@@ -302,6 +350,55 @@ const volverAlMenu = () => {
   width: 100vw;
   height: 100vh;
   background-color: rgb(108, 163, 240);
+}
+.contenedor-ganador {
+    background-color: rgb(108, 163, 240);
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.resultado-juego {
+    background-color: #000;
+    border: 8px solid #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 0 4px #000, 0 0 0 8px #ff0;
+    padding: 40px;
+    text-align: center;
+}
+
+.titulo-ganador {
+    color: #ff0;
+    font-size: 32px;
+    margin-bottom: 30px;
+    text-shadow: 4px 4px 0 #f00;
+}
+
+.tiempos-finales {
+    color: #fff;
+    font-size: 18px;
+    margin: 20px 0;
+}
+
+.boton-nuevo-juego {
+    background-color: #0f0;
+    color: #000;
+    border: none;
+    padding: 15px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    margin-top: 20px;
+    font-family: 'Press Start 2P', cursive;
+    transition: all 0.3s ease;
+}
+
+.boton-nuevo-juego:hover {
+    transform: scale(1.05);
+    background-color: #0d0;
 }
 
 
