@@ -1,7 +1,7 @@
 <template>
     <main class="main">
 <Globos v-if="yo.juego===1" @ganador="ganador"/>
-
+<penales v-if="yo.juego===2" @ganador="ganador"/>
 <Mando v-if="yo.juego===-1"/>
 <div v-if="yo.juego===0"class="menu-container">
     <div class="decoration decoration-1"></div>
