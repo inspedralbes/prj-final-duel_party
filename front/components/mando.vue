@@ -4,20 +4,20 @@
 
       <div class="cartel" v-if="!permisos">
 
-          <h3> Activar Permisos Requeridos</h3>
-          <button class="btn-permisos" @click="requestPermissions">IPHONE</button>
-          <button class="btn-permisos" @click="permisos =dar_permisos">ANDROID</button>
+        <h3> Activar Permisos Requeridos</h3>
+        <button class="btn-permisos" @click="requestPermissions">IPHONE</button>
+        <button class="btn-permisos" @click="permisos = dar_permisos">ANDROID</button>
       </div>
 
       <div v-if="mensaje">
         ponlo horizontal porfa
       </div>
-      
+
       <div v-if="permisos && (juego === 0 || juego === 1)">
         <div class="turno" v-if="meToca">
           TU TURNO!
         </div>
-        <div class="nJugador">{{yo.username}}</div>
+        <div class="nJugador">{{ yo.username }}</div>
         <div class="controller">
           <div class="dpad">
             <button class="up" @click="click('up')" :disabled="!meToca">▲</button>
@@ -44,109 +44,109 @@
 
 
 <script setup>
-import { ref, computed,onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import socketManager from '../static/socket'
 const socket = socketManager.getSocket();
 const yo = computed(() => $nuxt.$store.state);
 
 
-const juego= ref(0);
+const juego = ref(0);
 
 
-function cambioJuego(data){
+function cambioJuego(data) {
 
   juego.value = data;
 
 
 }
 
-function dar_permisos(){
+function dar_permisos() {
   permisos.value = true;
   $nuxt.$store.dispatch('updatePermisos', permisos.value);
 }
 
 
-const canShake =ref(true);
+const canShake = ref(true);
 const permisos = ref(false);
-if(yo.value.permisos){
+if (yo.value.permisos) {
   permisos.value = true;
 }
 const accelerationX = ref(0);
 
-    const accelerationY = ref(0);
-    const accelerationZ = ref(0);
+const accelerationY = ref(0);
+const accelerationZ = ref(0);
 
-    // Umbral para detectar una sacudida (puedes ajustarlo según necesites)
-    const shakeThreshold = 15;
-    const isShakeDetected = ref(false);
+// Umbral para detectar una sacudida (puedes ajustarlo según necesites)
+const shakeThreshold = 15;
+const isShakeDetected = ref(false);
 
-    // Función que maneja el evento devicemotion
-    const handleMotion = (event) => {
-      accelerationX.value = event.acceleration.x;
-      accelerationY.value = event.acceleration.y;
-      accelerationZ.value = event.acceleration.z;
+// Función que maneja el evento devicemotion
+const handleMotion = (event) => {
+  accelerationX.value = event.acceleration.x;
+  accelerationY.value = event.acceleration.y;
+  accelerationZ.value = event.acceleration.z;
 
-      // Calcular la aceleración total (magnitud del vector de aceleración)
-      const totalAcceleration = Math.sqrt(
-        accelerationX.value ** 2 + accelerationY.value ** 2 + accelerationZ.value ** 2
-      );
-      if (totalAcceleration > shakeThreshold && canShake.value) {
-        click('a');
-        canShake.value = false; // Bloquea la ejecución de click()
-    
+  // Calcular la aceleración total (magnitud del vector de aceleración)
+  const totalAcceleration = Math.sqrt(
+    accelerationX.value ** 2 + accelerationY.value ** 2 + accelerationZ.value ** 2
+  );
+  if (totalAcceleration > shakeThreshold && canShake.value) {
+    click('a');
+    canShake.value = false; // Bloquea la ejecución de click()
+
     // Reactivar después de 1 segundo
     setTimeout(() => {
       canShake.value = true;
     }, 1000);
   }
-      // Detectar sacudida cuando la aceleración total supera el umbral
-    
-    };
+  // Detectar sacudida cuando la aceleración total supera el umbral
 
-    const requestPermissions = async () => {
-      
-      if (window.DeviceMotionEvent) {
-        try {
-          // Si el dispositivo es iOS 13+, solicitar permisos
-          if (typeof DeviceMotionEvent.requestPermission === 'function') {
-            const permission = await DeviceMotionEvent.requestPermission();
-            if (permission === 'granted') {
-              permisos.value = false;
-              // Permiso otorgado, podemos escuchar los eventos
-              startListening();
-            } else {
-              console.log('Permiso denegado');
-              permisos.value = true;
-            }
-          } else {
-            // En dispositivos no iOS 13+ no es necesario el permiso
-            startListening();
-          }
-        } catch (error) {
-          console.error('Error al pedir permisos', error);
+};
+
+const requestPermissions = async () => {
+
+  if (window.DeviceMotionEvent) {
+    try {
+      // Si el dispositivo es iOS 13+, solicitar permisos
+      if (typeof DeviceMotionEvent.requestPermission === 'function') {
+        const permission = await DeviceMotionEvent.requestPermission();
+        if (permission === 'granted') {
+          permisos.value = false;
+          // Permiso otorgado, podemos escuchar los eventos
+          startListening();
+        } else {
+          console.log('Permiso denegado');
+          permisos.value = true;
         }
+      } else {
+        // En dispositivos no iOS 13+ no es necesario el permiso
+        startListening();
       }
-    };
+    } catch (error) {
+      console.error('Error al pedir permisos', error);
+    }
+  }
+};
 
-    const startListening = () => {
-      dar_permisos();
-      if (window.DeviceMotionEvent) {
-        window.addEventListener('devicemotion', handleMotion);
-      }
-    };
+const startListening = () => {
+  dar_permisos();
+  if (window.DeviceMotionEvent) {
+    window.addEventListener('devicemotion', handleMotion);
+  }
+};
 
-    onMounted(() => {
-       
-        requestPermissions();
-       
-    });
+onMounted(() => {
 
-    // Se remueve el listener al desmontarse el componente
-    onUnmounted(() => {
-      if (window.DeviceMotionEvent) {
-        window.removeEventListener('devicemotion', handleMotion);
-      }
-    }); 
+  requestPermissions();
+
+});
+
+// Se remueve el listener al desmontarse el componente
+onUnmounted(() => {
+  if (window.DeviceMotionEvent) {
+    window.removeEventListener('devicemotion', handleMotion);
+  }
+});
 
 
 const turno = ref(0);
@@ -164,9 +164,18 @@ function comprobarTurno() {
 
 
 function click(param) {
-  socket.emit('move', param, yo.value.username, yo.value.roomKey);
+
+  if (yo.value.juego === 3) {
+    socket.emit('enviar_luz', yo.value.username, yo.value.roomKey);
+
+
+  } else {
+    socket.emit('move', param, yo.value.username, yo.value.roomKey);
+  }
+
+
   console.log(yo.value.username);
-  
+
 }
 
 socket.on('turno', (data) => {
@@ -177,7 +186,7 @@ socket.on('turno', (data) => {
 
 socket.on('minijuego', (data) => {
   juego.value = data;
-   
+
 });
 
 const mensaje = ref(false)
@@ -219,9 +228,9 @@ window.addEventListener('resize', () => {
 
 
 <style scoped>
-
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-.cartel{
+
+.cartel {
   background-color: #8B4513;
   border: 5px solid #5A2A0A;
   padding: 20px;
@@ -233,7 +242,7 @@ window.addEventListener('resize', () => {
 }
 
 .btn-permisos {
-  background: #ec9252; 
+  background: #ec9252;
   color: white;
   border: none;
   padding: 12px 16px;
@@ -247,35 +256,38 @@ window.addEventListener('resize', () => {
   display: block;
 }
 
-.btn-permisos:focus{
+.btn-permisos:focus {
   background-color: #621111;
 }
 
-.nJugador{
-    text-align: center;
-    color: white;
-    margin-bottom: 30px;
-    padding: 10px;
+.nJugador {
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+  padding: 10px;
 
 }
+
 .turno {
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    display: flex; 
-    width: 170px;
-    background-color: #0eba45; 
-    color: white;
-    border: 5px solid #0a6b22;
-    box-shadow: 0 0 50px rgba(0, 0, 0, 10);
-    z-index: 1; 
-    margin: 0 auto 10px auto;
-    padding: 10px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  width: 170px;
+  background-color: #0eba45;
+  color: white;
+  border: 5px solid #0a6b22;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 10);
+  z-index: 1;
+  margin: 0 auto 10px auto;
+  padding: 10px;
 }
-main{
+
+main {
   background-color: #1a1a1a;
 
 }
+
 .mando {
   margin: 0;
   padding: 0;

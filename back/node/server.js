@@ -33,6 +33,7 @@ const basquet = require('./minijuegos/basquet');
 const ppt = require('./minijuegos/ppt');
 const globos = require('./minijuegos/globos');
 const penales = require('./minijuegos/penales');
+const luz_verde = require('./minijuegos/luz_verde');
 
 io.on('connection', async (socket) => {
 
@@ -42,6 +43,7 @@ io.on('connection', async (socket) => {
     basquet(socket, io, salas, conexiones);
     globos(socket,io ,salas, conexiones);
     penales(socket,io ,salas, conexiones);
+    luz_verde(socket,io ,salas, conexiones);
     ppt(socket, io,eleccionesPPT);
 
 
@@ -70,7 +72,7 @@ io.on('connection', async (socket) => {
 
     socket.on('move', (data, username, claveSala) => {
           
-    io.to(conexiones[salas[claveSala][0].id].id).emit('move', data, username);
+        io.to(claveSala).emit('move', data, username);
        
     });
 

@@ -1,13 +1,12 @@
 <template>
     <main>
-    <img class="fondo" src="/images/luz_verde/fondo.webp" alt="">
+    
     <div v-if="menu === 1">
-        <img src="/images/luz_verde/chico_rojo.webp" class="jugador"  alt="" >  
+        <mando/>
     </div>
-    <div v-if="menu === 2">
-        <img src="/images/luz_verde/chico_azul.webp" class="jugador"  alt="" >  
-    </div>
+    
     <div v-if="menu === 0">
+    <img class="fondo" src="/images/luz_verde/fondo.webp" alt="">
     <img src="/images/luz_verde/verde.webp" v-if="fichas.correr"  alt="" class="meta">     
     <img src="/images/luz_verde/rojo.webp" v-else alt="" class="meta">       
     <img src="/images/luz_verde/chico_rojo.webp"  :style="{left:fichas.rojo+'%'}" class="rojo" @click="mover(1)"></img>
@@ -19,10 +18,30 @@
 </template>
 <script setup>
 
-import { reactive, ref} from 'vue';
+import { reactive, ref, computed} from 'vue';
 
+import socketManager from '../static/socket'
+const socket = socketManager.getSocket(); 
 const fichas=reactive({ rojo:5,azul:5,correr:true});
+const yo= computed(() => $nuxt.$store.state);
 const menu=ref(0); 
+ 
+if(yo.value.jugadores[0].username===yo.value.username){
+  menu.value=1;
+}
+if(yo.value.jugadores[1].username===yo.value.username){
+  menu.value=1;
+}
+ 
+socket.on('recibir_luz', (username) => {
+    if(yo.value.jugadores[0].username===username){
+    mover(1);
+}else{
+    mover(2);
+}
+
+
+});
 
 function mover(data){
 
@@ -56,8 +75,6 @@ function mover(data){
             break;
 
     }
-   
-    console.log(fichas.azul);
     
 }
 cambiarEstadoAleatorio();
@@ -65,12 +82,13 @@ function cambiarEstadoAleatorio() {
   const tiempo = Math.floor(Math.random() * 1500) + 100  
 
   setTimeout(() => {
-   
-  //  fichas.correr = !fichas.correr
+     fichas.correr = !fichas.correr
     cambiarEstadoAleatorio() 
   }, tiempo)
 }
 
+
+ 
 </script>
 <style scoped>
 .fondo {
