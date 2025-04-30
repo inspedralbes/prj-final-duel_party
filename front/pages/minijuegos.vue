@@ -104,7 +104,7 @@ if(yo.value.username==="host"){
 
 function modo(data){
   // globos 1
-  // adivina persona 2
+  // penales 2
     $nuxt.$store.dispatch('updateJuego', data); 
     socket.emit('minijuego', yo.value.roomKey,data );
 }
