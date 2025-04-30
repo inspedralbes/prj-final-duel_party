@@ -9,33 +9,33 @@
 
           <div class="marcador">
             <div class="equipo">
-              <div class="nombre-equipo">JUGADOR 1</div> 
+              <div class="nombre-equipo"> {{ yo.jugadores[0].username }}</div> 
             </div>
 
             <div class="vs">VS</div>
 
             <div class="equipo">
 
-              <div class="nombre-equipo">JUGADOR 2</div> 
+              <div class="nombre-equipo"> {{ yo.jugadores[1].username }}</div> 
             </div>
           </div>
 
           <div class="penales">
             <div class="penales-equipo">
-              <div class="penal pendiente"></div>
-              <div class="penal pendiente"></div>
-              <div class="penal pendiente"></div>
-              <div class="penal pendiente"></div>
-              <div class="penal pendiente"></div>
+              <div class="penal" :class="{'pendiente': penales_rojo[0]==0, 'gol': penales_rojo[0]==1,'fallo': penales_rojo[0]==2}" ></div>
+              <div class="penal" :class="{'pendiente': penales_rojo[1]==0, 'gol': penales_rojo[1]==1,'fallo': penales_rojo[1]==2}" ></div>
+              <div class="penal" :class="{'pendiente': penales_rojo[2]==0, 'gol': penales_rojo[2]==1,'fallo': penales_rojo[2]==2}" ></div>
+              <div class="penal" :class="{'pendiente': penales_rojo[3]==0, 'gol': penales_rojo[3]==1,'fallo': penales_rojo[3]==2}" ></div>
+              <div class="penal" :class="{'pendiente': penales_rojo[4]==0, 'gol': penales_rojo[4]==1,'fallo': penales_rojo[4]==2}" ></div>
             </div>
 
             <div class="penales-equipo">
-              <div class="penal pendiente"></div>
-              <div class="penal pendiente"></div>
-              <div class="penal pendiente"></div>
-              <div class="penal pendiente"></div>
-              <div class="penal pendiente"></div>
-            </div>
+              <div class="penal" :class="{'pendiente': penales_azul[0]==0, 'gol': penales_azul[0]==1,'fallo': penales_azul[0]==2}" ></div>
+              <div class="penal" :class="{'pendiente': penales_azul[1]==0, 'gol': penales_azul[1]==1,'fallo': penales_azul[1]==2}" ></div>
+              <div class="penal" :class="{'pendiente': penales_azul[2]==0, 'gol': penales_azul[2]==1,'fallo': penales_azul[2]==2}" ></div>
+              <div class="penal" :class="{'pendiente': penales_azul[3]==0, 'gol': penales_azul[3]==1,'fallo': penales_azul[3]==2}" ></div>
+              <div class="penal" :class="{'pendiente': penales_azul[4]==0, 'gol': penales_azul[4]==1,'fallo': penales_azul[4]==2}" ></div>
+             </div>
           </div>
 
         </div>
@@ -83,17 +83,37 @@
 
 <script setup>
 
-import { reactive, ref } from 'vue';
+import { reactive, ref,computed } from 'vue';
+import socketManager from '../static/socket'
+const socket = socketManager.getSocket(); 
 
 
-// 0 = general 1 = portero 2 = jugador
-const menu = ref(2);
+// 0 = general, 1 = portero, 2 = jugador
+const menu = ref(0);
 const portero = ref("azul");
+const turno = reactive({turno:0,penal1:0,penal2:0,gol1:0,gol2:0});
+const emit = defineEmits();
+const yo= computed(() => $nuxt.$store.state);
 const flechas = reactive({
   izquierda: true,
   derecha: true,
   centro: true
 });
+
+// 0 = pendiente, 1 = gol, 2 = fallo
+const penales_rojo =ref([0,0,0,0,0]);
+const penales_azul =ref([0,0,0,0,0]);
+
+if(yo.value.jugadores[0].username===yo.value.username){
+  portero.value="rojo";
+  menu.value=2;
+}
+if(yo.value.jugadores[1].username===yo.value.username){
+  portero.value="azul";
+  menu.value=1;
+}
+
+
 
 const animaciones = reactive({
   izquierda: false,
@@ -106,9 +126,10 @@ const animaciones = reactive({
 });
 
 const penal = reactive({
-  portero: "izquierda",
-  jugador: "centro",
-  gol: "",
+  portero: "",
+  jugador: "",
+  portero_listo: false,
+  jugador_listo: false,
 });
 
 
@@ -117,18 +138,110 @@ function flecha(flecha) {
     flechas.derecha = false;
     flechas.centro = false;
     flechas.izquierda = true;
+    enviar_penales("izquierda");
   } else if (flecha === "derecha") {
     flechas.izquierda = false;
     flechas.centro = false;
     flechas.derecha = true;
+    enviar_penales("derecha");
   } else {
     flechas.izquierda = false;
     flechas.derecha = false;
     flechas.centro = true;
+    enviar_penales("centro");
   }
 
+  
 
 }
+
+function enviar_penales(data){
+  if(menu.value===1 && penal.portero_listo){
+    return;
+  }
+  if(menu.value===2 && penal.jugador_listo){
+    return;
+  }
+  socket.emit('enviar_penales', yo.value.roomKey, data,menu.value);
+}
+
+socket.on('recibir_penales', (direccion,portero) => {
+  if(yo.value.username!=="host"){
+    return;
+  }
+  if(portero==1){
+    penal.portero=direccion;
+    penal.portero_listo=true;
+  }else{
+    penal.jugador=direccion;
+    penal.jugador_listo=true;
+
+  }
+
+  if(penal.portero_listo && penal.jugador_listo){
+    mover();
+  }
+});
+
+
+function comprobar_penales(){
+
+  if(penal.jugador!==penal.portero){
+    if(turno.turno===0){
+      penales_rojo.value[turno.penal1]=1;
+      turno.penal1++;
+      turno.turno=1; 
+      turno.gol1++;
+    }else{
+      penales_azul.value[turno.penal2]=1;
+      turno.penal2++;
+      turno.turno=0; 
+      turno.gol2++;
+    } 
+    
+    
+  }else{
+    if(turno.turno===0){
+      penales_rojo.value[turno.penal1]=2;
+      turno.turno=1;
+      turno.penal1++;
+      
+    }else{
+      penales_azul.value[turno.penal2]=2;
+      turno.turno=0;
+      turno.penal2++;
+    } 
+  }
+
+  if(turno.penal2===5){
+    
+    if(turno.gol1>turno.gol2){ 
+      emit('ganador',0);
+    }else{
+      if(turno.gol1<turno.gol2){ 
+        emit('ganador',1);
+      }else{
+        alert("Empate");
+        turno.turno=0;
+        turno.penal1=0;
+        turno.penal2=0;
+       for (let index = 0; index < penales_azul.value.length; index++) {
+       penales_azul.value[index]=0;
+        penales_rojo.value[index]=0;
+   }
+      }
+
+    }
+
+
+
+
+  
+  
+  }
+}
+
+
 
 function mover() {
 
@@ -137,15 +250,47 @@ function mover() {
   setTimeout(() => {
     animaciones[`${penal.jugador}`] = false;
     animaciones[`${penal.portero}_portero`] = false;
+    comprobar_penales();
+    socket.emit('reiniciar_penales', yo.value.roomKey);
   }, 500);
+
+  
 
 }
 
+socket.on('reiniciar_penales', () => {
+  flechas.izquierda = true;
+  flechas.derecha = true;
+  flechas.centro = true;
+  penal.jugador="";
+  penal.portero="";
+  penal.portero_listo=false;
+  penal.jugador_listo=false;
+
+  if(menu.value===1){
+    menu.value=2;
+  }else{
+    if(menu.value===2){
+    menu.value=1;
+  }
+  }
+  
+  if(yo.value.username==="host"){
+    if(portero.value==="azul"){
+      portero.value="rojo";
+    }else{
+      portero.value="azul";
+    }
+  }
+});
 
 
 
 </script>
 <style scoped>
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 @keyframes izquierda {
   0% {
     transform: translateX(-50%);
@@ -223,6 +368,7 @@ function mover() {
 
 .marcador-container {
 
+  font-family: 'Press Start 2P', cursive;
   background: linear-gradient(to bottom, #073416, #0a4d23);
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
@@ -251,24 +397,19 @@ function mover() {
 }
 
 .nombre-equipo {
-  font-size: 28px;
+  font-size: 25px;
   font-weight: bold; 
   color: #fff;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.puntuacion {
-  font-size: 60px;
-  font-weight: bold;
-  color: #ffd700;
-  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
-}
+ 
 
 .vs {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 32px;
+  font-size: 20px;
   font-weight: bold;
   color: #ffd700;
 }
