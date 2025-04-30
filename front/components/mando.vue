@@ -65,8 +65,7 @@ function dar_permisos() {
   $nuxt.$store.dispatch('updatePermisos', permisos.value);
 }
 
-
-const canShake = ref(true);
+ 
 const permisos = ref(false);
 if (yo.value.permisos) {
   permisos.value = true;
@@ -90,14 +89,10 @@ const handleMotion = (event) => {
   const totalAcceleration = Math.sqrt(
     accelerationX.value ** 2 + accelerationY.value ** 2 + accelerationZ.value ** 2
   );
-  if (totalAcceleration > shakeThreshold && canShake.value) {
+  if (totalAcceleration > shakeThreshold ) {
     click('a');
-    canShake.value = false; // Bloquea la ejecución de click()
-
-    // Reactivar después de 1 segundo
-    setTimeout(() => {
-      canShake.value = true;
-    }, 1000);
+    
+  
   }
   // Detectar sacudida cuando la aceleración total supera el umbral
 
