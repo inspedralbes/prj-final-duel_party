@@ -28,7 +28,7 @@
           </div>
           <div class="buttons">
             <button class="b" @click="click('b')">B</button>
-            <button class="a" @click="click('a')">A</button>
+            <button class="a" @click="click('x')">A</button>
           </div>
         </div>
       </div>
