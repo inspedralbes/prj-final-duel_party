@@ -26,7 +26,7 @@
         <div class="minigame-name">Adivina Personaje</div>
       </div>
       
-      <div class="minigame">
+      <div class="minigame" @click="modo(2)">
         <div class="minigame-icon">⚽</div>
         <div class="minigame-name">Penales</div>
       </div>
