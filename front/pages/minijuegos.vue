@@ -27,8 +27,8 @@
         <div class="minigame-name">Penales</div>
       </div>
       <div class="minigame" @click="modo(3)" >
-        <div class="minigame-icon">👁️</div>
-        <div class="minigame-name">Reflejos</div>
+        <div class="minigame-icon">🏃‍♂️</div>
+        <div class="minigame-name">Luz verde, luz roja</div>
       </div>
       <div class="minigame">
         <div class="minigame-icon">🎭</div>
@@ -40,8 +40,6 @@
         <div class="minigame-icon">🕵️‍♂️</div>
         <div class="minigame-name">Adiniva Quien</div>
       </div>
-      
-  
       
       <div class="minigame">
         <div class="minigame-icon">💣</div>
