@@ -14,20 +14,12 @@
       </div>
 
       <div v-if="permisos && (juego === 0 || juego === 1)">
-        <div class="turno" v-if="meToca">
-          TU TURNO!
-        </div>
-        <div class="nJugador">{{ yo.username }}</div>
+        
+        <div class="jugador">{{ yo.username }}</div>
+        <div class="agita"><h1>¡AGITA!</h1></div>
+        <div class="o">o</div>
         <div class="controller">
-          <div class="dpad">
-            <button class="up" @click="click('up')" :disabled="!meToca">▲</button>
-            <button class="left" @click="click('left')" :disabled="!meToca">◄</button>
-            <button class="center" @click="click('center')" :disabled="!meToca"></button>
-            <button class="right" @click="click('right')" :disabled="!meToca">►</button>
-            <button class="down" @click="click('down')" :disabled="!meToca">▼</button>
-          </div>
           <div class="buttons">
-            <button class="b" @click="click('b')">B</button>
             <button class="a" @click="click('a')">A</button>
           </div>
         </div>
@@ -37,6 +29,7 @@
         <mando-ppt />
       </div>
     </div>
+
   </main>
 </template>
 
@@ -48,11 +41,18 @@ import { ref, computed, onMounted, onUnmounted } from "vue";
 import socketManager from '../static/socket'
 const socket = socketManager.getSocket();
 const yo = computed(() => $nuxt.$store.state);
-
+const canShake =ref(true);
 
 const juego = ref(0);
 
 
+
+const startListening = () => {
+  dar_permisos();
+  if (window.DeviceMotionEvent) {
+    window.addEventListener('devicemotion', handleMotion);
+  }
+};
 function cambioJuego(data) {
 
   juego.value = data;
@@ -90,12 +90,13 @@ const handleMotion = (event) => {
   const totalAcceleration = Math.sqrt(
     accelerationX.value ** 2 + accelerationY.value ** 2 + accelerationZ.value ** 2
   );
-  if (totalAcceleration > shakeThreshold ) {
+  if (totalAcceleration > shakeThreshold && canShake.value  ) {
     click('a');
-    
-  
-  }
-  // Detectar sacudida cuando la aceleración total supera el umbral
+    canShake.value = false;
+    setTimeout(() => {
+      canShake.value = true;
+    }, 500);
+  } 
 
 };
 
@@ -122,13 +123,6 @@ const requestPermissions = async () => {
   }
 };
 
-
-const startListening = () => {
-  dar_permisos();
-  if (window.DeviceMotionEvent) {
-    window.addEventListener('devicemotion', handleMotion);
-  }
-};
 
 onMounted(() => {
   if (yo.value.permisos) {
@@ -365,6 +359,39 @@ main {
   border: none;
   box-shadow: none;
 }
+
+.o {
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+  padding: 10px;
+  position: absolute;
+  top: 58%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.agita {
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+  padding: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.jugador {
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+  padding: 10px;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+}
+
 
 .buttons {
   display: flex;

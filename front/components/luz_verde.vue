@@ -25,6 +25,7 @@ const socket = socketManager.getSocket();
 const fichas=reactive({ rojo:5,azul:5,correr:true});
 const yo= computed(() => $nuxt.$store.state);
 const menu=ref(0); 
+const emit = defineEmits();
  
 if(yo.value.jugadores[0].username===yo.value.username){
   menu.value=1;
@@ -50,7 +51,7 @@ function mover(data){
             if(fichas.correr){
                 fichas.rojo+=5;
                 if(fichas.rojo==100){
-                    alert("ganador rojo");
+                    emit('ganador',0);
                 }
             }else{
                 fichas.rojo-=20;
@@ -64,7 +65,7 @@ function mover(data){
         if(fichas.correr){
                 fichas.azul+=5;
                 if(fichas.azul==100){
-                    alert("ganador azul");
+                   emit('ganador',1);
                 }
             }else{
                 fichas.azul-=20;
