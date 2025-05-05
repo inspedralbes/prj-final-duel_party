@@ -6,7 +6,7 @@
 
         <h3> Activar Permisos Requeridos</h3>
         <button class="btn-permisos" @click="requestPermissions">IPHONE</button>
-        <button class="btn-permisos" @click="permisos = dar_permisos">ANDROID</button>
+        <button class="btn-permisos" @click="permisos = true; $nuxt.$store.dispatch('updatePermisos', true); startListening();">ANDROID</button>
       </div>
 
       <div v-if="mensaje">
@@ -69,6 +69,7 @@ function dar_permisos() {
 const permisos = ref(false);
 if (yo.value.permisos) {
   permisos.value = true;
+  startListening();
 }
 const accelerationX = ref(0);
 
@@ -99,22 +100,20 @@ const handleMotion = (event) => {
 };
 
 const requestPermissions = async () => {
-
   if (window.DeviceMotionEvent) {
     try {
-      // Si el dispositivo es iOS 13+, solicitar permisos
       if (typeof DeviceMotionEvent.requestPermission === 'function') {
         const permission = await DeviceMotionEvent.requestPermission();
         if (permission === 'granted') {
-          permisos.value = false;
-          // Permiso otorgado, podemos escuchar los eventos
+          permisos.value = true;
+          $nuxt.$store.dispatch('updatePermisos', true);
           startListening();
         } else {
           console.log('Permiso denegado');
-          permisos.value = true;
         }
       } else {
-        // En dispositivos no iOS 13+ no es necesario el permiso
+        permisos.value = true;
+        $nuxt.$store.dispatch('updatePermisos', true);
         startListening();
       }
     } catch (error) {
@@ -122,6 +121,7 @@ const requestPermissions = async () => {
     }
   }
 };
+
 
 const startListening = () => {
   dar_permisos();
@@ -131,10 +131,14 @@ const startListening = () => {
 };
 
 onMounted(() => {
-
-  requestPermissions();
-
+  if (yo.value.permisos) {
+    permisos.value = true;
+    startListening();
+  } else {
+    requestPermissions();
+  }
 });
+
 
 // Se remueve el listener al desmontarse el componente
 onUnmounted(() => {
