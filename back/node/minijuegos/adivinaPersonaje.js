@@ -1,41 +1,21 @@
 module.exports = (socket, io, salas, conexiones) => {
-    // Evento para iniciar el juego
-    socket.on('iniciar_adivina_personaje', (data) => {
-        const { claveSala, categoria, jugadorInicial, personaje } = data;
-        if (salas[claveSala]) {
-            io.to(claveSala).emit('juego_iniciado', {
-                categoria,
-                jugadorInicial,
-                personaje
-            });
-        }
+    // Evento para enviar la lista de personajes al jugador
+    socket.on('enviar_personajes', (claveSala, personajes) => {
+        socket.broadcast.to(claveSala).emit('recibir_personajes', personajes);
     });
 
-    // Evento para enviar tiempo de adivinanza
-    socket.on('enviar_tiempo_adivinanza', (data) => {
-        const { claveSala, jugador, tiempo, personaje } = data;
-        if (salas[claveSala]) {
-            io.to(claveSala).emit('tiempo_registrado', {
-                jugador,
-                tiempo,
-                personaje
-            });
-        }
+    // Evento para enviar la pregunta del jugador al host
+    socket.on('enviar_pregunta', (claveSala, pregunta) => {
+        io.to(claveSala).emit('recibir_pregunta', pregunta);
     });
 
-    // Evento para finalizar ronda
-    socket.on('finalizar_ronda_adivinanza', (data) => {
-        const { claveSala, resultados } = data;
-        if (salas[claveSala]) {
-            io.to(claveSala).emit('ronda_finalizada', resultados);
-        }
+    // Evento para enviar la respuesta del host al jugador
+    socket.on('enviar_respuesta', (claveSala, respuesta) => {
+        socket.broadcast.to(claveSala).emit('recibir_respuesta', respuesta);
     });
 
-    // Evento para cambiar turno
-    socket.on('cambiar_turno_adivinanza', (data) => {
-        const { claveSala, siguienteJugador } = data;
-        if (salas[claveSala]) {
-            io.to(claveSala).emit('turno_cambiado', siguienteJugador);
-        }
+    // Evento para anunciar al ganador
+    socket.on('ganador_adivina', (claveSala, ganador) => {
+        io.to(claveSala).emit('ganador_adivina', ganador);
     });
 };

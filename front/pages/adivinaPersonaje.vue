@@ -184,12 +184,21 @@ const tiempoPausado = ref(false);
 const tiempo = ref(0);
 const tiempoFinal = ref(0);
 const personajeSeleccionado = ref(null);
+const yo  = computed(() => $nuxt.$store.state);
 
+  return jugadorSeleccionado.value === 1 ? 'Jugador 1' : 'Jugador 2';
 const resultados = ref({
   jugador1: null,
   jugador2: null
 });
 
+if(yo.value.jugadores[0].username==yo.value.username){
+vista.value = 1;
+}
+
+if(yo.value.jugadores[1].username==yo.value.username){
+vista.value = 2;
+}
 
 const formatTime = (time) => {
   const minutes = Math.floor(time / 60);
