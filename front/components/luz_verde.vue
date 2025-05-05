@@ -80,7 +80,7 @@ function mover(data){
 }
 cambiarEstadoAleatorio();
 function cambiarEstadoAleatorio() {
-  const tiempo = Math.floor(Math.random() * 1500) + 100  
+  const tiempo = Math.floor(Math.random() * 3000) + 1500  
 
   setTimeout(() => {
      fichas.correr = !fichas.correr

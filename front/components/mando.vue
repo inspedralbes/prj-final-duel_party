@@ -13,11 +13,14 @@
         ponlo horizontal porfa
       </div>
 
-      <div v-if="permisos && (juego === 0 || juego === 1)">
-        
+      <div v-if="permisos">
+       
         <div class="jugador">{{ yo.username }}</div>
+        <div v-if="modo===1">
         <div class="agita"><h1>¡AGITA!</h1></div>
-        <div class="o">o</div>
+      </div>
+
+      <div v-if="modo===2">
         <div class="controller">
           <div class="buttons">
             <button class="a" @click="click('a')">A</button>
@@ -25,9 +28,8 @@
         </div>
       </div>
 
-      <div v-if="juego === 2">
-        <mando-ppt />
       </div>
+ 
     </div>
 
   </main>
@@ -43,7 +45,8 @@ const socket = socketManager.getSocket();
 const yo = computed(() => $nuxt.$store.state);
 const canShake =ref(true);
 
-const juego = ref(0);
+// 1 = movimiento, 2 = boton 
+const modo=(1);
 
 
 
@@ -52,13 +55,8 @@ const startListening = () => {
   if (window.DeviceMotionEvent) {
     window.addEventListener('devicemotion', handleMotion);
   }
-};
-function cambioJuego(data) {
+}; 
 
-  juego.value = data;
-
-
-}
 
 function dar_permisos() {
   permisos.value = true;
@@ -72,7 +70,7 @@ if (yo.value.permisos) {
   startListening();
 }
 const accelerationX = ref(0);
-
+const mensaje = ref(false)
 const accelerationY = ref(0);
 const accelerationZ = ref(0);
 
@@ -131,6 +129,34 @@ onMounted(() => {
   } else {
     requestPermissions();
   }
+
+
+  window.addEventListener('load', () => {
+
+if (window.innerHeight > window.innerWidth) {
+  // Modo vertical
+  mensaje.value = true
+
+} else {
+  // Modo horizontal
+  mensaje.value = false
+}
+
+});
+
+window.addEventListener('resize', () => {
+
+if (window.innerHeight > window.innerWidth) {
+  // Modo vertical
+  mensaje.value = true
+
+} else {
+  // Modo horizontal
+  mensaje.value = false
+}
+
+});
+
 });
 
 
@@ -166,50 +192,10 @@ function click(param) {
     socket.emit('move', param, yo.value.username, yo.value.roomKey);
   }
 
-
-  console.log(yo.value.username);
-
 }
 
-socket.on('turno', (data) => {
-  turno.value = data;
-  comprobarTurno();
-
-});
-
-socket.on('minijuego', (data) => {
-  juego.value = data;
-
-});
-
-const mensaje = ref(false)
-
-window.addEventListener('load', () => {
 
 
-  if (window.innerHeight > window.innerWidth) {
-    // Modo vertical
-    mensaje.value = true
-
-  } else {
-    // Modo horizontal
-    mensaje.value = false
-  }
-
-});
-
-window.addEventListener('resize', () => {
-
-  if (window.innerHeight > window.innerWidth) {
-    // Modo vertical
-    mensaje.value = true
-
-  } else {
-    // Modo horizontal
-    mensaje.value = false
-  }
-
-});
 
 
 
@@ -222,6 +208,20 @@ window.addEventListener('resize', () => {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+
+
+@keyframes agitar {
+  0%{
+    opacity: 1;
+  }
+  50%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
 
 .cartel {
   background-color: #8B4513;
@@ -260,21 +260,7 @@ window.addEventListener('resize', () => {
   padding: 10px;
 
 }
-
-.turno {
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  width: 170px;
-  background-color: #0eba45;
-  color: white;
-  border: 5px solid #0a6b22;
-  box-shadow: 0 0 50px rgba(0, 0, 0, 10);
-  z-index: 1;
-  margin: 0 auto 10px auto;
-  padding: 10px;
-}
+ 
 
 main {
   background-color: #1a1a1a;
@@ -301,75 +287,8 @@ main {
   margin: 0;
   gap: 20px;
 }
-
-.dpad {
-  display: grid;
-  grid-template-areas:
-    ". up ."
-    "left center right"
-    ". down .";
-  gap: 10px;
-  justify-items: center;
-  align-items: center;
-  grid-column: 1;
-  margin-right: 100px;
-}
-
-.dpad button {
-  width: 60px;
-  height: 60px;
-  background-color: #444;
-  color: #fff;
-  border: 2px solid #666;
-  border-radius: 10px;
-  font-size: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  touch-action: manipulation;
-  box-shadow: 0px 4px 0px #333;
-  transition: all 0.1s ease;
-}
-
-.dpad button:active {
-  background-color: #666;
-  box-shadow: 0px 2px 0px #333;
-  transform: translateY(2px);
-}
-
-.dpad .up {
-  grid-area: up;
-}
-
-.dpad .down {
-  grid-area: down;
-}
-
-.dpad .left {
-  grid-area: left;
-}
-
-.dpad .right {
-  grid-area: right;
-}
-
-.dpad .center {
-  grid-area: center;
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-}
-
-.o {
-  text-align: center;
-  color: white;
-  margin-bottom: 30px;
-  padding: 10px;
-  position: absolute;
-  top: 58%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+ 
+ 
 .agita {
   text-align: center;
   color: white;
@@ -379,6 +298,7 @@ main {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  animation: agitar 1s infinite;
 }
 .jugador {
   text-align: center;
@@ -386,7 +306,7 @@ main {
   margin-bottom: 30px;
   padding: 10px;
   position: absolute;
-  top: 40%;
+  top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
 
@@ -403,6 +323,7 @@ main {
 }
 
 .buttons button {
+ 
   width: 80px;
   height: 80px;
   background-color: #ff4757;
@@ -416,6 +337,10 @@ main {
   touch-action: manipulation;
   box-shadow: 0px 4px 0px #ff6b81;
   transition: all 0.1s ease;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .buttons button:active {
@@ -424,17 +349,7 @@ main {
   transform: translateY(2px);
   color: black;
 }
-
-.buttons .b {
-  background-color: #226fec;
-  border-color: #226fec;
-  box-shadow: 0px 4px 0px #144491;
-}
-
-.buttons .b:active {
-  background-color: #ffffff;
-  box-shadow: 0px 2px 0px #ffffff;
-}
+ 
 
 .buttons .a {
   background-color: #fa2323;
@@ -445,6 +360,10 @@ main {
 .buttons .a:active {
   background-color: #ffffff;
   box-shadow: 0px 2px 0px #ffffff;
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* Estilo para el mensaje de orientación */

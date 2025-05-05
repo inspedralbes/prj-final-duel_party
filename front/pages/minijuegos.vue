@@ -92,11 +92,15 @@ const socket = socketManager.getSocket();
 const yo= computed(() => $nuxt.$store.state);  
 
 
+
 function ganador(data){
   $nuxt.$store.dispatch('updateJuego', 0); 
    alert("Ganador: " +yo.value.jugadores[data].username);
    socket.emit('minijuego', yo.value.roomKey,-1 );
   }
+if(yo.value.juego===''){
+  $nuxt.$router.push('/jugar');
+}
 
 if(yo.value.username==="host"){
     $nuxt.$store.dispatch('updateJuego', 0); 

@@ -160,7 +160,7 @@ socket.on('recibir_globos', (data) => {
       <div class="battle-container" v-if="yo.username == 'host'">
         <div class="player-card left">
           <div class="player-avatar">
-            <img class="images" src="/images/globos/rojo.webp">
+            <img class="imagess" src="/images/globos/rojo.webp">
           </div>
           <h2 class="player-name">{{ yo.jugadores[0].username }}</h2>
           <h2 class="player-name">{{ puntaje.rojo }}</h2>
@@ -173,7 +173,7 @@ socket.on('recibir_globos', (data) => {
 
         <div class="player-card right">
           <div class="player-avatar">
-            <img class="images" src="/images/globos/azul.webp">
+            <img class="imagess" src="/images/globos/azul.webp">
           </div>
           <h2 class="player-name">{{ yo.jugadores[1].username }}</h2>
           <h2 class="player-name">{{ puntaje.azul }}</h2>
@@ -328,6 +328,9 @@ main {
 }
 
 .images {
+  width: 8vw;
+}
+.imagess {
   width: 80px;
 }
 
