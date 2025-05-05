@@ -98,7 +98,7 @@ function ganador(data){
    alert("Ganador: " +yo.value.jugadores[data].username);
    socket.emit('minijuego', yo.value.roomKey,-1 );
   }
-if(yo.value.juego===''){
+if(yo.value.juego==='' && yo.value.username!=="host"){
   $nuxt.$router.push('/jugar');
 }
 
