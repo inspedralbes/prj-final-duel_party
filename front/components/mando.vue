@@ -46,7 +46,7 @@ const yo = computed(() => $nuxt.$store.state);
 const canShake =ref(true);
 
 // 1 = movimiento, 2 = boton 
-const modo=(1);
+const modo=(2);
 
 
 
