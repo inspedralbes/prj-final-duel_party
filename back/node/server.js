@@ -34,7 +34,7 @@ const ppt = require('./minijuegos/ppt');
 const globos = require('./minijuegos/globos');
 const penales = require('./minijuegos/penales');
 const luz_verde = require('./minijuegos/luz_verde');
-
+const colores= require('./minijuegos/colores');
 io.on('connection', async (socket) => {
 
 
@@ -44,6 +44,7 @@ io.on('connection', async (socket) => {
     globos(socket,io ,salas, conexiones);
     penales(socket,io ,salas, conexiones);
     luz_verde(socket,io ,salas, conexiones);
+    colores(socket,io ,salas, conexiones);
     ppt(socket, io,eleccionesPPT);
 
 

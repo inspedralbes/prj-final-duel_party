@@ -3,8 +3,8 @@
 
 
         <div class="botones" v-if="menu === 0">
-            <div class="boton" :style="{ backgroundColor: colores[colores_botones.b1].color }" @click="enviar(1)"></div>
-            <div class="boton" :style="{ backgroundColor: colores[colores_botones.b2].color }" @click="enviar(2)"></div>
+            <div class="boton" :style="{ backgroundColor: colores[color.b1].color }" @click="enviar(1)"></div>
+            <div class="boton" :style="{ backgroundColor: colores[color.b2].color }" @click="enviar(2)"></div>
            
 
         </div>
@@ -13,7 +13,7 @@
             <div class="main-screen">
                 <h1 class="game-title">¡Acierta el Color!</h1>
                 <div class="color-challenge" v-if="tiempo">
-                   {{ tiempoRestante}}
+                 <span style="border:1px solid black">{{ tiempoRestante}}</span>
                 </div>
                 <div :style="{ color: color.color }" class="color-challenge" v-else>
                    {{ color.colores}}
@@ -33,20 +33,26 @@
 
 
         </div>
-        <button @click="menu=0">Menu</button>
+      
     </main>
 </template>
 
 <script setup>
 
-import { reactive, ref } from 'vue';
-
+import { reactive, ref,computed } from 'vue'; 
+import socketManager from '../static/socket'
+const socket = socketManager.getSocket(); 
+const emit = defineEmits();
 // 0 = jugador, 1 = pantalla
 const menu = ref(1);
+const yo = computed(() => $nuxt.$store.state);
 const tiempo=ref(true);
+
 const color= reactive({
     color: "",
-    colores:""
+    colores:"",
+    b1:9,
+    b2:9
 });
 const colores = reactive([
     { color: "red",colores:"rojo" },
@@ -57,12 +63,17 @@ const colores = reactive([
     { color: "purple",colores:"morado" },
     { color: "orange",colores:"naranja" },
     { color: "brown",colores:"marron" },
+    { color: "gray",colores:"gris" },
     { color: "white",colores:"blanco" },
 ]);
- 
-const colores_botones = reactive({ b1: 0, b2: 0});
+  
 
- 
+let temporizador;
+if(yo.value.username!=="host"){
+menu.value=0;
+}else{
+    temporizador= setInterval(actualizarTemporizador, 1000);
+}
 
 
 function asignarColor(){
@@ -71,7 +82,7 @@ function asignarColor(){
     let aux1 = Math.floor(Math.random() * 2)+1;
     
     //guarda el color
-    colores_botones['b' + aux1]=colorEscogido;
+    color['b' + aux1]=colorEscogido;
     color.color = colores[colorEscogido].color;
     
     let textoEscodigo
@@ -90,16 +101,25 @@ function asignarColor(){
     }
     
     while(aux1==aux2);
-    colores_botones['b' + aux2]=textoEscodigo;
+    color['b' + aux2]=textoEscodigo;
 
 
     
-   
+   socket.emit('enviar_colores', yo.value.roomKey,color);
 
    
 
     
 }
+
+socket.on('recibir_colores', (data) => {
+  color.b1=data.b1;
+  color.b2=data.b2;
+  color.colores=data.colores;
+  color.color=data.color;
+  
+});
+
 
 function enviar(data){
     switch(data){
@@ -125,8 +145,6 @@ function actualizarTemporizador() {
     tiempoRestante.value--;
   }
 }
-
-let temporizador = setInterval(actualizarTemporizador, 1000);
 
 
 
@@ -198,6 +216,7 @@ main {
     border-radius: 15px;
     background-color: #f8f8f8;
     margin-bottom: 30px;
+    
     
 }
 
