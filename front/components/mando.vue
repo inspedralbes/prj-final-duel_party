@@ -361,7 +361,7 @@ main {
   background-color: #ffffff;
   box-shadow: 0px 2px 0px #ffffff;
   position: absolute;
-  top: 70%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
