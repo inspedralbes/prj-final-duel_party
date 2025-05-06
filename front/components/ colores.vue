@@ -3,30 +3,28 @@
 
 
         <div class="botones" v-if="menu === 0">
-            <div class="boton" :style="{ backgroundColor: colores[color.b1].color }" @click="enviar(1)"></div>
-            <div class="boton" :style="{ backgroundColor: colores[color.b2].color }" @click="enviar(2)"></div>
-           
-
+            <div class="boton" :style="{ backgroundColor: color.b1 }" @click="enviar(1)"></div>
+            <div class="boton" :style="{ backgroundColor: color.b2 }" @click="enviar(2)"></div>
         </div>
 
         <div v-if="menu === 1">
             <div class="main-screen">
                 <h1 class="game-title">¡Acierta el Color!</h1>
                 <div class="color-challenge" v-if="tiempo">
-                 <span style="border:1px solid black">{{ tiempoRestante}}</span>
+               {{ tiempoRestante}} 
                 </div>
                 <div :style="{ color: color.color }" class="color-challenge" v-else>
-                   {{ color.colores}}
+                   {{ color.colores}} 
                 </div>
                 
                 <div class="players-container">
                     <div class="player-info">
-                        <h3>Jugador 1</h3>
-                        <div class="score">0</div>
+                        <h3>{{yo.jugadores[0].username}}</h3>
+                        <div class="score">{{puntaje.j1}}</div>
                     </div>
                     <div class="player-info">
-                        <h3>Jugador 2</h3>
-                        <div class="score">0</div>
+                        <h3>{{yo.jugadores[1].username}}</h3>
+                        <div class="score">{{puntaje.j2}}</div>
                     </div>
                 </div>
             </div>
@@ -34,6 +32,9 @@
 
         </div>
       
+        
+
+
     </main>
 </template>
 
@@ -43,17 +44,19 @@ import { reactive, ref,computed } from 'vue';
 import socketManager from '../static/socket'
 const socket = socketManager.getSocket(); 
 const emit = defineEmits();
+
 // 0 = jugador, 1 = pantalla
 const menu = ref(1);
 const yo = computed(() => $nuxt.$store.state);
 const tiempo=ref(true);
-
+const puntaje= reactive({ j1:0,j2:0, ronda:0});
 const color= reactive({
     color: "",
     colores:"",
-    b1:9,
-    b2:9
+    b1:"white",
+    b2:"white",
 });
+
 const colores = reactive([
     { color: "red",colores:"rojo" },
     { color: "blue",colores:"azul" },
@@ -82,7 +85,7 @@ function asignarColor(){
     let aux1 = Math.floor(Math.random() * 2)+1;
     
     //guarda el color
-    color['b' + aux1]=colorEscogido;
+    color['b' + aux1]=colores[colorEscogido].color;
     color.color = colores[colorEscogido].color;
     
     let textoEscodigo
@@ -101,7 +104,7 @@ function asignarColor(){
     }
     
     while(aux1==aux2);
-    color['b' + aux2]=textoEscodigo;
+    color['b' + aux2]=colores[textoEscodigo].color;
 
 
     
@@ -112,21 +115,62 @@ function asignarColor(){
     
 }
 
+socket.on('recibir_opcion_colores', (data) => {
+    if(yo.value.username==="host"){
+        if(data.color===color.color){
+            if(data.username===yo.value.jugadores[0].username){
+                puntaje.j1++;
+            }else{
+                puntaje.j2++;
+            }
+            
+        }else{
+            if(data.username===yo.value.jugadores[0].username){
+                puntaje.j2++;
+            }else{
+                puntaje.j1++;
+            }
+        }
+        
+        puntaje.ronda++;
+        if(puntaje.ronda===11){
+            if(puntaje.j1>puntaje.j2){
+                emit('ganador',0);
+            }else{
+                if(puntaje.j1<puntaje.j2){
+                    emit('ganador',1);
+                }
+        }
+    }
+        reiniciarTemporizador();
+
+
+    }else{
+        menu.value=2;
+
+    }
+});
+
+
 socket.on('recibir_colores', (data) => {
+    if(yo.value.username==="host"){
+        return;
+    }
   color.b1=data.b1;
   color.b2=data.b2;
   color.colores=data.colores;
   color.color=data.color;
-  
+  menu.value=0;  
 });
 
 
 function enviar(data){
     switch(data){
         case 1:
-            
+        socket.emit('enviar_opcion_colores', yo.value.roomKey,yo.value.username, color.b1);
             break;
         case 2:
+        socket.emit('enviar_opcion_colores', yo.value.roomKey,yo.value.username, color.b2);
             break;
     }
 
@@ -149,7 +193,7 @@ function actualizarTemporizador() {
 
 
 function reiniciarTemporizador() {
-
+  tiempo.value=true;  
   clearInterval(temporizador);       // Detiene el temporizador actual
   tiempoRestante.value = 5;          // Reinicia el valor del tiempo
   temporizador = setInterval(actualizarTemporizador, 1000);  // Vuelve a iniciar el temporizador

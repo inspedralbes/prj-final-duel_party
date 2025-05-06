@@ -47,7 +47,6 @@ io.on('connection', async (socket) => {
     colores(socket,io ,salas, conexiones);
     ppt(socket, io,eleccionesPPT);
 
-
     socket.on('create-room', () => {
         const claveSala = uuidv4().slice(0, 5);
         if (!salas[claveSala]) {
