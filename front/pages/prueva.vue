@@ -1,6 +1,6 @@
 <template>
     <main>
-        <luz_verde/>
+       <h1>hola</h1>
     </main>
 </template>
 <script setup>
