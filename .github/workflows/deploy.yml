@@ -23,7 +23,7 @@ jobs:
       # Desplegar Backend Node
       - name: Deploy backend (Node.js)
         run: |
-          rsync -avz --delete ./back/ root@79.143.90.73:/root/node
+          rsync -avz --delete ./back/node root@79.143.90.73:/root/node
           ssh root@79.143.90.73 << 'EOF'
             cd /root/node
             npm install
