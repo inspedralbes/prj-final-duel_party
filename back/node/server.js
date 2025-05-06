@@ -47,7 +47,7 @@ io.on('connection', async (socket) => {
     ppt(socket, io,eleccionesPPT);
 
 
-    socket.on('create-room', () => {
+    socket.on('create-rooms', () => {
         const claveSala = uuidv4().slice(0, 5);
         if (!salas[claveSala]) {
             salas[claveSala] = [];  // Inicializamos la sala como un array vacío
