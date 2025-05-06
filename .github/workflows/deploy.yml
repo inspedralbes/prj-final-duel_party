@@ -23,12 +23,13 @@ jobs:
       # Desplegar Backend Node
       - name: Deploy backend (Node.js)
         run: |
-          rsync -avz --delete ./back/node root@79.143.90.73:/root/node
-          ssh root@79.143.90.73 << 'EOF'
+            rsync -avz --delete ./back/node/ root@79.143.90.73:/root/node/
+            ssh root@79.143.90.73 << 'EOF'
             cd /root/node
             npm install
-            pm2 restart backend || pm2 start app.js --name backend
-          EOF
+            pkill node || true
+            nohup node server.js > output.log 2>&1 &
+            EOF
 
       # Desplegar Frontend Nuxt
       - name: Deploy frontend (Nuxt)
