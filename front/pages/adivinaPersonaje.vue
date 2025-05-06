@@ -14,7 +14,7 @@
         <div v-if="!juegoIniciado" class="pasos-container">
           <div class="paso" :class="{ 'paso-activo': paso === 1 }">
             <span class="paso-numero">1</span>
-            <span class="paso-texto">Selecciona quién empieza</span>
+            <span class="paso-texto">Adivinar</span>
           </div>
           <div class="paso" :class="{ 'paso-activo': paso === 2 }">
             <span class="paso-numero">2</span>
@@ -28,14 +28,14 @@
 
         <!-- Selección de jugador -->
         <div v-if="paso === 1 && !juegoIniciado" class="seleccion-container">
-          <h2 class="subtitulo">¿QUIÉN EMPIEZA?</h2>
+          <h2 class="subtitulo">EMPIEZA ADIVINANDO:</h2>
           <div class="botones-container">
-            <button class="boton-jugador" :class="{ 'seleccionado': jugadorSeleccionado === 1 }"
-              @click="seleccionarJugador(1)">
+            <button v-if="turno" class="boton-jugador" :class="{ 'seleccionado': jugadorSeleccionado === 1 }"
+              >
               JUGADOR 1
             </button>
-            <button class="boton-jugador" :class="{ 'seleccionado': jugadorSeleccionado === 2 }"
-              @click="seleccionarJugador(2)">
+            <button v-else class="boton-jugador" :class="{ 'seleccionado': jugadorSeleccionado === 2 }"
+              >
               JUGADOR 2
             </button>
           </div>
@@ -170,10 +170,7 @@ import socketManager from '../static/socket';
 
 
 const mensajeGanador = ref('');
-
-
-
-const vista = ref(0);
+const vista = ref(3);
 const paso = ref(1);
 const jugadorSeleccionado = ref(null);
 const categoriaSeleccionada = ref(null);
@@ -184,21 +181,38 @@ const tiempoPausado = ref(false);
 const tiempo = ref(0);
 const tiempoFinal = ref(0);
 const personajeSeleccionado = ref(null);
-const yo  = computed(() => $nuxt.$store.state);
+const turno= ref(true);
 
-  return jugadorSeleccionado.value === 1 ? 'Jugador 1' : 'Jugador 2';
+const puedeAvanzar = ref(true);
+const yo  = computed(() => $nuxt.$store.state);
+ 
+
+
+const volverAlMenu = () => {
+    vista.value = 0;
+    paso.value = 1;
+    jugadorSeleccionado.value = null;
+    categoriaSeleccionada.value = null;
+    juegoIniciado.value = false;
+    tiempoJugador1.value = null;
+    tiempoJugador2.value = null;
+    tiempoPausado.value = false;
+    tiempo.value = 0;
+    tiempoFinal.value = 0;
+    personajeSeleccionado.value = null;
+    resultados.value = {
+        jugador1: null,
+        jugador2: null
+    };
+    mensajeGanador.value = '';
+};
+
+
 const resultados = ref({
   jugador1: null,
   jugador2: null
 });
-
-if(yo.value.jugadores[0].username==yo.value.username){
-vista.value = 1;
-}
-
-if(yo.value.jugadores[1].username==yo.value.username){
-vista.value = 2;
-}
+ 
 
 const formatTime = (time) => {
   const minutes = Math.floor(time / 60);
@@ -248,11 +262,6 @@ const categorias = [
   { id: 4, nombre: 'PERSONAJES DE FICCIÓN', icono: '🦸' }
 ];
 
-const puedeAvanzar = computed(() => {
-  if (paso.value === 1) return jugadorSeleccionado.value !== null;
-  if (paso.value === 2) return categoriaSeleccionada.value !== null;
-  return true;
-});
 
 const seleccionarJugador = (jugador) => {
   jugadorSeleccionado.value = jugador;
@@ -330,25 +339,6 @@ const empezarJuego = () => {
 };
 
 
-
-const volverAlMenu = () => {
-    vista.value = 0;
-    paso.value = 1;
-    jugadorSeleccionado.value = null;
-    categoriaSeleccionada.value = null;
-    juegoIniciado.value = false;
-    tiempoJugador1.value = null;
-    tiempoJugador2.value = null;
-    tiempoPausado.value = false;
-    tiempo.value = 0;
-    tiempoFinal.value = 0;
-    personajeSeleccionado.value = null;
-    resultados.value = {
-        jugador1: null,
-        jugador2: null
-    };
-    mensajeGanador.value = '';
-};
 
 </script>
 
@@ -768,8 +758,7 @@ const volverAlMenu = () => {
   font-size: 1rem;
   border: 2px solid #ff0;
   background: transparent;
-  color: #ff0;
-  cursor: pointer;
+  color: #ff0; 
   transition: all 0.3s ease;
   font-family: 'Press Start 2P', cursive;
 }
