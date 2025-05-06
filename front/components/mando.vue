@@ -46,7 +46,7 @@ const yo = computed(() => $nuxt.$store.state);
 const canShake =ref(true);
 
 // 1 = movimiento, 2 = boton 
-const modo=(1);
+const modo=(2);
 
 
 
@@ -361,7 +361,7 @@ main {
   background-color: #ffffff;
   box-shadow: 0px 2px 0px #ffffff;
   position: absolute;
-  top: 70%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
