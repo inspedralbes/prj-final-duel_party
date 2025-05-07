@@ -9,6 +9,7 @@ services:
       - "3000:3000"
     volumes:
       - ./front:/app:cached
+      
     working_dir: /app
     command: npm run dev
     environment:
@@ -22,5 +23,6 @@ services:
       - "20071:20071"
     volumes:
       - ./back/node:/app:cached
+      - /app/node_modules
     working_dir: /app
     command: npm run dev
