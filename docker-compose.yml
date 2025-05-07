@@ -8,8 +8,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./front:/app
-      - /app/node_modules
+      - ./front:/app:cached
     working_dir: /app
     command: npm run dev
     environment:
@@ -22,7 +21,6 @@ services:
     ports:
       - "20071:20071"
     volumes:
-      - ./back/node:/app
-      - /app/node_modules
+      - ./back/node:/app:cached
     working_dir: /app
     command: npm run dev
