@@ -1,16 +1,18 @@
 <template>
     <main>
 
-        <img class="fondo" src="/images/duelo/fondo.webp" alt="">
+        <img class="fondo" src="/images/duelo/fondo.webp" alt="" @click="disparar">
       
 
-        <div> <img class="rojo" src="/images/duelo/rojo.webp" alt=""></div>
-        <div> <img class="azul" src="/images/duelo/azul.webp" alt=""></div>
+        <div v-if="!perdedor.rojo"> <img class="rojo" :class="{ izquierda: posicion.rojo, derecha: !posicion.rojo }" src="/images/duelo/rojo.webp" alt=""></div>
+        <div v-if="!perdedor.azul"> <img class="azul" :class="{ izquierda: posicion.azul, derecha: !posicion.azul }" src="/images/duelo/azul.webp" alt=""></div>
 
 
-        <div> <img class="suelo_rojo" src="/images/duelo/suelo_rojo.webp" alt=""></div>
-        <div> <img class="suelo_azul" src="/images/duelo/suelo_azul.webp" alt=""></div>
+        <div v-if="perdedor.rojo"> <img class="suelo_rojo" src="/images/duelo/suelo_rojo.webp" alt=""></div>
+        <div v-if="perdedor.azul"> <img class="suelo_azul" src="/images/duelo/suelo_azul.webp" alt=""></div>
 
+        <div class="tiempo" v-if="disparo">DISPARA </div>
+        <div class="tiempo" v-else>EN GUARDIA </div>
     </main>
 </template>
 
@@ -23,6 +25,43 @@ const emit = defineEmits();
 // 0 = jugador, 1 = pantalla
 const menu = ref(1);
 const yo = computed(() => $nuxt.$store.state);
+
+//false = apuntar hacia derecha, true = apuntar hacia izquierda
+const perdedor= reactive({rojo:false,azul:false});
+const posicion= reactive({rojo:true,azul:false});
+const disparo=ref(false);
+
+function disparar(){
+
+    perdedor.rojo = !perdedor.rojo;
+    posicion.azul = !posicion.azul;
+}
+
+ 
+let tiempo = Math.floor(Math.random() * 10)+4;
+// temporizador
+let tiempoRestante = ref(tiempo);
+
+function actualizarTemporizador() {
+  if (tiempoRestante.value <= 0) {
+    clearInterval(temporizador);
+     disparo.value = true;
+  } else {
+    tiempoRestante.value--;
+  }
+}
+
+let temporizador = setInterval(actualizarTemporizador, 1000);
+
+
+
+function reiniciarTemporizador() {
+
+  clearInterval(temporizador);       // Detiene el temporizador actual
+  tiempoRestante.value = 5;          // Reinicia el valor del tiempo
+  temporizador = setInterval(actualizarTemporizador, 1000);  // Vuelve a iniciar el temporizador
+}
+
 
 </script>
 <style scoped>
@@ -37,12 +76,24 @@ const yo = computed(() => $nuxt.$store.state);
   object-fit: cover;
   z-index: 0;
 }
+.tiempo{
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    color: white;
+    z-index: 2;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    font-family: 'Press Start 2P', cursive;
+    
+}
 .rojo {
     position: absolute;
     top: 40%;
     left: 10%;
     transform-origin: 50% 50%;
-    z-index: 2;
+    z-index: 2; 
     width: 200px;
 }
 .azul{
@@ -50,9 +101,19 @@ const yo = computed(() => $nuxt.$store.state);
     top: 40%;
     left: 80%;
     transform-origin: 50% 50%;
+   
     z-index: 2;
     width: 200px;
 }
+
+.izquierda{
+    transform: scaleX(-1); 
+}
+.derecha{
+    transform: scaleX(1); 
+}
+
+
 
 .suelo_rojo {
     position: absolute;

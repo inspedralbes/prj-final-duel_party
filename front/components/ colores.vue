@@ -18,11 +18,11 @@
                 </div>
                 
                 <div class="players-container">
-                    <div class="player-info">
+                    <div class="player-info texto_rojo">
                         <h3>{{yo.jugadores[0].username}}</h3>
                         <div class="score">{{puntaje.j1}}</div>
                     </div>
-                    <div class="player-info">
+                    <div class="player-info texto_azul">
                         <h3>{{yo.jugadores[1].username}}</h3>
                         <div class="score">{{puntaje.j2}}</div>
                     </div>
@@ -290,6 +290,12 @@ main {
     border-radius: 10px;
     background-color: #f8f8f8;
     min-width: 150px;
+}
+.texto_azul{
+    color:blue;
+}
+.texto_rojo{
+    color:red;
 }
 
 .player-info h3 {
