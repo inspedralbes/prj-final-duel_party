@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   frontend:
     build:
@@ -8,11 +6,12 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./front:/app:cached
+      - ./front:/app
       - /app/node_modules
-      
     working_dir: /app
     command: npm run dev
+    environment:
+      - HOST=0.0.0.0
 
   backend:
     build:
@@ -21,7 +20,7 @@ services:
     ports:
       - "20071:20071"
     volumes:
-      - ./back/node:/app:cached
+      - ./back/node:/app
       - /app/node_modules
     working_dir: /app
     command: npm run dev
