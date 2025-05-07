@@ -39,34 +39,37 @@ const yo = computed(() => $nuxt.$store.state);
 }
 .rojo {
     position: absolute;
-    top: 20%;
-    left: 20%;
-    transform: scaleX(-1); 
-    transform-origin: left; 
+    top: 40%;
+    left: 10%;
+    transform-origin: 50% 50%;
     z-index: 2;
+    width: 200px;
 }
 .azul{
     position: absolute;
-    top: 20%;
+    top: 40%;
     left: 80%;
-    transform-origin: left; 
+    transform-origin: 50% 50%;
     z-index: 2;
+    width: 200px;
 }
 
 .suelo_rojo {
     position: absolute;
-    top: 60%;
+    top: 70%;
     left: 10%; 
     transform-origin: left; 
     z-index: 2;
+    width: 400px;
 }
 .suelo_azul{
     position: absolute;
     transform: scaleX(-1); 
-    top: 60%;
+    top: 70%;
     left: 90%;
     transform-origin: left; 
     z-index: 2;
+    width: 400px;
 }
   
 </style>
