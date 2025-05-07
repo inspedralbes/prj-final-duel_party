@@ -1,11 +1,11 @@
 <template>
     <main>
 
-        <img class="fondo" src="/images/duelo/fondo.webp" alt="" @click="disparar">
+        <img class="fondo" src="/images/duelo/fondo.webp" alt="" >
       
 
-        <div v-if="!perdedor.rojo"> <img class="rojo" :class="{ izquierda: posicion.rojo, derecha: !posicion.rojo }" src="/images/duelo/rojo.webp" alt=""></div>
-        <div v-if="!perdedor.azul"> <img class="azul" :class="{ izquierda: posicion.azul, derecha: !posicion.azul }" src="/images/duelo/azul.webp" alt=""></div>
+        <div v-if="!perdedor.rojo" @click="disparar(1)"> <img class="rojo" :class="{ izquierda: posicion.rojo, derecha: !posicion.rojo }" src="/images/duelo/rojo.webp" alt=""></div>
+        <div v-if="!perdedor.azul" @click="disparar(2)"> <img class="azul" :class="{ izquierda: posicion.azul, derecha: !posicion.azul }" src="/images/duelo/azul.webp" alt=""></div>
 
 
         <div v-if="perdedor.rojo"> <img class="suelo_rojo" src="/images/duelo/suelo_rojo.webp" alt=""></div>
@@ -30,12 +30,53 @@ const yo = computed(() => $nuxt.$store.state);
 const perdedor= reactive({rojo:false,azul:false});
 const posicion= reactive({rojo:true,azul:false});
 const disparo=ref(false);
+const disparoHecho=ref(true);
 
-function disparar(){
+function disparar(data){
+if(disparoHecho.value){
+    disparoHecho.value=false;
+    if(disparo.value){
 
-    perdedor.rojo = !perdedor.rojo;
-    posicion.azul = !posicion.azul;
+        switch(data){
+    case 2:
+        perdedor.rojo = !perdedor.rojo;
+        posicion.azul = !posicion.azul;
+        break;
+    case 1:
+        perdedor.azul = !perdedor.azul;
+        posicion.rojo = !posicion.rojo;
+        break;
 }
+    }else{
+
+switch(data){
+    case 1:
+        perdedor.rojo = !perdedor.rojo;
+        posicion.azul = !posicion.azul;
+        break;
+    case 2:
+        perdedor.azul = !perdedor.azul;
+        posicion.rojo = !posicion.rojo;
+        break;
+}
+    }
+}
+}
+ 
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') {
+     
+        disparar(2);
+ 
+  } else if (e.key === 'ArrowLeft') {
+    
+        disparar(1);
+ 
+  } else {
+    console.log('Pulsaste:', e.key);
+  }
+});
 
  
 let tiempo = Math.floor(Math.random() * 10)+4;
