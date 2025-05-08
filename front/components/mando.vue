@@ -193,7 +193,10 @@ function click(param) {
     socket.emit('enviar_luz', yo.value.username, yo.value.roomKey);
 
 
-  } else {
+  }else if(yo.value.juego===5){
+    socket.emit('enviar_duelo', yo.value.username, yo.value.roomKey);
+  }
+   else {
     socket.emit('move', param, yo.value.username, yo.value.roomKey);
   }
 

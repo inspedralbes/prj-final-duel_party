@@ -4,8 +4,9 @@
 <penales v-if="yo.juego===2" @ganador="ganador"/>
 <Luz_verde v-if="yo.juego===3" @ganador="ganador"/>
 <Colores v-if="yo.juego===4" @ganador="ganador"/>
-<Basket v-if="yo.juego===5" @ganador="ganador"/>
+<Duelo v-if="yo.juego===5" @ganador="ganador"/>
 <Mando v-if="yo.juego===-1"/>
+<Win v-if="visibleWIN" :initialWinnerName="yo.jugadores[winner].username" @salir="ganador2"/>
 <div v-if="yo.juego===0"class="menu-container">
     <div class="decoration decoration-1"></div>
     <div class="decoration decoration-2"></div>
@@ -37,9 +38,9 @@
         <div class="minigame-icon">🎨</div>
         <div class="minigame-name">Colores</div>
       </div>
-      <div class="minigame">
-        <div class="minigame-icon"  @click="modo(5)">🎭</div>
-        <div class="minigame-name">Adivina Personaje</div>
+      <div class="minigame" @click="modo(5)">
+        <div class="minigame-icon" >🔫</div>
+        <div class="minigame-name">Duelo oeste</div>
       </div>
       
       
@@ -91,15 +92,26 @@ import Mando from '../components/mando.vue';
 import Luz_verde from '../components/luz_verde.vue';
 import Colores from '../components/ colores.vue';
 import Basket from '../components/basket.vue';
+import Duelo from '../components/duelo.vue';
+
 const socket = socketManager.getSocket();
 const yo= computed(() => $nuxt.$store.state);  
-
-
+const visibleWIN = ref(false);
+const winner=ref(-1)
 
 function ganador(data){
+  winner.value=data;
+  visibleWIN.value=true;
   $nuxt.$store.dispatch('updateJuego', 0); 
-   alert("Ganador: " +yo.value.jugadores[data].username);
-   socket.emit('minijuego', yo.value.roomKey,-1 );
+  socket.emit('minijuego', yo.value.roomKey,-1 );
+}
+
+function ganador2(){
+  visibleWIN.value=false;
+  winner.value=-1;
+ 
+   
+   
   }
 if(yo.value.juego==='' && yo.value.username!=="host"){
   $nuxt.$router.push('/jugar');
