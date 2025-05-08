@@ -19,3 +19,64 @@ Actualmente, el proyecto se encuentra en **desarrollo**. Estamos trabajando en l
 
 ## 🛠️ Estado de Desarrollo:
 El proyecto está en fase inicial, estamos implementando los minijuegos y la funcionalidad básica del tablero.
+
+## 💻 Com començar (per a nous desenvolupadors):
+
+### 1. Clona el repositori:
+
+`git clone (url del proyecte)`
+
+`cd prj-final-duel_party`
+
+### 2. Assegura't de tenir Docker instal·lat.
+
+Si no tens Docker instal·lat, pots seguir aquests passos segons el teu sistema operatiu:
+
+- **Linux (Ubuntu/Debian)**
+  
+`sudo apt update`
+
+`sudo apt install docker.io docker-compose -y`
+
+`sudo systemctl start docker`
+
+`sudo systemctl enable docker`
+
+- **MacOS / Windows**
+  
+`Ves a https://www.docker.com/products/docker-desktop`
+
+`Descarrega i instal·la Docker Desktop`
+
+`Reinicia el teu sistema si cal`
+
+**Assegura’t que Docker funciona correctament amb:**
+
+`docker --version`
+
+`docker-compose --version`
+
+### 3. Executa el projecte en local:
+
+`docker-compose up`
+
+Això arrencarà automàticament els 2 servidors (nuxt i node).
+
+### 4. Configuració manual del servidor de Node.js:
+
+Obre el fitxer **front/static/socket.js**.
+
+Comenta i descomenta manualment les rutes del socket segons el context que vulguis provar.
+
+### 5. Accedeix al projecte en el teu navegador:
+
+Nxut: `http://localhost:3000`
+
+Node: `http://localhost:20071`
+
+### 🚀 Desplegament a Producció:
+
+El projecte utilitza una GitHub Action per desplegar automàticament a producció quan es fa push a la branca main.
+
+El sistema s'encarrega del desplegament automàtic.
+
