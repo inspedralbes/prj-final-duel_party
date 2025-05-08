@@ -1,11 +1,11 @@
-# 🎲 DuelParty - Juego de Mesa de Multijugador Local🕹️
+# 🎲 DuelParty - Multijugador Local🕹️
 
 ## Integrantes:
 - **Diego Mujica** 💡
 - **Elihu Valdelomar** 💡
 
 ## Descripción del Proyecto:
-**DuelParty** es un juego de mesa **multijugador local** que ofrece una experiencia interactiva utilizando los **dispositivos móviles** de los jugadores. En este juego, de **2 jugadores**, competirán entre sí jugando diversos **minijuegos** en para conseguir subir cada vez mas una **montaña**. ¡El objetivo es llegar primero a la cima , mientras te diviertes ganando minijuegos!
+**DuelParty** es un juego de **multijugador local** que ofrece una experiencia interactiva utilizando los **dispositivos móviles** de los jugadores. En este juego, de **2 jugadores**, competirán entre sí jugando diversos **minijuegos** en para conseguir subir cada vez mas una **montaña**. ¡El objetivo es llegar primero a la cima , mientras te diviertes ganando minijuegos!
 
 ## 🚀 Estado del Proyecto:
 Actualmente, el proyecto se encuentra en **desarrollo**. Estamos trabajando en la implementación de los primeros **minijuegos** ,en la optimización de la interfaz y mejora del diseño. 
