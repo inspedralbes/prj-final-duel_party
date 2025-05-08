@@ -51,7 +51,7 @@ if(yo.value.username===yo.value.jugadores[0].username){
   fondo.yo=fondo.azul;
 }
 // 1 = movimiento, 2 = boton 
-const modo=(2);
+const modo=(1);
 
 
 
