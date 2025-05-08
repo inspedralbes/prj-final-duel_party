@@ -37,7 +37,7 @@ export default {
 
 }
 .logo {
-  width: 300px;
+  width: 700px;
   
 }
 .btn-inicio {
