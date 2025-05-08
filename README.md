@@ -56,17 +56,17 @@ Si no tens Docker instal·lat, pots seguir aquests passos segons el teu sistema 
 
 `docker-compose --version`
 
-### 3. Executa el projecte en local:
-
-`docker-compose up`
-
-Això arrencarà automàticament els 2 servidors (nuxt i node).
-
-### 4. Configuració manual del servidor de Node.js:
+### 3. Configuració manual del servidor de Node.js:
 
 Obre el fitxer **front/static/socket.js**.
 
 Comenta i descomenta manualment les rutes del socket segons el context que vulguis provar.
+
+### 4. Executa el projecte en local:
+
+`docker-compose up`
+
+Això arrencarà automàticament els 2 servidors (nuxt i node).
 
 ### 5. Accedeix al projecte en el teu navegador:
 
