@@ -26,7 +26,7 @@ const posicion = reactive([{top:0, left:0},{top:0, left:0},{top:0, left:0},{top:
 setTimeout(() => {
    winner.value=ganador();
     setTimeout(() => {
-        emit('acabarJuego',winner.value);
+        emit('ganador',winner.value);
     }, 3000);
     
     
@@ -196,72 +196,7 @@ moveMarker();
    
     <p v-if="result !== null">{{ resultMessage }}</p>
   </div>
-            <div class="div_canasta"> 
-                <div class="tiempo_fuera">
-            <div class="tiempo"> {{ animaciones.p1 }} </div>
-            </div> 
-                <img src="/aro.png" :style="{ zIndex: animaciones.c1}"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
-            <img id="balon1" class="balon" :class="{ 'animacion_encestar': animaciones.a1}"  :style="{zIndex: animaciones.b1 }"  src="/balon.png" alt="">
-            <div class="jugador">{{ yo.jugadores[1].username }}</div>  
-        </div>
-            <div v-if="yo.jugadores[2].in" @click="obtenerPosicion(2)" :class="{ 'disabled': animaciones.a2 }"  ref="j3" id="j3" class="div">
-                <div class="container">
-   
-    <div class="progress-bar">
-     
-      <div class="highlight-start"></div>
-      <div class="highlight-range"></div>
-      <div class="highlight-end"></div>
-
-    
-      <div
-        class="marker"
-        :style="{ left: markerPosition + '%' }"
-      ></div>
-    </div>
-
-  
-   
-
-  
-    <p v-if="result !== null">{{ resultMessage }}</p>
-  </div>
-                <div class="div_canasta"> 
-                    <div class="tiempo_fuera">
-            <div class="tiempo"> {{ animaciones.p2 }} </div>
-            </div> 
-                    <img src="/aro.png" :style="{ zIndex: animaciones.c2 }"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
-                <img id="balon1" class="balon" :class="{ 'animacion_encestar': animaciones.a2}"  :style="{zIndex: animaciones.b2 }"  src="/balon.png" alt="">
-              <div class="jugador">{{ yo.jugadores[2].username }}</div>  
-            </div>
-            <div v-if="yo.jugadores[3].in" @click="obtenerPosicion(3)" :class="{ 'disabled': animaciones.a3 }"  ref="j4" id="j4" class="div">
-                <div class="container">
-   
-    <div class="progress-bar">
-    
-      <div class="highlight-start"></div>
-      <div class="highlight-range"></div>
-      <div class="highlight-end"></div>
-
-     
-      <div
-        class="marker"
-        :style="{ left: markerPosition + '%' }"
-      ></div>
-    </div>
-
-    
-   
-
-   
-    <p v-if="result !== null">{{ resultMessage }}</p>
-  </div>
-                <div class="div_canasta"> 
-                    <div class="tiempo_fuera">
-            <div class="tiempo"> {{ animaciones.p3 }} </div>
-            </div> <img src="/aro.png" :style="{ zIndex: animaciones.c3 }"  class="aro" alt="" srcset=""> <img class="canasta" src="/tablero.png" alt=""></div>
-                <img id="balon1" class="balon" :class="{ 'animacion_encestar': animaciones.a3}"  :style="{zIndex: animaciones.b3 }"  src="/balon.png" alt="">
-              <div class="jugador">{{ yo.jugadores[3].username }}</div>  
+           
             </div>
 
         </div>

@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main :style="{ backgroundColor: '#' + fondo.yo }">
     <div class="mando">
 
       <div class="cartel" v-if="!permisos">
@@ -39,14 +39,19 @@
 
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted, reactive } from "vue";
 import socketManager from '../static/socket'
 const socket = socketManager.getSocket();
 const yo = computed(() => $nuxt.$store.state);
 const canShake =ref(true);
-
+const fondo= reactive({rojo:"720000",azul:"12145c",yo:""});
+if(yo.value.username===yo.value.jugadores[0].username){
+  fondo.yo=fondo.rojo;
+}else{
+  fondo.yo=fondo.azul;
+}
 // 1 = movimiento, 2 = boton 
-const modo=(1);
+const modo=(2);
 
 
 
@@ -188,7 +193,10 @@ function click(param) {
     socket.emit('enviar_luz', yo.value.username, yo.value.roomKey);
 
 
-  } else {
+  }else if(yo.value.juego===5){
+    socket.emit('enviar_duelo', yo.value.username, yo.value.roomKey);
+  }
+   else {
     socket.emit('move', param, yo.value.username, yo.value.roomKey);
   }
 
@@ -261,11 +269,7 @@ function click(param) {
 
 }
  
-
-main {
-  background-color: #1a1a1a;
-
-}
+ 
 
 .mando {
   margin: 0;
