@@ -3,6 +3,7 @@
   <div class="div-inicio">
     <NuxtLink to="/jugar">
       <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+      <img class="logo" src="/images/logo.png" alt="" srcset=""> <br>
       <button class="btn-inicio">EMPEZAR</button>
     </NuxtLink>
   </div>
@@ -35,7 +36,10 @@ export default {
   place-items: center;
 
 }
-
+.logo {
+  width: 300px;
+  
+}
 .btn-inicio {
   height: 70px;
   width: 250px;
