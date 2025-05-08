@@ -5,13 +5,13 @@
 - **Elihu Valdelomar** 💡
 
 ## Descripción del Proyecto:
-**DuelParty** es un juego de mesa **multijugador local** que ofrece una experiencia interactiva utilizando los **dispositivos móviles** de los jugadores. En este juego, de **2 a 4 jugadores**, competirán entre sí jugando diversos **minijuegos** en un **tablero dinámico**. ¡El objetivo es ser el primero en dar las vueltas establecidas , mientras te diviertes con diferentes desafíos!
+**DuelParty** es un juego de mesa **multijugador local** que ofrece una experiencia interactiva utilizando los **dispositivos móviles** de los jugadores. En este juego, de **2 jugadores**, competirán entre sí jugando diversos **minijuegos** en para conseguir subir cada vez mas una **montaña**. ¡El objetivo es llegar primero a la cima , mientras te diviertes ganando minijuegos!
 
 ## 🚀 Estado del Proyecto:
 Actualmente, el proyecto se encuentra en **desarrollo**. Estamos trabajando en la implementación de los primeros **minijuegos** ,en la optimización de la interfaz y mejora del diseño. 
 
 ## 📅 Herramientas de Trabajo:
-- **NODE.JS** : servidor sockets.io.
+- **NODE.JS** : backend servidor sockets.io.
 - **NUXT.JS** : frontend
 
 ## 🌐 URL de Producción:
