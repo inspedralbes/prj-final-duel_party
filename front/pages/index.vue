@@ -3,7 +3,7 @@
   <div class="div-inicio">
     <NuxtLink to="/jugar">
       <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-      <img class="logo" src="/images/logo.png" alt="" srcset=""> <br>
+      <img class="logo" src="/images/logo.webp" alt="" srcset=""> <br>
       <button class="btn-inicio">EMPEZAR</button>
     </NuxtLink>
   </div>
