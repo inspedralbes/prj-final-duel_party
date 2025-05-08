@@ -5,9 +5,11 @@ let socketInstance;
 
 const makeSocket = (token) => {
   if (!socketInstance) {
-     //     socketInstance = io("https://duelparty.cat", {
-   //    path: "/socket.io/", // Asegúrate de incluir el path
-    socketInstance = io("http://localhost:20071", { 
+    //PRODUCION
+      socketInstance = io("https://duelparty.cat", {  path: "/socket.io/", 
+
+     // DESARROLLO
+   //     socketInstance = io("http://localhost:20071", { 
       transports: ["websocket"],
       withCredentials: true,
       auth: {
