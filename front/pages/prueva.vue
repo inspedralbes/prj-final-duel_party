@@ -1,6 +1,6 @@
 <template>
     <main>
-        <Duelo/>
+        <soga/>
     </main>
 </template>
 <script setup>
