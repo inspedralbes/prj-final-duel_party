@@ -1,23 +1,48 @@
 <template>
     <div class="explanation-box">
-        <h2 class="title">{{ title }}</h2>
+        <h2 class="title">{{ textos[num].title }}</h2>
         <p class="description">
-            {{ description }}
+            {{ textos[num].description }}
         </p>
+        <button class="boton" @click="jugar">JUGAR</button>
     </div>
 </template>
 
 <script setup>
+import { reactive } from 'vue';
 defineProps({
-    title: {
-        type: String,
-        default: '¿Cómo se juega?'
-    },
-    description: {
-        type: String,
-        default: 'Haz clic en la ruleta para que gire. Cuando se detenga, verás qué emoji ha salido. ¡Buena suerte!'
+    num: {
+        type: Number,
+        default: 0
     }
-})
+});
+
+const emit = defineEmits();
+
+function jugar(){
+    emit('jugar');
+}
+
+const textos=reactive([{
+    title:"Globos",
+    description:"Explota todos los globos de tu color"
+},{
+    title:"Duelos del Oeste",
+    description:"Sacude el movil para disparar, cuando sea el momento justo"
+},{
+    title:"Penales",
+    description:"Escoge donde quiere chutar, escoge donde te quires tirar"
+},{
+    title:"Tirar de la soga",
+    description:"Presiona el boton para tirar de la soga sin parar"
+},{
+    title:"Luz verde, luz roja",
+    description:"Agita el movil para moverte, pero CUIDADO, solo cuando esté la luz de verde"
+},{
+    title:"Colores",
+    description:"Aparece un texto pintado en pantalla, escoge el color del texto"
+}
+])
 </script>
 
 <style scoped>
@@ -31,14 +56,22 @@ defineProps({
     }
 
 }
-
+.boton{
+  width: 150px;
+  height: 50px;
+  background-image: url('/images/fondo-inicio.png');
+  border: 1px solid white;
+  color: white;
+  cursor: pointer;
+  
+}
 .explanation-box {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-image: url('/images/fondo-inicio.png');
-     
+      text-align: center;
     padding: 16px 24px;
     margin: 20px auto;
     max-width: 600px;

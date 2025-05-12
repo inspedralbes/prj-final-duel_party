@@ -8,76 +8,7 @@
 <Soga v-if="yo.juego===6" @ganador="ganador"/>
 <Mando v-if="yo.juego===-1"/>
 <Win v-if="visibleWIN" :initialWinnerName="yo.jugadores[winner].username" @salir="ganador2"/>
-<div v-if="yo.juego===0"class="menu-container">
-    <div class="decoration decoration-1"></div>
-    <div class="decoration decoration-2"></div>
-    <div class="decoration decoration-3"></div>
-    
-    <div class="star-coin star-1">⭐</div>
-    <div class="star-coin star-2">⭐</div>
-    
-    <div class="menu-header">
-      <h1 class="menu-title">¡MINIJUEGOS!</h1>
-    </div>
-    
-    <div class="minigames-grid">
-      <div class="minigame" @click="modo(1)">
-        <div class="minigame-icon">🎈</div>
-        <div class="minigame-name">Globos</div>
-      </div>
-      
-      <div class="minigame" @click="modo(2)">
-        <div class="minigame-icon">⚽</div>
-        <div class="minigame-name">Penales</div>
-      </div>
-      <div class="minigame" @click="modo(3)" >
-        <div class="minigame-icon">🏃‍♂️</div>
-        <div class="minigame-name">Luz verde, luz roja</div>
-      </div>
-        
-      <div class="minigame" @click="modo(4)" >
-        <div class="minigame-icon">🎨</div>
-        <div class="minigame-name">Colores</div>
-      </div>
-      <div class="minigame" @click="modo(5)">
-        <div class="minigame-icon" >🔫</div>
-        <div class="minigame-name">Duelo oeste</div>
-      </div>
-      
-      
-      <div class="minigame" @click="modo(6)">
-        <div class="minigame-icon">🫴</div>
-        <div class="minigame-name">Tirar de la soga</div>
-      </div>
-    <!--
-      <div class="minigame">
-        <div class="minigame-icon">💣</div>
-        <div class="minigame-name">Bomba</div>
-      </div>
-      
-      <div class="minigame">
-        <div class="minigame-icon">🫴</div>
-        <div class="minigame-name">Manos</div>
-      </div>
-    
-      
-      <div class="minigame">
-        <div class="minigame-icon">🖼️</div>
-        <div class="minigame-name">Adivina Imagen</div>
-      </div>
-      
-     
-      <div class="minigame">
-        <div class="minigame-icon">🔪</div>
-        <div class="minigame-name">Cuchillos</div>
-      </div> 
-       -->
-    </div>
-   
-    <div class="menu-footer">
-      ¡Selecciona un minijuego para comenzar la diversión!
-    </div>
-  </div>
+
 
 
 

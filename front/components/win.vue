@@ -76,6 +76,8 @@ const emit = defineEmits();
   </script>
   
   <style scoped>
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
   .winner-outer-container {
     position: relative;
     display: flex;
@@ -87,6 +89,7 @@ const emit = defineEmits();
   }
   
   .winner-container {
+    font-family: 'Press Start 2P', cursive;
     position: relative;
     width: 80%;
     max-width: 500px;
