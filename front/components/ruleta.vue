@@ -31,13 +31,12 @@
   const emit = defineEmits();
   const segments = ref([ 
     { text: '🎈', color: 'none' },
-    { text: '🎭', color: 'none' },
-    { text: '⚽', color: 'none' },
-    { text: '🕵️‍♂️', color: 'none' }, 
-    { text: '💣', color: 'none' },
+    { text: '🔫', color: 'none' },
+    { text: '⚽', color: 'none' }, 
     { text: '🫴', color: 'none' },
+    { text: '🏃‍♂️', color: 'none' },
     { text: '🎨', color: 'none' },
-    { text: '🖼️', color: 'none' },
+    
     
   ])
   
@@ -71,6 +70,8 @@
   const normalizedRotation = (360 - (currentRotation.value % 360)) % 360
   const index = Math.floor(normalizedRotation / segmentAngle)
   const correctedIndex = (index + 1) % segments.value.length
+  console.log(segments.value[correctedIndex].text)
+  
   emit('minijuego',correctedIndex);
  //  resultDisplay.value = `¡${correctedIndex}!`
  // resultDisplay.value = `¡${segments.value[correctedIndex].text}!`
@@ -94,17 +95,18 @@
   }
   
   .wheel-container {
-    position: relative;
+    position: absolute;
     width: 400px;
     height: 400px;
   }
   
   .wheel {
-    width: 100%;
-    height: 100%;
+    width: 300px;
+    height: 300px;
     border-radius: 50%;
     position: absolute;
-    top: 80%;
+    top: 50%;
+    left: 10%;
     transform: translate(-50%, -50%);
     overflow: hidden;
     border: 8px solid #2e25a5;
@@ -136,8 +138,8 @@
   
   .marker {
     position: absolute;
-    top: 75%;
-    left: 50%;
+    top: 40%;
+    left: 40%;
     transform: translateX(-50%);
     width: 0;
     height: 0;
