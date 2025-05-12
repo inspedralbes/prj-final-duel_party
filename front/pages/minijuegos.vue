@@ -6,7 +6,7 @@
 <Colores v-if="yo.juego===4" @ganador="ganador"/>
 <Duelo v-if="yo.juego===5" @ganador="ganador"/>
 <Soga v-if="yo.juego===6" @ganador="ganador"/>
-<Mando :mando="2" v-if="yo.juego===-1"/>
+<Mando v-if="yo.juego===-1"/>
 <Win v-if="visibleWIN" :initialWinnerName="yo.jugadores[winner].username" @salir="ganador2"/>
 <div v-if="yo.juego===0"class="menu-container">
     <div class="decoration decoration-1"></div>
