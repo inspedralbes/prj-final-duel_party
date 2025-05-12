@@ -45,13 +45,21 @@ const socket = socketManager.getSocket();
 const yo = computed(() => $nuxt.$store.state);
 const canShake =ref(true);
 const fondo= reactive({rojo:"720000",azul:"12145c",yo:""});
+
+  // Props para personalizar el componente
+  const props = defineProps({
+    mando: {
+      type: Number,
+      default: 1
+    }
+  });
 if(yo.value.username===yo.value.jugadores[0].username){
   fondo.yo=fondo.rojo;
 }else{
   fondo.yo=fondo.azul;
 }
 // 1 = movimiento, 2 = boton 
-const modo=(1);
+const modo=(props.mando);
 
 
 
@@ -195,6 +203,8 @@ function click(param) {
 
   }else if(yo.value.juego===5){
     socket.emit('enviar_duelo', yo.value.username, yo.value.roomKey);
+  } else if(yo.value.juego===6){
+    socket.emit('enviar_soga', yo.value.username, yo.value.roomKey);
   }
    else {
     socket.emit('move', param, yo.value.username, yo.value.roomKey);

@@ -36,6 +36,7 @@ const penales = require('./minijuegos/penales');
 const luz_verde = require('./minijuegos/luz_verde');
 const colores= require('./minijuegos/colores');
 const duelo = require('./minijuegos/duelo');
+const soga = require('./minijuegos/soga');
 io.on('connection', async (socket) => {
 
 
@@ -43,6 +44,7 @@ io.on('connection', async (socket) => {
 
     basquet(socket, io, salas, conexiones);
     globos(socket,io ,salas, conexiones);
+    soga(socket,io ,salas, conexiones);
     penales(socket,io ,salas, conexiones);
     luz_verde(socket,io ,salas, conexiones);
     colores(socket,io ,salas, conexiones);

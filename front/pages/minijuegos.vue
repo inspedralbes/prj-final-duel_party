@@ -5,7 +5,8 @@
 <Luz_verde v-if="yo.juego===3" @ganador="ganador"/>
 <Colores v-if="yo.juego===4" @ganador="ganador"/>
 <Duelo v-if="yo.juego===5" @ganador="ganador"/>
-<Mando v-if="yo.juego===-1"/>
+<Soga v-if="yo.juego===6" @ganador="ganador"/>
+<Mando :mando="2" v-if="yo.juego===-1"/>
 <Win v-if="visibleWIN" :initialWinnerName="yo.jugadores[winner].username" @salir="ganador2"/>
 <div v-if="yo.juego===0"class="menu-container">
     <div class="decoration decoration-1"></div>
@@ -44,11 +45,11 @@
       </div>
       
       
-      <div class="minigame">
-        <div class="minigame-icon">🕵️‍♂️</div>
-        <div class="minigame-name">Adiniva Quien</div>
+      <div class="minigame" @click="modo(6)">
+        <div class="minigame-icon">🫴</div>
+        <div class="minigame-name">Tirar de la soga</div>
       </div>
-      
+    <!--
       <div class="minigame">
         <div class="minigame-icon">💣</div>
         <div class="minigame-name">Bomba</div>
@@ -70,8 +71,9 @@
         <div class="minigame-icon">🔪</div>
         <div class="minigame-name">Cuchillos</div>
       </div> 
+       -->
     </div>
-    
+   
     <div class="menu-footer">
       ¡Selecciona un minijuego para comenzar la diversión!
     </div>
@@ -175,7 +177,7 @@ function modo(data){
     
     .minigames-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 1rem;
       position: relative;
       z-index: 2;
