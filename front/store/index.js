@@ -7,7 +7,7 @@ export const state = () => ({
       { username: "", in: false },
       { username: "", in: false },
     ],
-    juego:0,
+    juego:'',
     permisos:false,
   })
 

@@ -23,9 +23,10 @@
 </template>
 
 <script setup>
-
+import socketManager from '../static/socket'
 import { reactive, ref,computed } from 'vue'; 
 
+const socket = socketManager.getSocket();
 const yo= computed(() => $nuxt.$store.state);  
 
 if(yo.value.juego==='' && yo.value.username!=="host"){
