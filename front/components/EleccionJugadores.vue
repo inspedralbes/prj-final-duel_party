@@ -45,7 +45,7 @@
 import { reactive, ref,watch } from 'vue';
 import socketManager from '../static/socket'
 const socket = socketManager.getSocket();
-
+const jugarListo=ref(false);
 const props = defineProps({
   data: {
     type: Array,
@@ -107,7 +107,9 @@ function reiniciarColor(){
 }
 
  socket.on('move', (data, username) => {
-  console.log(username)
+    
+
+
   if(username===props.data[0].username){
    jugadoresListos.jugador1=true;
   }else{ 
@@ -115,6 +117,7 @@ function reiniciarColor(){
   }
 
   if(jugadoresListos.jugador1 && jugadoresListos.jugador2){
+    
     $nuxt.$router.push('/modo');
   }
 

@@ -201,11 +201,13 @@ function comprobarTurno() {
 
 
 function click(param) {
+  if(modo.value===0){
+    return;
+  }
+
 
   if (yo.value.juego === 2) {
     socket.emit('enviar_duelo', yo.value.username, yo.value.roomKey);
-    
-    
   }else if(yo.value.juego===4){
     socket.emit('enviar_soga', yo.value.username, yo.value.roomKey);
   } else if(yo.value.juego===5){
