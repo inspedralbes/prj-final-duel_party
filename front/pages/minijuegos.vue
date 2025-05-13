@@ -7,7 +7,7 @@
 <Luz_verde v-if="yo.juego===5" @ganador="ganador"/>
 <Colores v-if="yo.juego===6" @ganador="ganador"/>
 <Mando v-if="yo.juego===-1"/>
-
+<explicar class="explicar" @jugar="modo2" :num="juego-1" v-if="visibleInstrucciones"/>
 <Win class="win" v-if="visibleWIN" :initialWinnerName="yo.jugadores[winner].username" @salir="ganador2"/>
 <div v-if="yo.juego===0"class="menu-container">
     <div class="decoration decoration-1"></div>
@@ -28,28 +28,29 @@
       </div>
       
       <div class="minigame" @click="modo(2)">
-        <div class="minigame-icon">⚽</div>
-        <div class="minigame-name">Penales</div>
-      </div>
-      <div class="minigame" @click="modo(3)" >
-        <div class="minigame-icon">🏃‍♂️</div>
-        <div class="minigame-name">Luz verde, luz roja</div>
-      </div>
-        
-      <div class="minigame" @click="modo(4)" >
-        <div class="minigame-icon">🎨</div>
-        <div class="minigame-name">Colores</div>
-      </div>
-      <div class="minigame" @click="modo(5)">
         <div class="minigame-icon" >🔫</div>
         <div class="minigame-name">Duelo oeste</div>
       </div>
       
-      
-      <div class="minigame" @click="modo(6)">
+      <div class="minigame" @click="modo(3)">
+        <div class="minigame-icon">⚽</div>
+        <div class="minigame-name">Penales</div>
+      </div>
+      <div class="minigame" @click="modo(4)">
         <div class="minigame-icon">🫴</div>
         <div class="minigame-name">Tirar de la soga</div>
       </div>
+
+      <div class="minigame" @click="modo(5)" >
+        <div class="minigame-icon">🏃‍♂️</div>
+        <div class="minigame-name">Luz verde, luz roja</div>
+      </div>
+        
+      <div class="minigame" @click="modo(6)" >
+        <div class="minigame-icon">🎨</div>
+        <div class="minigame-name">Colores</div>
+      </div>
+      
     <!--
       <div class="minigame">
         <div class="minigame-icon">💣</div>
@@ -101,17 +102,18 @@ const socket = socketManager.getSocket();
 const yo= computed(() => $nuxt.$store.state);  
 const visibleWIN = ref(false);
 const winner=ref(-1)
-
+const visibleInstrucciones=ref(false);
+const juego=ref(0);
 function ganador(data){
   winner.value=data;
   visibleWIN.value=true;
-
   socket.emit('minijuego', yo.value.roomKey,-1 );
 }
 
 function ganador2(){
   visibleWIN.value=false;
   winner.value=-1;
+  
    $nuxt.$store.dispatch('updateJuego', 0); 
    
    
@@ -125,12 +127,21 @@ if(yo.value.username==="host"){
 } 
  
 
+function modo2(){
+  visibleInstrucciones.value=false;
+ $nuxt.$store.dispatch('updateJuego', juego.value); 
+  socket.emit('minijuego', yo.value.roomKey,juego.value );
+  juego.value=0;
+}
 
 function modo(data){
-  // globos 1
-  // penales 2
-    $nuxt.$store.dispatch('updateJuego', data); 
-    socket.emit('minijuego', yo.value.roomKey,data );
+  if(visibleInstrucciones.value){
+    juego.value=0;
+  visibleInstrucciones.value=false;  
+  }else{
+  juego.value=data;
+  visibleInstrucciones.value=true;  
+  }
 }
 
 
@@ -145,6 +156,9 @@ function modo(data){
     background-image: linear-gradient(45deg, #5c94fc 0%, #83bdff 100%);
     height: 100vh;
     width: 100vw;
+}
+.explicar{
+    z-index: 3;
 }
 .win{
   position: absolute;
