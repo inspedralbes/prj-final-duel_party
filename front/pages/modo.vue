@@ -51,7 +51,7 @@
       </div>
   </div>
   <div v-if="menu === 0">
-    <mando/>
+    <Mando/>
   </div>
     </main>
   </template>
@@ -59,6 +59,7 @@
   <script setup>
   import { computed, ref } from "vue";
   import socketManager from '../static/socket' 
+import Mando from "../components/mando.vue";
 
 const socket = socketManager.getSocket();
   const menu = ref(1);

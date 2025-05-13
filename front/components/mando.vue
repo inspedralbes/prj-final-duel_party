@@ -1,6 +1,6 @@
 <template>
-  <main :style="{ backgroundColor: '#' + fondo.yo }">
-    <div class="mando">
+  <main >
+    <div class="mando" :style="{ backgroundColor: '#' + fondo.yo }">
 
       <div class="cartel" v-if="!permisos">
 
@@ -247,6 +247,10 @@ function click(param) {
     opacity: 1;
   }
 }
+.fondo{
+  background-color: #8B4513;
+  
+}
 
 .cartel {
   background-color: #8B4513;
@@ -296,7 +300,7 @@ function click(param) {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  width: 98vw;
+  width: 100vw;
   overflow: hidden;
   font-family: 'Press Start 2P', cursive;
   color: #fff;
