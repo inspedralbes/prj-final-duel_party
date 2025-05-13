@@ -16,6 +16,9 @@
       <div v-if="permisos">
        
         <div class="jugador">{{ yo.username }}</div>
+        <div v-if="modo===0">
+        <div class="agita"><h1>¡ESPERANDO MINIJUEGO!</h1></div>
+      </div>
         <div v-if="modo===1">
         <div class="agita"><h1>¡AGITA!</h1></div>
       </div>
@@ -50,7 +53,7 @@ const fondo= reactive({rojo:"720000",azul:"12145c",yo:""});
   const props = defineProps({
     mando: {
       type: Number,
-      default: 2
+      default: 1
     }
   });
 if(yo.value.username===yo.value.jugadores[0].username){
@@ -58,10 +61,12 @@ if(yo.value.username===yo.value.jugadores[0].username){
 }else{
   fondo.yo=fondo.azul;
 }
-// 1 = movimiento, 2 = boton 
-const modo=(props.mando);
+//0 = esperando, 1 = movimiento, 2 = boton 
+const modo=ref(props.mando);
 
-
+if(yo.value.juego===-1){
+  modo.value=0;
+}
 
 const startListening = () => {
   dar_permisos();
@@ -311,6 +316,7 @@ function click(param) {
   position: absolute;
   top: 50%;
   left: 50%;
+  width: 1000px;
   transform: translate(-50%, -50%);
   animation: agitar 1s infinite;
 }

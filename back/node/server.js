@@ -81,6 +81,13 @@ io.on('connection', async (socket) => {
        
     });
 
+    socket.on('pagina', (claveSala, pagina) => {
+        
+        socket.broadcast.to(claveSala).emit('pagina', pagina);
+         
+        
+    });
+
     socket.on('minijuego', (claveSala, minijuego) => {
         
         socket.broadcast.to(claveSala).emit('minijuego', minijuego);

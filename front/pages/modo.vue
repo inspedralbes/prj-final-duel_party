@@ -1,7 +1,8 @@
 <template>
-    <main class="game-container">
+    <main >
+      <div class="game-container"  v-if="menu === 1">
       <!-- Pantalla de selección de modo -->
-      <div v-if="menu === 1" class="game-screen modo-select-screen">
+      <div  class="game-screen modo-select-screen">
         <div class="pixel-overlay"></div>
         <div class="content-container">
           <h1 class="game-title">DUEL PARTY</h1>
@@ -48,21 +49,52 @@
           </div>
         </div>
       </div>
-  
+  </div>
+  <div v-if="menu === 0">
+    <mando/>
+  </div>
     </main>
   </template>
   
   <script setup>
-  import { ref } from "vue";
-  
+  import { computed, ref } from "vue";
+  import socketManager from '../static/socket' 
+
+const socket = socketManager.getSocket();
   const menu = ref(1);
+  const yo= computed(() => $nuxt.$store.state);
   const hoveredmodo = ref(null);
   
+  if(yo.value.username!=="host"){
+    menu.value=0;
+  }
+  if(yo.value.juego==='' && yo.value.username!=="host"){
+  $nuxt.$router.push('/jugar');
+}
+
+socket.on('pagina', (data) => {
+   $nuxt.$store.dispatch('updateJuego', -1);
+  switch(data){
+    case 1:
+       $nuxt.$router.push('/historia');
+      break;
+    case 2:
+     $nuxt.$router.push('/minijuegos');
+      break;
+    default:
+      $nuxt.$router.push('/jugar');
+      break;
+  }
+})   
+
+
   function modoSeleccionado(modo) {
     if (modo === 'mountain') {
-        $nuxt.$router.push('/');
+       socket.emit('pagina', yo.value.roomKey,1);
+        $nuxt.$router.push('/historia');
     } else if (modo === 'minigames') {
-      $nuxt.$router.push('/');
+       socket.emit('pagina', yo.value.roomKey,2);
+      $nuxt.$router.push('/minijuegos');
     }
   }
   </script>
