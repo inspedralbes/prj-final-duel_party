@@ -1,12 +1,13 @@
 <template>
     <main class="main">
 <Globos v-if="yo.juego===1" @ganador="ganador"/>
-<penales v-if="yo.juego===2" @ganador="ganador"/>
-<Luz_verde v-if="yo.juego===3" @ganador="ganador"/>
-<Colores v-if="yo.juego===4" @ganador="ganador"/>
-<Duelo v-if="yo.juego===5" @ganador="ganador"/>
-<Soga v-if="yo.juego===6" @ganador="ganador"/>
+<Duelo v-if="yo.juego===2" @ganador="ganador"/>
+<Penales v-if="yo.juego===3" @ganador="ganador"/>
+<Soga v-if="yo.juego===4" @ganador="ganador"/>
+<Luz_verde v-if="yo.juego===5" @ganador="ganador"/>
+<Colores v-if="yo.juego===6" @ganador="ganador"/>
 <Mando v-if="yo.juego===-1"/>
+
 <Win class="win" v-if="visibleWIN" :initialWinnerName="yo.jugadores[winner].username" @salir="ganador2"/>
 <div v-if="yo.juego===0"class="menu-container">
     <div class="decoration decoration-1"></div>
@@ -92,8 +93,9 @@ import Globos from '../components/globos.vue';
 import socketManager from '../static/socket'
 import Mando from '../components/mando.vue';
 import Luz_verde from '../components/luz_verde.vue';
-import Colores from '../components/ colores.vue';
+import Colores from '../components/colores.vue';
 import Duelo from '../components/duelo.vue';
+import Penales from '../components/penales.vue';
 
 const socket = socketManager.getSocket();
 const yo= computed(() => $nuxt.$store.state);  

@@ -23,7 +23,7 @@ import Globos from '../components/globos.vue';
 import socketManager from '../static/socket'
 import Mando from '../components/mando.vue';
 import Luz_verde from '../components/luz_verde.vue';
-import Colores from '../components/ colores.vue';
+import Colores from '../components/colores.vue';
 import Duelo from '../components/duelo.vue';
 
 const socket = socketManager.getSocket();
@@ -34,17 +34,18 @@ const winner=ref(-1)
 function ganador(data){
   winner.value=data;
   visibleWIN.value=true;
-  $nuxt.$store.dispatch('updateJuego', 0); 
+ 
   socket.emit('minijuego', yo.value.roomKey,-1 );
 }
 
 function ganador2(){
   visibleWIN.value=false;
   winner.value=-1;
- 
+  $nuxt.$store.dispatch('updateJuego', 0); 
    
    
   }
+
 if(yo.value.juego==='' && yo.value.username!=="host"){
   $nuxt.$router.push('/jugar');
 }

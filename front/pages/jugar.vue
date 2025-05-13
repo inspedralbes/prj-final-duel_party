@@ -5,6 +5,7 @@
 
             <div class="grid">
                 <button class="btn-inicio" @click="crearSala()">Crear una sala</button>
+              
                 <input type="text" v-model="claveActual" class="input-sala" placeholder="Clave de la sala" />
                 <button class="btn-inicio" @click="unirseSala()">Unirse a una sala</button>
             </div>
@@ -26,6 +27,7 @@ import socketManager from '../static/socket';
 const claveSala = computed(() => $nuxt.$store.state.roomKey);
 const yo= computed(() => $nuxt.$store.state);
 const claveActual=ref("");
+const nombre=ref("");
 socketManager.RemSocket();
 
 const menu = ref(1);
@@ -82,7 +84,7 @@ socket.on("room-joined", (claveSala, username) => {
     $nuxt.$store.dispatch('updatePlayer', { claveSala, username });
    // minijuego
    // historia
-    $nuxt.$router.push('/minijuegos');
+    $nuxt.$router.push('/historia');
      
     console.log(yo.value.username);
 });
