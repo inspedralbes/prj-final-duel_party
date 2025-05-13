@@ -82,7 +82,7 @@ socket.on("room-joined", (claveSala, username) => {
     $nuxt.$store.dispatch('updatePlayer', { claveSala, username });
    // minijuego
    // historia
-    $nuxt.$router.push('/historia');
+    $nuxt.$router.push('/minijuegos');
      
     console.log(yo.value.username);
 });

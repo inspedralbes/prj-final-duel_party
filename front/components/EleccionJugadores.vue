@@ -115,7 +115,7 @@ function reiniciarColor(){
   }
 
   if(jugadoresListos.jugador1 && jugadoresListos.jugador2){
-    $nuxt.$router.push('/historia');
+    $nuxt.$router.push('/minijuegos');
   }
 
  });

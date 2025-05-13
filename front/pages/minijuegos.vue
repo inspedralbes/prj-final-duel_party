@@ -7,7 +7,7 @@
 <Duelo v-if="yo.juego===5" @ganador="ganador"/>
 <Soga v-if="yo.juego===6" @ganador="ganador"/>
 <Mando v-if="yo.juego===-1"/>
-<Win v-if="visibleWIN" :initialWinnerName="yo.jugadores[winner].username" @salir="ganador2"/>
+<Win class="win" v-if="visibleWIN" :initialWinnerName="yo.jugadores[winner].username" @salir="ganador2"/>
 <div v-if="yo.juego===0"class="menu-container">
     <div class="decoration decoration-1"></div>
     <div class="decoration decoration-2"></div>
@@ -103,14 +103,14 @@ const winner=ref(-1)
 function ganador(data){
   winner.value=data;
   visibleWIN.value=true;
-  $nuxt.$store.dispatch('updateJuego', 0); 
+
   socket.emit('minijuego', yo.value.roomKey,-1 );
 }
 
 function ganador2(){
   visibleWIN.value=false;
   winner.value=-1;
- 
+   $nuxt.$store.dispatch('updateJuego', 0); 
    
    
   }
@@ -143,6 +143,13 @@ function modo(data){
     background-image: linear-gradient(45deg, #5c94fc 0%, #83bdff 100%);
     height: 100vh;
     width: 100vw;
+}
+.win{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index:10;
 }
  .menu-container {
     font-family: 'Press Start 2P', cursive;  
