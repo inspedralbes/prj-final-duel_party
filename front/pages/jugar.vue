@@ -100,7 +100,7 @@ main {
     padding: 0;
 }
 .div-inicio {
-    place-items: center;
+  place-items: center;
   background-image: url('/images/fondo-inicio.png');
   background-size: cover;
   background-position: center;
