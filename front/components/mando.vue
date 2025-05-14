@@ -300,7 +300,7 @@ function click(param) {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  width: 150vw;
+  width: 100vw;
   overflow: hidden;
   font-family: 'Press Start 2P', cursive;
   color: #fff;

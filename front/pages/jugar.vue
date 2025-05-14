@@ -111,7 +111,7 @@ main {
   text-align: center;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; 
   height: 100vh;
   width: 100vw;
   font-family: 'Press Start 2P', cursive;
@@ -122,7 +122,7 @@ main {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    height: 40vh;
+    
     margin-left: 20px;
 
 }
@@ -147,7 +147,7 @@ main {
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
     transition: transform 0.3s, background-color 0.3s;
     font-family: 'Press Start 2P', cursive;
-    margin-bottom: 100px;
+    margin-bottom: 50px;
     padding: 20px;
     border-radius: 10%;
 }
