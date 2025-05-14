@@ -105,7 +105,7 @@ main {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-
+  background-attachment: fixed;
   margin: 0;
   padding: 0;
   text-align: center;
