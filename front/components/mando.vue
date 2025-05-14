@@ -53,7 +53,7 @@ const fondo= reactive({rojo:"720000",azul:"12145c",yo:""});
   const props = defineProps({
     mando: {
       type: Number,
-      default: 1
+      default: 2
     }
   });
 if(yo.value.username===yo.value.jugadores[0].username){

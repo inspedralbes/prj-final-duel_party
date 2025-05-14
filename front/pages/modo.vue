@@ -18,7 +18,7 @@
                 @mouseleave="hoveredmodo = null"
               >
                 <div class="modo-icon-container">
-                  <img src="/montaña.png" alt="Mountain" class="modo-icon">
+                  <img src="/images/modo/montaña.png" alt="Mountain" class="modo-icon">
                 </div>
                 <div class="modo-text">
                   <span class="modo-name">Duelo en la Montaña</span>
@@ -34,7 +34,7 @@
                 @mouseleave="hoveredmodo = null"
               >
                 <div class="modo-icon-container">
-                  <img src="/minijuegos.png" alt="Minigames" class="modo-icon">
+                  <img src="/images/modo//minijuegos.png" alt="Minigames" class="modo-icon">
                 </div>
                 <div class="modo-text">
                   <span class="modo-name">Minijuegos</span>
