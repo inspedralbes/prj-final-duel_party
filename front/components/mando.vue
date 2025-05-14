@@ -293,6 +293,9 @@ function click(param) {
  
 
 .mando {
+  position: fixed;
+  top: 0;
+  left: 0;
   margin: 0;
   padding: 0;
   display: flex;
@@ -304,6 +307,7 @@ function click(param) {
   overflow: hidden;
   font-family: 'Press Start 2P', cursive;
   color: #fff;
+  z-index: 1;
 }
 
 .controller {
@@ -398,5 +402,14 @@ function click(param) {
   color: #ff4757;
   text-align: center;
   margin-top: 20px;
+}
+
+/* Asegura que el fondo cubra toda la pantalla y no se desplace */
+:global(html), :global(body) {
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 </style>
