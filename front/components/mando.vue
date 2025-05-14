@@ -297,13 +297,15 @@ function click(param) {
   top: 0;
   left: 0;
   margin: 0;
-  padding: 0;
+  padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  width: 100vw;
+  height: 100dvh;
+  width: 100dvw;
+  min-height: 100vh;
+  min-width: 100vw;
   overflow: hidden;
   font-family: 'Press Start 2P', cursive;
   color: #fff;
