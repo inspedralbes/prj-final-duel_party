@@ -9,14 +9,14 @@
 
           <div class="marcador">
             <div class="equipo">
-              <div class="nombre-equipo"> {{ yo.jugadores[0].username }}</div> 
+              <div class="nombre-equipo" style="text-shadow: 2px 2px 10px rgb(255, 0, 0);"> {{ yo.jugadores[0].username }}</div> 
             </div>
 
             <div class="vs">VS</div>
 
             <div class="equipo">
 
-              <div class="nombre-equipo"> {{ yo.jugadores[1].username }}</div> 
+              <div class="nombre-equipo" style=" text-shadow: 2px 2px 10px rgb(0, 0, 255);"> {{ yo.jugadores[1].username }}</div> 
             </div>
           </div>
 
@@ -63,7 +63,7 @@
 
 
 
-      <div v-if="menu === 1 || menu === 2">
+      <div v-if="(menu === 1 || menu === 2) && espera ">
         <img v-if="menu === 1" class="pantalla_portero" :src="`/images/penales/portero_${portero}.webp`" alt="">
         <img v-if="menu === 2" class="pantalla_balon" :src="`/images/penales/balon.webp`" alt="">
 
@@ -94,6 +94,7 @@ const portero = ref("azul");
 const turno = reactive({turno:0,penal1:0,penal2:0,gol1:0,gol2:0});
 const emit = defineEmits();
 const yo= computed(() => $nuxt.$store.state);
+const espera=ref(false);
 const flechas = reactive({
   izquierda: true,
   derecha: true,
@@ -107,10 +108,12 @@ const penales_azul =ref([0,0,0,0,0]);
 if(yo.value.jugadores[0].username===yo.value.username){
   portero.value="rojo";
   menu.value=2;
+  espera.value=true;
 }
 if(yo.value.jugadores[1].username===yo.value.username){
   portero.value="azul";
   menu.value=1;
+   espera.value=true;
 }
 
 
@@ -134,6 +137,7 @@ const penal = reactive({
 
 
 function flecha(flecha) {
+   espera.value=false;
   if (flecha === "izquierda") {
     flechas.derecha = false;
     flechas.centro = false;
@@ -221,7 +225,7 @@ function comprobar_penales(){
       if(turno.gol1<turno.gol2){ 
         emit('ganador',1);
       }else{
-        alert("Empate");
+         
         turno.turno=0;
         turno.penal1=0;
         turno.penal2=0;
@@ -266,6 +270,9 @@ socket.on('reiniciar_penales', () => {
   penal.portero="";
   penal.portero_listo=false;
   penal.jugador_listo=false;
+  setTimeout(() => {
+    espera.value=true;
+  }, 500);
 
   if(menu.value===1){
     menu.value=2;
@@ -400,7 +407,7 @@ socket.on('reiniciar_penales', () => {
   font-size: 25px;
   font-weight: bold; 
   color: #fff;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+ 
 }
 
  

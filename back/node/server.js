@@ -88,7 +88,7 @@ io.on('connection', async (socket) => {
     socket.on('minijuego', (claveSala, minijuego) => {
         
         socket.broadcast.to(claveSala).emit('minijuego', minijuego);
-        console.log("esa");
+        
         
     });
 
