@@ -50,6 +50,7 @@ const menu = ref(1);
 const yo = computed(() => $nuxt.$store.state);
 const tiempo=ref(true);
 const puntaje= reactive({ j1:0,j2:0, ronda:0});
+const recibirColores=ref(true);
 const color= reactive({
     color: "",
     colores:"",
@@ -116,7 +117,12 @@ function asignarColor(){
 }
 
 socket.on('recibir_opcion_colores', (data) => {
+
     if(yo.value.username==="host"){
+        if(recibirColores.value===false){
+            return;
+        }
+        recibirColores.value=false;
         if(data.color===color.color){
             if(data.username===yo.value.jugadores[0].username){
                 puntaje.j1++;
@@ -133,17 +139,16 @@ socket.on('recibir_opcion_colores', (data) => {
         }
         
         puntaje.ronda++;
-        if(puntaje.ronda===11){
-            if(puntaje.j1>puntaje.j2){
-                emit('ganador',0);
-            }else{
-                if(puntaje.j1<puntaje.j2){
-                    emit('ganador',1);
-                }
-        }
-    }
-        reiniciarTemporizador();
 
+        if(puntaje.j1===6){
+            emit('ganador',0);
+        }
+        if(puntaje.j2===6){
+            emit('ganador',1);
+        }
+         
+        reiniciarTemporizador();
+         
 
     }else{
         menu.value=2;
@@ -154,6 +159,7 @@ socket.on('recibir_opcion_colores', (data) => {
 
 socket.on('recibir_colores', (data) => {
     if(yo.value.username==="host"){
+        recibirColores.value=true;
         return;
     }
   color.b1=data.b1;
