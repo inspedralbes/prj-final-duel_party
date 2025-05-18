@@ -4,8 +4,8 @@
 <div>
 <img class="montaña" src="/images/montaña/montaña.webp" alt="" srcset=""> 
 </div>
-<img class="jugador1" :style="{left:movimiento.jugador1.left+'%',top:movimiento.jugador1.top+'%'}"  src="/images/montaña/jugador1.webp">
-<img class="jugador2" :style="{right:movimiento.jugador2.right+'%',top:movimiento.jugador2.top+'%'}"   src="/images/montaña/jugador2.webp">
+<img class="jugador1" @click="mover(0)" :style="{left:movimiento.jugador1.left+'%',top:movimiento.jugador1.top+'%'}"  src="/images/montaña/jugador1.webp">
+<img class="jugador2" @click="mover(1)" :style="{right:movimiento.jugador2.right+'%',top:movimiento.jugador2.top+'%'}"   src="/images/montaña/jugador2.webp">
 <ruleta class="ruleta" @minijuego="minijuego"/>
 <explicar class="explicar" @jugar="modo" :num="juego" v-if="visibleInstrucciones"/>
 </div>  
@@ -180,5 +180,9 @@ function mover(data){
     left: 50%;
     transform: translate(-50%, -50%);
 
+}
+
+.ruleta{
+    z-index: 10;
 }
 </style>
