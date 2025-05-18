@@ -123,10 +123,10 @@ socket.on('ganador_globos', (data) => {
   puntaje.ronda++;
 
   if (puntaje.azul === 3) {
-    emit('ganador', 1);
+    emit('ganador',1);
   }
   if (puntaje.rojo === 3) {
-    emit('ganador', 0);
+    emit('ganador',0);
   }
 
   console.log(puntaje.ronda, puntaje.azul, puntaje.rojo);

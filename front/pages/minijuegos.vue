@@ -104,6 +104,7 @@ const visibleWIN = ref(false);
 const winner=ref(-1)
 const visibleInstrucciones=ref(false);
 const juego=ref(0);
+
 function ganador(data){
   winner.value=data;
   visibleWIN.value=true;
@@ -165,7 +166,7 @@ function modo(data){
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index:10;
+  z-index:100;
 }
  .menu-container {
     font-family: 'Press Start 2P', cursive;  
