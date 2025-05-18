@@ -162,7 +162,7 @@ function mover(data){
     position: absolute;
     width: 100px;
     transition: 0.5s ease-out;
-    z-index: 2;
+   
      
     
 }
@@ -170,7 +170,7 @@ function mover(data){
     position: absolute;
     width: 100px;
     transition: 0.5s ease-out;
-    z-index: 2;
+   
 }
 .montaña{
     width: 100%;
