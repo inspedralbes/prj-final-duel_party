@@ -162,11 +162,13 @@ function modo(data){
     z-index: 3;
 }
 .win{
-  position: absolute;
+  position: fixed !important;
+  z-index: 9999 !important;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index:100;
+  
 }
  .menu-container {
     font-family: 'Press Start 2P', cursive;  
