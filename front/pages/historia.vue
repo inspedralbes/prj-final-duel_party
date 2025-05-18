@@ -58,6 +58,8 @@ const movimiento = reactive({
 
 
 function ganador(data){
+    console.log("hola",data);
+    
   visibleInstrucciones.value=false;  
   winner.value=data;
   visibleWIN.value=true;

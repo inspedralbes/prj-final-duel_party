@@ -129,7 +129,8 @@ socket.on('ganador_globos', (data) => {
     emit('ganador', 0);
   }
 
-
+  console.log(puntaje.ronda, puntaje.azul, puntaje.rojo);
+  
 });
 
 
