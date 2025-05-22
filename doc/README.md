@@ -1,19 +1,7 @@
-# Documentació
-Llistat d'alguns dels punts que han de quedar explicats en aquesta carpeta. Poden ser tots en aquest fitxer o en diversos fitxers enllaçats.
+# VIDEOS
 
-És obligatori modificar aquest document!!
+demo_2425_DuelParty:
+https://youtu.be/Y1y9ImKQjY0
 
-## Documentació bàsica MÍNIMA
- * Objectius
- * Arquitectura bàsica
-   * Tecnologies utilitzades
-   * Interrelació entre els diversos components
- * Com crees l'entorn de desenvolupament
- * Com desplegues l'aplicació a producció
- * Llistat d'endpoints de l'API de backend
-    * Rutes
-   * Exemples de JSON de peticó
-   * Exemples de JSON de resposta i els seus codis d'estat 200? 404?
- * Aplicació Android
- * Altres elements importants.
- * ...
+pitch_2425_DuelParty:
+https://youtu.be/UXWaeze3HD4
