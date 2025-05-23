@@ -28,7 +28,7 @@ El proyecto está en fase inicial, estamos implementando los minijuegos y la fun
 
 `cd prj-final-duel_party`
 
-### 2. Assegura't de tenir Docker instal·lat.
+### 2. Assegura't de tenir Docker instal·lat
 
 Si no tens Docker instal·lat, pots seguir aquests passos segons el teu sistema operatiu:
 
